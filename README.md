@@ -14,7 +14,7 @@ The add-on adds an icon to the toolbar of your browser, displaying the number of
 
 # How to use the extension:
 
-[Screenshot](./zackdev/extension-screenshot.png)
+![Screenshot](./zackdev/extension-screenshot.png)
 
 * Click the toolbar icon to get an overview of domains they belong to
 * Expand or contract those domains by clicking the down or up facing arrow to view specific cookies
