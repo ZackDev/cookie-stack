@@ -2,8 +2,6 @@
 
 A Firefox browser extension for viewing and deleting cookies.
 
-The add-on adds an icon to the toolbar of your browser, displaying the number of cookies currently set.
-
 # How to enable the extension:
 
 * point the browser to `about:debugging#/runtime/this-firefox`
@@ -13,6 +11,8 @@ The add-on adds an icon to the toolbar of your browser, displaying the number of
 * if your browser is in private mode, go to `about:addons`, and allow `Cookie Stack` to run in private windows
 
 # How to use the extension:
+
+The add-on adds an icon to the toolbar of your browser, displaying the number of cookies currently set.
 
 ![Screenshot](./zackdev/extension-screenshot.png)
 
