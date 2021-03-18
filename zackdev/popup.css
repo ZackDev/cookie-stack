@@ -1,0 +1,92 @@
+body {
+  min-width: 500px;
+  max-width: 500px;
+  min-height: 500px;
+  max-height: 500px;
+  overflow: hidden;
+  background-color: #FFF;
+  color: #000;
+}
+
+#wrapper {
+  padding: 5px;
+}
+
+#title {
+  margin: 0 auto;
+}
+
+#subtitle {
+  margin: 0 auto;
+}
+
+#message-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  min-height: 75px;
+}
+
+#message {
+  display: none;
+  width: 100%;
+}
+
+#content-wrap {
+  padding: 1px 10px 0px 10px;
+  margin: 5px 0px 5px 0px;
+  background-color: #F2F2F2;
+  min-height: 330px;
+  max-height: 330px;
+  overflow-y: scroll;
+}
+
+#info-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 32px;
+  max-height: 32px;
+  padding: 0px 5px 0px 5px;
+  color: #383838;
+  font-size: 12px;
+}
+
+.cookie-domain {
+  min-height: 45px;
+  font-size: 20px;
+}
+
+.cookie {
+  align-items: center;
+}
+
+.cookie-domain {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.cookie-action {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  min-height: 40px;
+}
+
+.cookie .attribute-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #212121;
+}
+
+.cookie .attribute {
+  overflow-wrap: anywhere;
+  font-size: 16px;
+}
+
+.cookie .attribute-name {
+  font-size: 16px;
+}
