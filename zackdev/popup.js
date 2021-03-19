@@ -112,7 +112,6 @@ class StackCookieDisplay {
     this.content_root = content_root;
     this.messages = [];
     this.displaying_message = false;
-    this.display_version();
   }
 
   on_cookie_added( stack_cookie ) {
@@ -168,7 +167,7 @@ class StackCookieDisplay {
   }
 
   display_message() {
-    if ( this.displaying_message === false) {
+    if ( this.displaying_message === false ) {
       if ( this.messages.length > 0 ) {
         var message = this.messages[0];
         this.displaying_message = true;
@@ -177,20 +176,15 @@ class StackCookieDisplay {
         message_div.fadeIn( 500, function() {
           $( this ).fadeOut( 2500 );
         });
-        setTimeout(function() {
+        setTimeout( function() {
           this.messages.shift();
           this.displaying_message = false;
-          if ( this.messages.length > 0) {
+          if ( this.messages.length > 0 ) {
             this.display_message();
           }
         }.bind( this ) , 4000);
       }
     }
-  }
-
-  display_version() {
-    var version_str = browser.runtime.getManifest().version;
-    $( '#version' ).html( [ 'version' , version_str ].join( ' ' ) );
   }
 }
 
@@ -206,11 +200,18 @@ function on_cookie_changed_listener( cookie_event ) {
   }
 }
 
+function set_version() {
+  var version_str = browser.runtime.getManifest().version;
+  $( '#version' ).html( [ 'version' , version_str ].join( ' ' ) );
+}
+
 function init() {
+  set_version();
   var display = new StackCookieDisplay( $( '#content') );
   this.stack = new Stack( display );
-  browser.cookies.onChanged.removeListener( on_cookie_changed_listener );
-  browser.cookies.onChanged.addListener( on_cookie_changed_listener );
+  if ( ! browser.cookies.onChanged.hasListener( on_cookie_changed_listener ) ) {
+    browser.cookies.onChanged.addListener( on_cookie_changed_listener );
+  }
 
   var get_all_cookies = browser.cookies.getAll( {} );
   get_all_cookies.then( add_all_cookies );
