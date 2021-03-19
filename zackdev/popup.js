@@ -1,3 +1,10 @@
+/*
+  Helper class
+  - static unique_string( str )
+  -- returns the concatenated ascii-number representation of the passed string
+  -- solely for generating valid jquery selectors from strings that contain special
+  -- characters like '.' and '#'
+*/
 class Helper {
   static unique_string( str ) {
     let u_str = '';
@@ -8,7 +15,11 @@ class Helper {
   }
 }
 
-
+/*
+  Stack class
+  manages the cookies indicated by the cookies.onChanged events and informs the
+  StackCookieDisplay
+*/
 class Stack {
   constructor( display ) {
     this.cookies = [];
@@ -67,7 +78,11 @@ class Stack {
   }
 }
 
-
+/*
+  StackCookie class
+  - wrapper class for cookies provided by the cookies.onChanged event
+  - adds functionality that is used by StackCookieDisplay
+*/
 class StackCookie {
   constructor( cookie ) {
     this.cookie = cookie;
@@ -98,6 +113,13 @@ class StackCookie {
 }
 
 
+/*
+  StackCookieDisplay class
+  - responsible for DOM manipulation
+  -- adding and removing cookies
+  -- displaying cookie values
+  -- displaying messages
+*/
 class StackCookieDisplay {
   static check_or_x( true_false ) {
     if ( true_false === true ) {
@@ -114,6 +136,8 @@ class StackCookieDisplay {
     this.displaying_message = false;
   }
 
+  // creates and adds 'cookie-domain' div to the DOM if it is the first cookie for this domain
+  // creates and adds 'cookie-wrap' and appends it to an already existing or previously created domain
   on_cookie_added( stack_cookie ) {
     var cookie_domain = $( `.cookie-domain.${stack_cookie.unique_domain_string()}` );
     if ( cookie_domain.length === 0 ) {
@@ -124,6 +148,8 @@ class StackCookieDisplay {
     this.add_message( `cookie "${stack_cookie.cookie.domain}${stack_cookie.cookie.path}${stack_cookie.cookie.name}" added.` );
   }
 
+  // removes a single cookie from the DOM
+  // removes 'cookie-domain' from DOM if there are no more cookies in it
   on_cookie_removed( stack_cookie ) {
     $( `#${stack_cookie.unique_cookie_string()}` ).remove();
     let cookies = $( `.cookie.${stack_cookie.unique_domain_string()}` );
@@ -133,6 +159,7 @@ class StackCookieDisplay {
     this.add_message( `cookie "${stack_cookie.cookie.domain}${stack_cookie.cookie.path}${stack_cookie.cookie.name}" removed.` );
   }
 
+  // creates HTML string for a specific cookie, including the cookie values provided
   create_cookie_html( stack_cookie ) {
     var u_domain_str = stack_cookie.unique_domain_string();
     var u_cookie_str = stack_cookie.unique_cookie_string();
@@ -153,6 +180,7 @@ class StackCookieDisplay {
     return cookie_html;
   }
 
+  // creates HTML string for a specific domain with the corresponding collapse button
   create_cookie_domain_html( stack_cookie ) {
     var u_domain_str = stack_cookie.unique_domain_string();
     var cookie_domain_html = "";
@@ -166,6 +194,12 @@ class StackCookieDisplay {
     this.display_message();
   }
 
+  /*
+  sequentially displaying messages like 'cookie ... added' and 'cookie ... removed'
+  - pseudo recursion of display_message() by setTimeout(...) if 'this.messages' contains elements
+  - 'this.displaying_message' is true as long as the animation fadeIn() + fadeOut() is active
+  - removes displayed messages from 'this.messages'
+  */
   display_message() {
     if ( this.displaying_message === false ) {
       if ( this.messages.length > 0 ) {
@@ -207,14 +241,30 @@ function set_version() {
 
 function init() {
   set_version();
+
+  // creates StackCookieDisplay object with jquery DOM reference
   var display = new StackCookieDisplay( $( '#content') );
+
+  // initializes Stack with a reference to the StackCookieDisplay created above
   this.stack = new Stack( display );
+
+  // adds cookies.onChange listener
   if ( ! browser.cookies.onChanged.hasListener( on_cookie_changed_listener ) ) {
     browser.cookies.onChanged.addListener( on_cookie_changed_listener );
   }
 
+  // gets all cookies from browser.cookies API and adds them to the Stack
   var get_all_cookies = browser.cookies.getAll( {} );
   get_all_cookies.then( add_all_cookies );
+
+  /*
+  determines which button has been clicked (collapse or trash)
+  - collapse button: changes the up and down collapse arrows
+  - trash button:
+  -- gets 'unique_cookie_string' from button id
+  -- gets cookie from stack by 'unique_cookie_string'
+  -- calls browser.cookies.remove(...)
+  */
   $( window ).click( function( e ) {
     if ( e.target.type === "button" ) {
       if ( e.target.classList ) {
@@ -251,6 +301,9 @@ function init() {
   });
 }
 
+/*
+  sorts and adds cookies to the stack
+*/
 function add_all_cookies( cookies ) {
   cookies.sort( compare_cookies );
   for (let i = 0; i < cookies.length; i++) {
@@ -258,6 +311,9 @@ function add_all_cookies( cookies ) {
   }
 }
 
+/*
+  custom cookie sort function
+*/
 function compare_cookies( a , b ) {
   let comparison = 0;
   if ( a.domain > b.domain ) {
@@ -269,9 +325,10 @@ function compare_cookies( a , b ) {
   return comparison;
 }
 
-function on_cookie_removed( cookie ) {
-  //stub: handling is done by cookies.onChanged(...)
-}
+/*
+stub: handling is done by cookies.onChanged(...)
+*/
+function on_cookie_removed( cookie ) { }
 
 function on_cookie_remove_error( error ) {
   console.log( error );
