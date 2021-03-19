@@ -22,59 +22,28 @@ class Helper {
 */
 class Stack {
   constructor( display ) {
-    this.cookies = [];
+    this.cookies = new Map();
     this.display = display;
   }
 
   add_cookie( cookie ) {
     var stack_cookie = new StackCookie( cookie );
-    this.cookies.push( stack_cookie );
+    this.cookies.set( stack_cookie.unique_cookie_string() , stack_cookie );
     this.display.on_cookie_added( stack_cookie );
   }
 
   remove_cookie( cookie ) {
-    var cookie_index = this.get_cookie_index( cookie );
-    var stack_cookie = '';
-    if ( cookie_index >= 0 ) {
-      stack_cookie = this.cookies[ cookie_index ];
-    }
-    else if ( cookie_index === -1 ) {
+    var new_stack_cookie = new StackCookie( cookie );
+    var stack_cookie = this.get_cookie( new_stack_cookie.unique_cookie_string() );
+    if ( stack_cookie === undefined ) {
       stack_cookie = new StackCookie( cookie );
     }
-    this.remove_cookie_from_cookies( cookie );
+    this.cookies.delete( stack_cookie );
     this.display.on_cookie_removed( stack_cookie );
   }
 
-  remove_cookie_from_cookies( cookie ) {
-    var cookie_index = this.get_cookie_index( cookie );
-    this.cookies.splice( cookie_index , 1 );
-  }
-
-  get_cookie_index( cookie ) {
-    var cookie_index = -1;
-    for ( let i = 0; i < this.cookies.length; i++ ) {
-      var stack_cookie = this.cookies[i];
-      if ( cookie.secure === stack_cookie.cookie.secure && cookie.domain === stack_cookie.cookie.domain && cookie.path === stack_cookie.cookie.path && cookie.name === stack_cookie.cookie.name ) {
-        cookie_index = i;
-        break
-      }
-    }
-    return cookie_index;
-  }
-
-  get_cookie_index_by_u_cookie_str( u_cookie_str ){
-    var index = -1;
-    for ( let i = 0; i < this.cookies.length; i++ ) {
-      if ( this.cookies[i].unique_cookie_string() === u_cookie_str) {
-        index = i;
-        break;
-      }
-    }
-    return index;
-  }
-
-  get_cookie_by_index( index ) {
-    return this.cookies[index];
+  get_cookie( key ) {
+    return this.cookies.get( key );
   }
 }
 
@@ -272,15 +241,16 @@ function init() {
           var class_name = e.target.classList[i];
           if ( class_name === "trash" ) {
             var u_cookie_str = e.target.id;
-            var cookie_index = this.stack.get_cookie_index_by_u_cookie_str( u_cookie_str );
-            var stack_cookie = this.stack.get_cookie_by_index( cookie_index );
-            var remove_cookie = browser.cookies.remove(
-              {
-                url: stack_cookie.url(),
-                name: stack_cookie.cookie.name
-              }
-            );
-            remove_cookie.then( on_cookie_removed , on_cookie_remove_error );
+            var stack_cookie = this.stack.get_cookie( u_cookie_str );
+            if ( stack_cookie !== undefined ) {
+              var remove_cookie = browser.cookies.remove(
+                {
+                  url: stack_cookie.url(),
+                  name: stack_cookie.cookie.name
+                }
+              );
+              remove_cookie.then( on_cookie_removed , on_cookie_remove_error );
+            }
             break;
           }
           else if ( class_name === "bi-arrow-down" ) {
