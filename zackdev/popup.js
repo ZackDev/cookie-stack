@@ -162,11 +162,10 @@ class StackCookieDisplay {
   }
 
   display_message( msg ) {
-    $( '#message' ).html( msg );
-    $( '#message' ).fadeIn( 500, function() {
-      $( '#message' ).fadeOut( 2500 , function() {
-        $( '#message' ).html( '' );
-      });
+    var message = $( '#message' );
+    message.html( msg );
+    message.fadeIn( 500, function() {
+      $( this ).fadeOut( 2500 );
     });
   }
 
@@ -176,7 +175,6 @@ class StackCookieDisplay {
 }
 
 function on_cookie_changed_listener( cookie_event ) {
-  console.log( cookie_event );
   if ( cookie_event.removed === true && cookie_event.cause === 'overwrite' ) {
     this.stack.remove_cookie( cookie_event.cookie );
   }
