@@ -105,13 +105,17 @@ class StackCookieDisplay {
     this.displaying_message = false;
   }
 
+  set_stack( stack ) {
+    this.stack = stack;
+  }
+
   // creates and adds 'cookie-domain' div to the DOM if it is the first cookie for this domain
   // creates and adds 'cookie-wrap' and appends it to an already existing or previously created domain
   on_cookie_added( stack_cookie ) {
     var cookie_domain = $( `.cookie-domain.${stack_cookie.unique_domain_string()}` );
     if ( cookie_domain.length === 0 ) {
       this.content_root.append( this.create_cookie_domain_html( stack_cookie ) );
-      var details_button = $( `.btn.details#${stack_cookie.unique_domain_string()}` );
+      var details_button = $( `#details-button-${stack_cookie.unique_domain_string()}` );
       details_button.click( function() {
         if ( $( this ).hasClass( 'bi-arrow-up' ) ) {
           $( this ).removeClass( 'bi-arrow-up' );
@@ -125,6 +129,17 @@ class StackCookieDisplay {
     }
     var cookie_wrap = $( `#cookie-wrap-${stack_cookie.unique_domain_string()}` );
     cookie_wrap.append( this.create_cookie_html( stack_cookie ) );
+    var trash_button = $( `#trash-button-${stack_cookie.unique_cookie_string()}` );
+    trash_button.click( this , function( event ) {
+      var u_cookie_id = this.id.replace( 'trash-button-' , '' );
+      var stack_cookie = event.data.stack.get_cookie(u_cookie_id);
+      browser.cookies.remove(
+        {
+          url: stack_cookie.url(),
+          name: stack_cookie.cookie.name
+        }
+      );
+    });
     this.add_message( `cookie "${stack_cookie.cookie.domain}${stack_cookie.cookie.path}${stack_cookie.cookie.name}" added.` );
   }
 
@@ -145,7 +160,7 @@ class StackCookieDisplay {
     var u_cookie_str = stack_cookie.unique_cookie_string();
     var cookie_html = "";
     cookie_html += `<div id="cookie-${u_cookie_str}" class="cookie ${u_domain_str}">`;
-    cookie_html += `<div class="cookie-action"><button type="button" id="${u_cookie_str}" class="trash btn btn-secondary btn-sm bi bi-trash"></button></div>`;
+    cookie_html += `<div class="cookie-action"><button type="button" id="trash-button-${u_cookie_str}" class="btn btn-secondary btn-sm bi bi-trash"></button></div>`;
     cookie_html += `<div class="attribute-row border-bottom"><span class="attribute-name">path &amp; name</span><span class="attribute">${stack_cookie.cookie.path}${stack_cookie.cookie.name}</span></div>`;
     cookie_html += `<div class="attribute-row border-bottom"><span class="attribute-name">secure</span><span class="attribute ${StackCookieDisplay.check_or_x(stack_cookie.cookie.secure)}"></span></div>`;
     cookie_html += `<div class="attribute-row border-bottom"><span class="attribute-name">session</span><span class="attribute ${StackCookieDisplay.check_or_x(stack_cookie.cookie.session)}"></span></div>`;
@@ -164,7 +179,7 @@ class StackCookieDisplay {
   create_cookie_domain_html( stack_cookie ) {
     var u_domain_str = stack_cookie.unique_domain_string();
     var cookie_domain_html = "";
-    cookie_domain_html += `<div class="cookie-domain border-top ${u_domain_str}"><span class="attribute">${stack_cookie.cookie.domain}</span><button type="button" id="${u_domain_str}" class="details btn btn-secondary btn-sm bi bi-arrow-down" data-toggle="collapse" data-target="#cookie-wrap-${u_domain_str}"></button></div>`;
+    cookie_domain_html += `<div class="cookie-domain border-top ${u_domain_str}"><span class="attribute">${stack_cookie.cookie.domain}</span><button type="button" id="details-button-${u_domain_str}" class="details btn btn-secondary btn-sm bi bi-arrow-down" data-toggle="collapse" data-target="#cookie-wrap-${u_domain_str}"></button></div>`;
     cookie_domain_html += `<div id="cookie-wrap-${u_domain_str}" class="cookie-wrap collapse"></div>`;
     return cookie_domain_html;
   }
@@ -228,6 +243,8 @@ function init() {
   // initializes Stack with a reference to the StackCookieDisplay created above
   this.stack = new Stack( display );
 
+  display.set_stack( this.stack );
+
   // adds cookies.onChange listener
   if ( ! browser.cookies.onChanged.hasListener( on_cookie_changed_listener ) ) {
     browser.cookies.onChanged.addListener( on_cookie_changed_listener );
@@ -236,36 +253,6 @@ function init() {
   // gets all cookies from browser.cookies API and adds them to the Stack
   var get_all_cookies = browser.cookies.getAll( {} );
   get_all_cookies.then( add_all_cookies );
-
-  /*
-  handles trash button clicks
-  - gets 'unique_cookie_string' from button id
-  - gets cookie from stack by 'unique_cookie_string'
-  - calls browser.cookies.remove(...)
-  */
-  $( window ).click( function( e ) {
-    if ( e.target.type === "button" ) {
-      if ( e.target.classList ) {
-        for ( var i = 0; i < e.target.classList.length; i++ ) {
-          var class_name = e.target.classList[i];
-          if ( class_name === "trash" ) {
-            var u_cookie_str = e.target.id.replace('button-', '');
-            var stack_cookie = this.stack.get_cookie( u_cookie_str );
-            if ( stack_cookie !== undefined ) {
-              var remove_cookie = browser.cookies.remove(
-                {
-                  url: stack_cookie.url(),
-                  name: stack_cookie.cookie.name
-                }
-              );
-              remove_cookie.then( on_cookie_removed , on_cookie_remove_error );
-            }
-            break;
-          }
-        }
-      }
-    }
-  });
 }
 
 /*
