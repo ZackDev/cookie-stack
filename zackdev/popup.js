@@ -110,6 +110,8 @@ class StackCookieDisplay {
 
   constructor( content_root ) {
     this.content_root = content_root;
+    this.messages = [];
+    this.displaying_message = false;
     this.display_version();
   }
 
@@ -120,7 +122,7 @@ class StackCookieDisplay {
     }
     var cookie_wrap = $( `#cookie-wrap-${stack_cookie.unique_domain_string()}` );
     cookie_wrap.append( this.create_cookie_html( stack_cookie ) );
-    this.display_message( `cookie "${stack_cookie.cookie.domain}${stack_cookie.cookie.path}${stack_cookie.cookie.name}" added.` );
+    this.add_message( `cookie "${stack_cookie.cookie.domain}${stack_cookie.cookie.path}${stack_cookie.cookie.name}" added.` );
   }
 
   on_cookie_removed( stack_cookie ) {
@@ -129,7 +131,7 @@ class StackCookieDisplay {
     if ( cookies.length === 0 ) {
       $( `.cookie-domain.${stack_cookie.unique_domain_string()}` ).remove();
     }
-    this.display_message( `cookie "${stack_cookie.cookie.domain}${stack_cookie.cookie.path}${stack_cookie.cookie.name}" removed.` );
+    this.add_message( `cookie "${stack_cookie.cookie.domain}${stack_cookie.cookie.path}${stack_cookie.cookie.name}" removed.` );
   }
 
   create_cookie_html( stack_cookie ) {
@@ -160,12 +162,30 @@ class StackCookieDisplay {
     return cookie_domain_html;
   }
 
-  display_message( msg ) {
-    var message = $( '#message' );
-    message.html( msg );
-    message.fadeIn( 500, function() {
-      $( this ).fadeOut( 2500 );
-    });
+  add_message( msg ) {
+    this.messages.push( msg );
+    this.display_message();
+  }
+
+  display_message() {
+    if ( this.displaying_message === false) {
+      if ( this.messages.length > 0 ) {
+        var message = this.messages[0];
+        this.displaying_message = true;
+        var message_div = $( '#message' );
+        message_div.html( message );
+        message_div.fadeIn( 500, function() {
+          $( this ).fadeOut( 2500 );
+        });
+        setTimeout(function() {
+          this.messages.shift();
+          this.displaying_message = false;
+          if ( this.messages.length > 0) {
+            this.display_message();
+          }
+        }.bind( this ) , 4000);
+      }
+    }
   }
 
   display_version() {
