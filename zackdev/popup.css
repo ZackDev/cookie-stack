@@ -79,14 +79,15 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  color: #212121;
 }
 
-.cookie .attribute {
+.cookie .attribute-value {
   overflow-wrap: anywhere;
   font-size: 16px;
+  color: #383838;
 }
 
 .cookie .attribute-name {
   font-size: 16px;
+  color: #212121;
 }

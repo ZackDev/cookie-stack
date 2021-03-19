@@ -161,16 +161,16 @@ class StackCookieDisplay {
     var cookie_html = "";
     cookie_html += `<div id="cookie-${u_cookie_str}" class="cookie ${u_domain_str}">`;
     cookie_html += `<div class="cookie-action"><button type="button" id="trash-button-${u_cookie_str}" class="btn btn-secondary btn-sm bi bi-trash"></button></div>`;
-    cookie_html += `<div class="attribute-row border-bottom"><span class="attribute-name">path &amp; name</span><span class="attribute">${stack_cookie.cookie.path}${stack_cookie.cookie.name}</span></div>`;
-    cookie_html += `<div class="attribute-row border-bottom"><span class="attribute-name">secure</span><span class="attribute ${StackCookieDisplay.check_or_x(stack_cookie.cookie.secure)}"></span></div>`;
-    cookie_html += `<div class="attribute-row border-bottom"><span class="attribute-name">session</span><span class="attribute ${StackCookieDisplay.check_or_x(stack_cookie.cookie.session)}"></span></div>`;
-    cookie_html += `<div class="attribute-row border-bottom"><span class="attribute-name">host only</span><span class="attribute ${StackCookieDisplay.check_or_x(stack_cookie.cookie.hostOnly)}"></span></div>`;
-    cookie_html += `<div class="attribute-row border-bottom"><span class="attribute-name">http only</span><span class="attribute ${StackCookieDisplay.check_or_x(stack_cookie.cookie.httpOnly)}"></span></div>`;
-    cookie_html += `<div class="attribute-row border-bottom"><span class="attribute-name">same site</span><span class="attribute">${stack_cookie.cookie.sameSite}</span></div>`;
-    cookie_html += `<div class="attribute-row border-bottom"><span class="attribute-name">expiration date</span><span class="attribute">${stack_cookie.cookie.expirationDate}</span></div>`;
-    cookie_html += `<div class="attribute-row border-bottom"><span class="attribute-name">first party domain</span><span class="attribute">${stack_cookie.cookie.firstPartyDomain}</span></div>`;
-    cookie_html += `<div class="attribute-row border-bottom"><span class="attribute-name">store id</span><span class="attribute">${stack_cookie.cookie.storeId}</span></div>`;
-    cookie_html += `<div class="attribute-row border-bottom"><span class="attribute">${stack_cookie.cookie.value}</span></div>`;
+    cookie_html += `<div class="attribute-row border-bottom"><span class="attribute-name">path &amp; name</span><span class="attribute-value">${stack_cookie.cookie.path}${stack_cookie.cookie.name}</span></div>`;
+    cookie_html += `<div class="attribute-row border-bottom"><span class="attribute-name">secure</span><span class="attribute-value ${StackCookieDisplay.check_or_x(stack_cookie.cookie.secure)}"></span></div>`;
+    cookie_html += `<div class="attribute-row border-bottom"><span class="attribute-name">session</span><span class="attribute-value ${StackCookieDisplay.check_or_x(stack_cookie.cookie.session)}"></span></div>`;
+    cookie_html += `<div class="attribute-row border-bottom"><span class="attribute-name">host only</span><span class="attribute-value ${StackCookieDisplay.check_or_x(stack_cookie.cookie.hostOnly)}"></span></div>`;
+    cookie_html += `<div class="attribute-row border-bottom"><span class="attribute-name">http only</span><span class="attribute-value ${StackCookieDisplay.check_or_x(stack_cookie.cookie.httpOnly)}"></span></div>`;
+    cookie_html += `<div class="attribute-row border-bottom"><span class="attribute-name">same site</span><span class="attribute-value">${stack_cookie.cookie.sameSite}</span></div>`;
+    cookie_html += `<div class="attribute-row border-bottom"><span class="attribute-name">expiration date</span><span class="attribute-value">${stack_cookie.cookie.expirationDate}</span></div>`;
+    cookie_html += `<div class="attribute-row border-bottom"><span class="attribute-name">first party domain</span><span class="attribute-value">${stack_cookie.cookie.firstPartyDomain}</span></div>`;
+    cookie_html += `<div class="attribute-row border-bottom"><span class="attribute-name">store id</span><span class="attribute-value">${stack_cookie.cookie.storeId}</span></div>`;
+    cookie_html += `<div class="attribute-row border-bottom"><span class="attribute-value">${stack_cookie.cookie.value}</span></div>`;
     cookie_html += `</div>`;
     return cookie_html;
   }
@@ -179,7 +179,7 @@ class StackCookieDisplay {
   create_cookie_domain_html( stack_cookie ) {
     var u_domain_str = stack_cookie.unique_domain_string();
     var cookie_domain_html = "";
-    cookie_domain_html += `<div class="cookie-domain border-top ${u_domain_str}"><span class="attribute">${stack_cookie.cookie.domain}</span><button type="button" id="details-button-${u_domain_str}" class="details btn btn-secondary btn-sm bi bi-arrow-down" data-toggle="collapse" data-target="#cookie-wrap-${u_domain_str}"></button></div>`;
+    cookie_domain_html += `<div class="cookie-domain border-top ${u_domain_str}"><span class="attribute-value">${stack_cookie.cookie.domain}</span><button type="button" id="details-button-${u_domain_str}" class="details btn btn-secondary btn-sm bi bi-arrow-down" data-toggle="collapse" data-target="#cookie-wrap-${u_domain_str}"></button></div>`;
     cookie_domain_html += `<div id="cookie-wrap-${u_domain_str}" class="cookie-wrap collapse"></div>`;
     return cookie_domain_html;
   }
