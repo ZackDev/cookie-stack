@@ -238,14 +238,11 @@ function init() {
   get_all_cookies.then( add_all_cookies );
 
   /*
-  determines which button has been clicked (collapse or trash)
-  - collapse button: changes the up and down collapse arrows
-  - trash button:
-  -- gets 'unique_cookie_string' from button id
-  -- gets cookie from stack by 'unique_cookie_string'
-  -- calls browser.cookies.remove(...)
+  handles trash button clicks
+  - gets 'unique_cookie_string' from button id
+  - gets cookie from stack by 'unique_cookie_string'
+  - calls browser.cookies.remove(...)
   */
-
   $( window ).click( function( e ) {
     if ( e.target.type === "button" ) {
       if ( e.target.classList ) {
