@@ -110,8 +110,7 @@ class StackCookieDisplay {
 
   constructor( content_root ) {
     this.content_root = content_root;
-    var version = browser.runtime.getManifest().version;
-    this.display_version( version );
+    this.display_version();
   }
 
   on_cookie_added( stack_cookie ) {
@@ -169,7 +168,8 @@ class StackCookieDisplay {
     });
   }
 
-  display_version( version_str ) {
+  display_version() {
+    var version_str = browser.runtime.getManifest().version;
     $( '#version' ).html( [ 'version' , version_str ].join( ' ' ) );
   }
 }
