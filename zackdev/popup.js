@@ -296,7 +296,7 @@ class StackCookieDisplay {
 
     //first party domain
     var attribute_row = $( '<div></div>' );
-    attribute_row.addClass( 'attribute-row' , 'border-bottom');
+    attribute_row.addClass( [ 'attribute-row' , 'border-bottom' ] );
     var attribute_name = $( '<span></span>' );
     attribute_name.addClass( 'attribute-name' );
     attribute_name.text( 'first party domain' );
