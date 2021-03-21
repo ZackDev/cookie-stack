@@ -414,12 +414,6 @@ class StackCookieDisplay {
 
     return ret;
 
-    /*
-    var cookie_domain_html = "";
-    cookie_domain_html += `<div id="cookie-domain-${u_domain_str}" class="cookie-domain border-top"><div><span class="badge badge-light ${StackCookieDisplay.check_or_x(stack_cookie.cookie.secure)}">secure</span><span class="attribute-value">${stack_cookie.cookie.domain}</span></div><button type="button" id="details-button-${u_domain_str}" class="details btn btn-secondary btn-sm bi bi-arrow-down" data-toggle="collapse" data-target="#cookie-wrap-${u_domain_str}"></button></div>`;
-    cookie_domain_html += `<div id="cookie-wrap-${u_domain_str}" class="cookie-wrap ${collapse_class}"></div>`;
-    return cookie_domain_html;
-    */
   }
 
   add_message( msg ) {
