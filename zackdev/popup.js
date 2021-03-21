@@ -103,10 +103,16 @@ class StackCookieDisplay {
     this.messages = [];
     this.displaying_message = false;
     this.domain_state = new Map();
+    this.set_version();
   }
 
   set_stack( stack ) {
     this.stack = stack;
+  }
+
+  set_version() {
+    var version_str = browser.runtime.getManifest().version;
+    $( '#version' ).html( [ 'version' , version_str ].join( ' ' ) );
   }
 
   // creates and adds 'cookie-domain' div to the DOM if it is the first cookie for this domain
@@ -494,20 +500,14 @@ function on_cookie_changed_listener( cookie_event ) {
   */
 }
 
-function set_version() {
-  var version_str = browser.runtime.getManifest().version;
-  $( '#version' ).html( [ 'version' , version_str ].join( ' ' ) );
-}
+
 
 function init() {
-  set_version();
-
   // creates StackCookieDisplay object with jquery DOM reference
   var display = new StackCookieDisplay( $( '#content') );
 
   // initializes Stack with a reference to the StackCookieDisplay created above
   this.stack = new Stack( display );
-
   display.set_stack( this.stack );
 
   // adds cookies.onChange listener
