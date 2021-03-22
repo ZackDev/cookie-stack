@@ -4,6 +4,7 @@
   -- returns the concatenated ascii-number representation of the passed string
   -- solely for generating valid jquery selectors from strings that contain special
   -- characters like '.' and '#'
+  - example 'github.com' as selector would select tags named 'github' with class 'com'
 */
 class Helper {
   static unique_string( str ) {
@@ -50,7 +51,7 @@ class Stack {
 /*
   StackCookie class
   - wrapper class for cookies provided by the cookies.onChanged event
-  - adds functionality that is used by StackCookieDisplay
+  - adds functionality that is used by Stack and StackCookieDisplay
 */
 class StackCookie {
   constructor( cookie ) {
@@ -86,7 +87,8 @@ class StackCookie {
   - responsible for DOM manipulation
   -- adding and removing cookies
   -- displaying cookie values
-  -- displaying messages
+  -- handling trash and details button clicks
+  -- displaying messages, version and a link to the homepage
 */
 class StackCookieDisplay {
   static check_or_x( true_false ) {
