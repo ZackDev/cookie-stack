@@ -129,9 +129,9 @@ class StackCookieDisplay {
     console.log( 'StackCookieDisplay.on_cookie_added()');
     console.log( stack_cookie );
 
-    var cookie_domain = $( `#cookie-domain-${stack_cookie.unique_domain_string()}` );
-    // cookie domain doesn't exist
-    if ( cookie_domain.length === 0 ) {
+    var domain_wrap = $( `#domain-wrap-${stack_cookie.unique_domain_string()}` );
+    // domain-wrap doesn't exist
+    if ( domain_wrap.length === 0 ) {
       // set the domain state to it's default, 'not collapsed'
       console.log( 'StackCookieDisplay.on_cookie_added(): adding cookie_domain');
       this.domain_state.set( stack_cookie.unique_domain_string() ,
@@ -139,7 +139,7 @@ class StackCookieDisplay {
           collapsed: false
         }
       );
-      this.content_root.append( this.create_cookie_domain_html( stack_cookie ) );
+      this.content_root.append( this.create_domain_wrap_html( stack_cookie ) );
     }
     var cookie_wrap = $( `#cookie-wrap-${stack_cookie.unique_domain_string()}` );
     console.log( 'StackCookieDisplay.on_cookie_added(): adding cookie to cookie_wrap:');
@@ -157,9 +157,8 @@ class StackCookieDisplay {
     $( `#cookie-${stack_cookie.unique_cookie_string()}` ).remove();
     let cookies = $( `.cookie.${stack_cookie.unique_domain_string()}` );
     if ( cookies.length === 0 ) {
-      console.log( 'StackCookieDisplay.on_cookie_removed(): removing cookie domain and wrap' );
-      $( `#cookie-domain-${stack_cookie.unique_domain_string()}` ).remove();
-      $( `#cookie-wrap-${stack_cookie.unique_domain_string()}` ).remove();
+      console.log( 'StackCookieDisplay.on_cookie_removed(): removing domain-wrap' );
+      $( `#domain-wrap-${stack_cookie.unique_domain_string()}` ).remove();
       this.domain_state.delete( stack_cookie.unique_domain_string() );
     }
     this.add_message( `cookie "${stack_cookie.cookie.domain}${stack_cookie.cookie.path}${stack_cookie.cookie.name}" removed.` );
@@ -355,7 +354,7 @@ class StackCookieDisplay {
   }
 
   // creates HTML string for a specific domain with the corresponding collapse button
-  create_cookie_domain_html( stack_cookie ) {
+  create_domain_wrap_html( stack_cookie ) {
 
     var u_domain_str = stack_cookie.unique_domain_string();
     var domain_state = this.domain_state.get( u_domain_str );
@@ -419,7 +418,11 @@ class StackCookieDisplay {
     cookie_wrap_div.addClass( [ 'cookie-wrap' , 'collapse' ] );
     cookie_wrap_div.addClass( `${collapse_class}` );
 
+
+
     var ret = $( '<div></div>' );
+    ret.addClass( 'domain-wrap' );
+    ret.attr( 'id' , `domain-wrap-${u_domain_str}` );
     ret.append( cookie_domain_div );
     ret.append( cookie_wrap_div );
 

@@ -68,6 +68,10 @@ body {
   justify-content: space-between;
 }
 
+.domain-wrap {
+
+}
+
 .cookie-action {
   display: flex;
   align-items: center;
