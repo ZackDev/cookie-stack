@@ -4,7 +4,7 @@
   -- returns the concatenated ascii-number representation of the passed string
   -- solely for generating valid jquery selectors from strings that contain special
   -- characters like '.' and '#'
-  - example 'github.com' as selector would select tags named 'github' with class 'com'
+  - negative example 'github.com' as selector would select tags named 'github' with class 'com'
 */
 class Helper {
   static unique_string( str ) {
