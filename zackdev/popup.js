@@ -104,6 +104,7 @@ class StackCookieDisplay {
     this.displaying_message = false;
     this.domain_state = new Map();
     this.set_version();
+    this.set_homepage_link();
   }
 
   set_stack( stack ) {
@@ -113,6 +114,11 @@ class StackCookieDisplay {
   set_version() {
     var version_str = browser.runtime.getManifest().version;
     $( '#version' ).html( [ 'version' , version_str ].join( ' ' ) );
+  }
+
+  set_homepage_link() {
+    var homepage_url = browser.runtime.getManifest().homepage_url;
+    $( '#homepage-link' ).attr( 'href' , homepage_url );
   }
 
   // creates and adds 'cookie-domain' div to the DOM if it is the first cookie for this domain
