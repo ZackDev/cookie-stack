@@ -79,6 +79,12 @@ class StackCookie {
     url_str += `${this.cookie.domain}${this.cookie.path}`;
     return url_str;
   }
+
+  domain() {
+    let domain_str = ''
+    domain_str += `${this.cookie.domain}`;
+    return domain_str;
+  }
 }
 
 
@@ -133,13 +139,34 @@ class StackCookieDisplay {
     // domain-wrap doesn't exist
     if ( domain_wrap.length === 0 ) {
       // set the domain state to it's default, 'not collapsed'
-      console.log( 'StackCookieDisplay.on_cookie_added(): adding cookie_domain');
+      console.log( 'StackCookieDisplay.on_cookie_added(): setting domain state');
       this.domain_state.set( stack_cookie.unique_domain_string() ,
         {
           collapsed: false
         }
       );
-      this.content_root.append( this.create_domain_wrap_html( stack_cookie ) );
+      console.log( 'StackCookieDisplay.on_cookie_added(): domain_wrap doesnt exist, going through which to insert to.');
+      var domain_added = false;
+      var all_domain_wraps = $( '.domain-wrap' );
+      for (let i = 0; i < all_domain_wraps.length; i++) {
+        var compare_wrap = $( all_domain_wraps[ i ]);
+        var compare_wrap_domain = $( compare_wrap ).attr( 'domain' );
+        console.log( 'StackCookieDisplay.on_cookie_added(): comparing cookie domain to existing domain:');
+        console.log( stack_cookie.domain() );
+        console.log( compare_wrap_domain );
+        if (stack_cookie.domain() < compare_wrap_domain ) {
+
+          console.log( 'StackCookieDisplay.on_cookie_added(): prepending domain-wrap');
+          $( all_domain_wraps[ i ] ).before( this.create_domain_wrap_html( stack_cookie ) );
+          domain_added = true;
+          break;
+        }
+      }
+      if ( domain_added === false ) {
+        console.log( 'StackCookieDisplay.on_cookie_added(): appending domain-wrap to content_root ');
+        this.content_root.append( this.create_domain_wrap_html( stack_cookie ) );
+      }
+      //this.content_root.append( this.create_domain_wrap_html( stack_cookie ) );
     }
     var cookie_wrap = $( `#cookie-wrap-${stack_cookie.unique_domain_string()}` );
     console.log( 'StackCookieDisplay.on_cookie_added(): adding cookie to cookie_wrap:');
@@ -355,14 +382,17 @@ class StackCookieDisplay {
 
   // creates HTML string for a specific domain with the corresponding collapse button
   create_domain_wrap_html( stack_cookie ) {
+    console.log( 'StackCookieDisplay.create_domain_wrap_html()');
 
     var u_domain_str = stack_cookie.unique_domain_string();
     var domain_state = this.domain_state.get( u_domain_str );
+    console.log( 'StackCookieDisplay.create_domain_wrap_html(): domain_state');
+    console.log( domain_state );
     var collapse_class = '';
     if ( domain_state.collapsed === true ) {
       collapse_class = 'show' ;
     }
-
+    console.log( 'StackCookieDisplay.create_domain_wrap_html(): creating html elements');
     var cookie_domain_div = $( '<div></div>' );
     cookie_domain_div.attr( 'id' , `cookie-domain-${u_domain_str}` );
     cookie_domain_div.addClass( [ 'cookie-domain' , 'border-top' ] );
@@ -423,6 +453,7 @@ class StackCookieDisplay {
     var ret = $( '<div></div>' );
     ret.addClass( 'domain-wrap' );
     ret.attr( 'id' , `domain-wrap-${u_domain_str}` );
+    ret.attr( 'domain' , `${stack_cookie.domain()}` )
     ret.append( cookie_domain_div );
     ret.append( cookie_wrap_div );
 
@@ -535,24 +566,9 @@ function init() {
   sorts and adds cookies to the stack
 */
 function add_all_cookies( cookies ) {
-  cookies.sort( compare_cookies );
   for (let i = 0; i < cookies.length; i++) {
     this.stack.add_cookie( cookies[i] );
   }
-}
-
-/*
-  custom cookie sort function
-*/
-function compare_cookies( a , b ) {
-  let comparison = 0;
-  if ( a.domain > b.domain ) {
-    comparison = 1;
-  }
-  else if ( a.domain < b.domain ) {
-    comparison = -1;
-  }
-  return comparison;
 }
 
 /*
