@@ -140,24 +140,24 @@ class StackCookieDisplay {
     // domain-wrap doesn't exist
     if ( domain_wrap.length === 0 ) {
       // set the domain state to it's default, 'not collapsed'
-      console.log( 'StackCookieDisplay.on_cookie_added(): setting domain state');
+      console.log( 'StackCookieDisplay.on_cookie_added(): setting domain state' );
       this.domain_state.set( stack_cookie.unique_domain_string() ,
         {
           collapsed: false
         }
       );
-      console.log( 'StackCookieDisplay.on_cookie_added(): domain_wrap doesnt exist, going through which to insert to.');
+      console.log( 'StackCookieDisplay.on_cookie_added(): domain_wrap doesnt exist, going through which to insert to.' );
       var domain_added = false;
       var all_domain_wraps = $( '.domain-wrap' );
       for (let i = 0; i < all_domain_wraps.length; i++) {
         var compare_wrap = $( all_domain_wraps[ i ]);
         var compare_wrap_domain = $( compare_wrap ).attr( 'domain' );
-        console.log( 'StackCookieDisplay.on_cookie_added(): comparing cookie domain to existing domain:');
+        console.log( 'StackCookieDisplay.on_cookie_added(): comparing cookie domain to existing domain:' );
         console.log( stack_cookie.domain() );
         console.log( compare_wrap_domain );
         // lexical domain comparison ('a' < 'b' ) = true, ('a' > 'b') = false
         if (stack_cookie.domain() < compare_wrap_domain ) {
-          console.log( 'StackCookieDisplay.on_cookie_added(): prepending domain-wrap');
+          console.log( 'StackCookieDisplay.on_cookie_added(): prepending domain-wrap' );
           // add domain-wrap for stack_cookie before the compared element, set domain_added flag to true, leave the for loop
           $( all_domain_wraps[ i ] ).before( this.create_domain_wrap_html( stack_cookie ) );
           domain_added = true;
@@ -199,12 +199,12 @@ class StackCookieDisplay {
   create_cookie_html( stack_cookie ) {
     var u_domain_str = stack_cookie.unique_domain_string();
     var u_cookie_str = stack_cookie.unique_cookie_string();
-    var cookie_div = $( '<div></div>');
-    cookie_div.attr( 'id' , `cookie-${u_cookie_str}`);
+    var cookie_div = $( '<div></div>' );
+    cookie_div.attr( 'id' , `cookie-${u_cookie_str}` );
     cookie_div.addClass( [ 'cookie' , `${u_domain_str}` ] );
 
     var cookie_action_div = $( '<div></div>' );
-    cookie_action_div.addClass( 'cookie-action' );
+    cookie_action_div.addClass( [ 'cookie-action' , 'border-top' ] );
 
     var trash_button = $( '<button></button>' );
     trash_button.attr( 'id' , `trash-button-${u_cookie_str}` );
@@ -232,7 +232,7 @@ class StackCookieDisplay {
     var attribute_name = $( '<span></span>' );
     attribute_name.addClass( 'attribute-name' );
     attribute_name.text( 'path & name' );
-    var attribute_value = $( '<span></span>');
+    var attribute_value = $( '<span></span>' );
     attribute_value.addClass( 'attribute-value' );
     attribute_value.text( `${stack_cookie.cookie.path}${stack_cookie.cookie.name}` );
 
@@ -248,7 +248,7 @@ class StackCookieDisplay {
     var attribute_name = $( '<span></span>' );
     attribute_name.addClass( 'attribute-name' );
     attribute_name.text( 'secure' );
-    var attribute_value = $( '<span></span>');
+    var attribute_value = $( '<span></span>' );
     attribute_value.addClass( 'attribute-value' );
     attribute_value.addClass( `${StackCookieDisplay.check_or_x(stack_cookie.cookie.secure)}` );
 
@@ -264,7 +264,7 @@ class StackCookieDisplay {
     var attribute_name = $( '<span></span>' );
     attribute_name.addClass( 'attribute-name' );
     attribute_name.text( 'session' );
-    var attribute_value = $( '<span></span>');
+    var attribute_value = $( '<span></span>' );
     attribute_value.addClass( 'attribute-value' );
     attribute_value.addClass( `${StackCookieDisplay.check_or_x(stack_cookie.cookie.session)}` );
 
@@ -280,7 +280,7 @@ class StackCookieDisplay {
     var attribute_name = $( '<span></span>' );
     attribute_name.addClass( 'attribute-name' );
     attribute_name.text( 'host only' );
-    var attribute_value = $( '<span></span>');
+    var attribute_value = $( '<span></span>' );
     attribute_value.addClass( 'attribute-value' );
     attribute_value.addClass( `${StackCookieDisplay.check_or_x(stack_cookie.cookie.hostOnly)}` );
 
@@ -296,7 +296,7 @@ class StackCookieDisplay {
     var attribute_name = $( '<span></span>' );
     attribute_name.addClass( 'attribute-name' );
     attribute_name.text( 'http only' );
-    var attribute_value = $( '<span></span>');
+    var attribute_value = $( '<span></span>' );
     attribute_value.addClass( 'attribute-value' );
     attribute_value.addClass( `${StackCookieDisplay.check_or_x(stack_cookie.cookie.httpOnly)}` );
 
@@ -308,11 +308,11 @@ class StackCookieDisplay {
 
     //same site
     var attribute_row = $( '<div></div>' );
-    attribute_row.addClass( [ 'attribute-row' , 'border-bottom' ]);
+    attribute_row.addClass( [ 'attribute-row' , 'border-bottom' ] );
     var attribute_name = $( '<span></span>' );
     attribute_name.addClass( 'attribute-name' );
     attribute_name.text( 'same site' );
-    var attribute_value = $( '<span></span>');
+    var attribute_value = $( '<span></span>' );
     attribute_value.addClass( 'attribute-value' );
     attribute_value.text( `${stack_cookie.cookie.sameSite}` );
 
@@ -328,7 +328,7 @@ class StackCookieDisplay {
     var attribute_name = $( '<span></span>' );
     attribute_name.addClass( 'attribute-name' );
     attribute_name.text( 'expiration date' );
-    var attribute_value = $( '<span></span>');
+    var attribute_value = $( '<span></span>' );
     attribute_value.addClass( 'attribute-value' );
     attribute_value.text( `${stack_cookie.cookie.expirationDate}` );
 
@@ -344,7 +344,7 @@ class StackCookieDisplay {
     var attribute_name = $( '<span></span>' );
     attribute_name.addClass( 'attribute-name' );
     attribute_name.text( 'first party domain' );
-    var attribute_value = $( '<span></span>');
+    var attribute_value = $( '<span></span>' );
     attribute_value.addClass( 'attribute-value' );
     attribute_value.text( `${stack_cookie.cookie.firstPartyDomain}` );
 
@@ -373,7 +373,7 @@ class StackCookieDisplay {
     //value
     var attribute_row = $( '<div></div>' );
     attribute_row.addClass( [ 'attribute-row' , 'border-bottom' ] );
-    var attribute_value = $( '<span></span>');
+    var attribute_value = $( '<span></span>' );
     attribute_value.addClass( 'attribute-value' );
     attribute_value.text( `${stack_cookie.cookie.value}` );
 
@@ -401,7 +401,7 @@ class StackCookieDisplay {
     cookie_domain_div.attr( 'id' , `cookie-domain-${u_domain_str}` );
     cookie_domain_div.addClass( [ 'cookie-domain' , 'border-top' ] );
 
-    var domain_info_div = $( '<div></div>');
+    var domain_info_div = $( '<div></div>' );
 
     var secure_badge = $( '<span></span>' );
     secure_badge.addClass( [ 'badge' , 'badge-light' ] );
@@ -414,7 +414,7 @@ class StackCookieDisplay {
 
     var details_button = $( '<button></button>' );
     details_button.attr( 'type' , 'button' );
-    details_button.attr( 'id' , `details-button-${u_domain_str}`);
+    details_button.attr( 'id' , `details-button-${u_domain_str}` );
     details_button.attr( 'data-toogle' , 'collapse' );
     details_button.attr( 'data-target' , `#cookie-wrap-${u_domain_str}` );
     details_button.addClass( [ 'details' , 'btn' , 'btn-secondary' , 'btn-sm' , 'bi' , 'bi-arrow-down' ] );
@@ -457,7 +457,7 @@ class StackCookieDisplay {
     var ret = $( '<div></div>' );
     ret.addClass( 'domain-wrap' );
     ret.attr( 'id' , `domain-wrap-${u_domain_str}` );
-    ret.attr( 'domain' , `${stack_cookie.domain()}` )
+    ret.attr( 'domain' , `${stack_cookie.domain()}` );
     ret.append( cookie_domain_div );
     ret.append( cookie_wrap_div );
 
@@ -482,7 +482,7 @@ class StackCookieDisplay {
   display_message() {
     if ( this.displaying_message === false ) {
       if ( this.messages.length > 0 ) {
-        var message = this.messages[0];
+        var message = this.messages[ 0 ];
         this.displaying_message = true;
         var message_div = $( '#message' );
         message_div.html( message );
