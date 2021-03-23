@@ -76,13 +76,14 @@ class StackCookie {
   url() {
     let url_str = ''
     this.cookie.secure ? url_str = 'https://' : url_str = 'http://';
-    url_str += `${this.cookie.domain}${this.cookie.path}`;
+    url_str += this.cookie.domain;
+    url_str += this.cookie.path;
     return url_str;
   }
 
   domain() {
     let domain_str = ''
-    domain_str += `${this.cookie.domain}`;
+    domain_str += this.cookie.domain;
     return domain_str;
   }
 }
@@ -154,20 +155,23 @@ class StackCookieDisplay {
         console.log( 'StackCookieDisplay.on_cookie_added(): comparing cookie domain to existing domain:');
         console.log( stack_cookie.domain() );
         console.log( compare_wrap_domain );
+        // lexical domain comparison ('a' < 'b' ) = true, ('a' > 'b') = false
         if (stack_cookie.domain() < compare_wrap_domain ) {
-
           console.log( 'StackCookieDisplay.on_cookie_added(): prepending domain-wrap');
+          // add domain-wrap for stack_cookie before the compared element, set domain_added flag to true, leave the for loop
           $( all_domain_wraps[ i ] ).before( this.create_domain_wrap_html( stack_cookie ) );
           domain_added = true;
           break;
         }
       }
+      // append domain-wrap to content_root if comparison didn't trigger
+      // e.g. existing domains: 'a', 'b', adding cookie with 'c' domain
       if ( domain_added === false ) {
         console.log( 'StackCookieDisplay.on_cookie_added(): appending domain-wrap to content_root ');
         this.content_root.append( this.create_domain_wrap_html( stack_cookie ) );
       }
-      //this.content_root.append( this.create_domain_wrap_html( stack_cookie ) );
     }
+    // at this point, a cookie-domain with cookie wrap exists
     var cookie_wrap = $( `#cookie-wrap-${stack_cookie.unique_domain_string()}` );
     console.log( 'StackCookieDisplay.on_cookie_added(): adding cookie to cookie_wrap:');
     console.log( cookie_wrap );
