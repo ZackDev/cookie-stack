@@ -232,12 +232,19 @@ class StackCookieDisplay {
     var attribute_name = $( '<span></span>' );
     attribute_name.addClass( 'attribute-name' );
     attribute_name.text( 'path & name' );
-    var attribute_value = $( '<span></span>' );
-    attribute_value.addClass( 'attribute-value' );
-    attribute_value.text( `${stack_cookie.cookie.path}${stack_cookie.cookie.name}` );
+    var attribute_value_wrap = $( '<div></div>' );
+    attribute_value_wrap.addClass( 'attribute-value' );
+    var attribute_value_path = $( '<span></span>' );
+    attribute_value_path.addClass( 'badge badge-dark' );
+    attribute_value_path.text( `${stack_cookie.cookie.path}` );
+    var attribute_value_name = $( '<span></span>' );
+    attribute_value_name.text( `${stack_cookie.cookie.name}` );
+
+    attribute_value_wrap.append( attribute_value_path );
+    attribute_value_wrap.append( attribute_value_name );
 
     attribute_row.append( attribute_name );
-    attribute_row.append( attribute_value );
+    attribute_row.append( attribute_value_wrap );
 
     cookie_div.append( attribute_row );
 
