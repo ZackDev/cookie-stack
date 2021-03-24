@@ -68,7 +68,7 @@ class StackCookie {
 
   unique_domain_string() {
     let u_str = '';
-    this.cookie.secure ? u_str = "https://" : u_str = "http://";
+    //this.cookie.secure ? u_str = "https://" : u_str = "http://";
     u_str += this.cookie.domain;
     return Helper.unique_string( u_str );
   }
@@ -403,10 +403,12 @@ class StackCookieDisplay {
 
     var domain_info_div = $( '<div></div>' );
 
+    /*
     var secure_badge = $( '<span></span>' );
     secure_badge.addClass( [ 'badge' , 'badge-light' ] );
     secure_badge.addClass( `${StackCookieDisplay.check_or_x(stack_cookie.cookie.secure)}` );
     secure_badge.text( 'secure' );
+    */
 
     var domain_name = $( '<span></span>' );
     domain_name.addClass( 'attribute-value' );
@@ -441,7 +443,7 @@ class StackCookieDisplay {
       );
     });
 
-    domain_info_div.append( secure_badge );
+    //domain_info_div.append( secure_badge );
     domain_info_div.append( domain_name );
 
     cookie_domain_div.append( domain_info_div);
@@ -502,7 +504,7 @@ class StackCookieDisplay {
 }
 
 function on_cookie_changed_listener( cookie_event ) {
-  console.log( 'cookie event caught.' );
+  console.log( 'on_cookie_changed_listener(): cookie event caught.' );
   console.log( cookie_event );
 
   if ( cookie_event.removed === true ) {
@@ -567,7 +569,7 @@ function init() {
 }
 
 /*
-  sorts and adds cookies to the stack
+  adds cookies to the stack
 */
 function add_all_cookies( cookies ) {
   for (let i = 0; i < cookies.length; i++) {
