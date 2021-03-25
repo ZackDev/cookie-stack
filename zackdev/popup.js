@@ -235,7 +235,7 @@ class StackCookieDisplay {
     var attribute_value_wrap = $( '<div></div>' );
     attribute_value_wrap.addClass( 'attribute-value' );
     var attribute_value_path = $( '<span></span>' );
-    attribute_value_path.addClass( 'badge badge-dark' );
+    attribute_value_path.addClass( [ 'badge' , 'badge-dark' ] );
     attribute_value_path.text( `${stack_cookie.cookie.path}` );
     var attribute_value_name = $( '<span></span>' );
     attribute_value_name.text( `${stack_cookie.cookie.name}` );
