@@ -5,7 +5,6 @@
     <link type="text/css" rel="stylesheet" href="/lib/bootstrap/css/bootstrap.css">
     <link type="text/css" rel="stylesheet" href="/lib/bootstrap/bootstrap-icons/bootstrap-icons.css">
     <script type="text/javascript" src="/lib/jquery-3.6.0.js"></script>
-    <script type="text/javascript" src="/lib/popper.min.js"></script>
     <script type="text/javascript" src="/lib/bootstrap/js/bootstrap.bundle.js"></script>
     <script type="text/javascript" src="/zackdev/popup.js"></script>
     <meta charset="utf-8">
@@ -14,8 +13,13 @@
   <body>
     <div id="wrapper">
       <header class="header shadow-sm">
-        <div id="title"><b>Cookie Stack</b></div>
-        <div id="subtitle">view and delete cookies</div>
+        <div>
+          <div id="title"><b>Cookie Stack</b></div>
+          <div id="subtitle">view and delete cookies</div>
+        </div>
+        <a href="/zackdev/options.html" target="_blank">
+          <img src="/lib/bootstrap/bootstrap-icons/gear.svg" height="30px" width="auto">
+        </a>
       </header>
       <div id="content-wrap" class="shadow-sm">
         <div id="content"></div>
@@ -28,7 +32,7 @@
           <div id="version"></div>
           <div>
             <a id="homepage-link" class="badge badge-light">
-              homepage <img src="./favicon-16x16.png">
+              <img src="/lib/bootstrap/bootstrap-icons/github.svg" height="25px" width="auto">
             </a>
           </div>
         </div>

@@ -53,6 +53,12 @@ body {
   font-size: 12px;
 }
 
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
 .cookie-domain {
   min-height: 45px;
   font-size: 20px;
