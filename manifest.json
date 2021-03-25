@@ -5,7 +5,8 @@
   "homepage_url": "https://github.com/ZackDev/cookie-stack",
   "permissions": [
     "<all_urls>",
-    "cookies"
+    "cookies",
+    "storage"
   ],
   "background": {
     "scripts": ["/zackdev/background.js"]
