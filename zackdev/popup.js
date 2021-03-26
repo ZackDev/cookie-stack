@@ -116,10 +116,6 @@ class StackCookieDisplay {
     this.set_homepage_link();
   }
 
-  set_stack( stack ) {
-    this.stack = stack;
-  }
-
   set_version() {
     var version_str = browser.runtime.getManifest().version;
     $( '#version' ).html( [ 'version' , version_str ].join( ' ' ) );
@@ -210,10 +206,8 @@ class StackCookieDisplay {
     trash_button.attr( 'id' , `trash-button-${u_cookie_str}` );
     trash_button.attr( 'type' , 'button' );
     trash_button.addClass( [ 'btn' , 'btn-secondary' , 'btn-sm' , 'bi' , 'bi-trash' ] );
-    trash_button.click( this , function( event ) {
+    trash_button.click( function() {
       console.log( 'StackCookieDisplay: trash button clicked.' );
-      var u_cookie_id = this.id.replace( 'trash-button-' , '' );
-      var stack_cookie = event.data.stack.get_cookie( u_cookie_id );
       console.log( stack_cookie );
       console.log( stack_cookie.url() );
       var remove = browser.cookies.remove(
@@ -563,7 +557,6 @@ function init() {
 
   // initializes Stack with a reference to the StackCookieDisplay created above
   this.stack = new Stack( display );
-  display.set_stack( this.stack );
 
   // adds cookies.onChange listener
   if ( ! browser.cookies.onChanged.hasListener( on_cookie_changed_listener ) ) {
