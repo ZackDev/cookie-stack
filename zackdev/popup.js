@@ -27,24 +27,14 @@ class Stack {
     this.display = display;
   }
 
-  add_cookie( cookie ) {
-    var stack_cookie = new StackCookie( cookie );
+  add_cookie( stack_cookie ) {
     this.cookies.set( stack_cookie.unique_cookie_string() , stack_cookie );
     this.display.on_cookie_added( stack_cookie );
   }
 
-  remove_cookie( cookie ) {
-    var new_stack_cookie = new StackCookie( cookie );
-    var stack_cookie = this.get_cookie( new_stack_cookie.unique_cookie_string() );
-    if ( stack_cookie === undefined ) {
-      stack_cookie = new_stack_cookie;
-    }
+  remove_cookie( stack_cookie ) {
     this.cookies.delete( stack_cookie.unique_cookie_string() );
     this.display.on_cookie_removed( stack_cookie );
-  }
-
-  get_cookie( key ) {
-    return this.cookies.get( key );
   }
 }
 
@@ -507,46 +497,50 @@ class StackCookieDisplay {
 function on_cookie_changed_listener( cookie_event ) {
   console.log( 'on_cookie_changed_listener(): cookie event caught.' );
   console.log( cookie_event );
-
+  var stack_cookie = new StackCookie( cookie_event.cookie );
+  /*
   if ( cookie_event.removed === true ) {
     this.stack.remove_cookie( cookie_event.cookie );
   }
   else if ( cookie_event.removed === false ) {
     this.stack.add_cookie( cookie_event.cookie );
   }
-  /*
-  // cookie got overwritten by a new one
-  if ( cookie_event.cause === 'overwrite' ) {
-    console.log( 'handling cookie event "overwrite". adding cookie.' );
-    this.stack.overwrite_cookie( cookie_event.cookie );
+  */
+  // cookie got collected by the GC
+  if ( cookie_event.cause === 'evicted' ) {
+    console.log( 'handling cookie event "evicted". removing cookie.' );
+    this.stack.remove_cookie( stack_cookie );
+  }
+
+  // cookie expired
+  else if ( cookie_event.cause === 'expired' ) {
+    console.log( 'handling cookie event "expired". removing cookie.');
+    this.stack.remove_cookie( stack_cookie );
   }
 
   // cookie got explicitly added or removed
   else if ( cookie_event.cause === 'explicit' ) {
     if ( cookie_event.removed === true ) {
       console.log( 'handling cookie event "explicit". removing cookie.' );
-      this.stack.remove_cookie( cookie_event.cookie );
+      this.stack.remove_cookie( stack_cookie );
 
     }
     else if ( cookie_event.removed === false ) {
       console.log( 'handling cookie event "explicit". adding cookie.' );
-      this.stack.add_cookie( cookie_event.cookie );
+      this.stack.add_cookie( stack_cookie );
     }
   }
 
-  // cookie got collected by the GC
-  else if ( cookie_event.cause === 'evicted' ) {
-    console.log( 'handling cookie event "evicted". removing cookie.' );
-    this.stack.remove_cookie( cookie_event.cookie );
+  else if ( cookie_event.cause === 'expired_overwrite') {
+    console.log( 'handling cookie event "expired_overwrite". removing cookie.' );
+    this.stack.remove_cookie( stack_cookie );
   }
 
-  // cookie expired
-  else if ( cookie_event.cause === 'expired' ) {
-    console.log( 'handling cookie event "expired". removing cookie.');
-    this.stack.remove_cookie( cookie_event.cookie);
+  // this cookie got overwritten by a new one
+  else if ( cookie_event.cause === 'overwrite' ) {
+    console.log( 'handling cookie event "overwrite". removing cookie.' );
+    this.stack.remove_cookie( stack_cookie );
   }
-
-  */
 }
 
 
@@ -573,7 +567,7 @@ function init() {
 */
 function add_all_cookies( cookies ) {
   for (let i = 0; i < cookies.length; i++) {
-    this.stack.add_cookie( cookies[i] );
+    this.stack.add_cookie( new StackCookie( cookies[i] ) );
   }
 }
 
