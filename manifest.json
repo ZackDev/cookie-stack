@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "Cookie Stack",
-  "version": "2021-03-23",
+  "version": "2021-03-31",
   "homepage_url": "https://github.com/ZackDev/cookie-stack",
   "permissions": [
     "<all_urls>",
