@@ -3,7 +3,7 @@
   - fetches all cookies from the browser's store
   - then calls the update_action_text() function
 */
-const cookie_event_listener = function cookie_event_listener( change_event ) {
+const cookie_event_listener = ( change_event ) => {
   var get_all_cookies = browser.cookies.getAll( {} );
   get_all_cookies.then( update_action_text );
 };
@@ -12,7 +12,7 @@ const cookie_event_listener = function cookie_event_listener( change_event ) {
 /*
   updates the toolbar icon's badge text with the current number of cookies passed
 */
-const update_action_text = function update_action_text( cookies ) {
+const update_action_text = ( cookies ) => {
   var num_cookies = String( cookies.length );
   browser.browserAction.setBadgeText(
     {
