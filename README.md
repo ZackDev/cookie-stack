@@ -19,3 +19,7 @@ The add-on adds an icon to the toolbar of your browser, displaying the number of
 * Click the toolbar icon to get an overview of domains they belong to
 * Expand or contract those domains by clicking the down or up facing arrow to view specific cookies
 * Delete a cookie by clicking the trash icon
+
+## Issues:
+
+Cookies, whose url (domain + path) isn't fully recontructible by the cookies returned by `browser.coolies.getAll({})` API call, can't be removed by this extension.
