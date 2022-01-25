@@ -198,13 +198,22 @@ class StackCookieDisplay {
     trash_button.addClass( [ 'btn' , 'btn-secondary' , 'btn-sm' , 'bi' , 'bi-trash' ] );
     trash_button.click( function() {
       console.log( 'StackCookieDisplay: trash button clicked.' );
-      console.log( stack_cookie );
-      console.log( stack_cookie.url() );
-      var remove = browser.cookies.remove(
-        {
-          url: stack_cookie.url(),
-          name: stack_cookie.cookie.name
-        }
+      let details = {
+        url: stack_cookie.url(),
+        name: stack_cookie.cookie.name,
+        storeId: stack_cookie.cookie.storeId,
+        firstPartyDomain: stack_cookie.cookie.firstPartyDomain
+      }
+      console.log( "details: ", details );
+      browser.cookies.remove( details )
+      .then(
+        function resolve(r) {
+          console.log(`browser.cookies.remove: resolved with: ${r}`);
+          if (r === null) {
+            console.log(`browser.cookies.remove lastError: ${browser.runtime.lastError}`);
+          }
+        },
+        rej => console.log(`browser.cookies.remove resolved with: ${rej}`)
       );
     });
     cookie_action_div.append( trash_button );
