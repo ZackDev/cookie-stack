@@ -199,11 +199,23 @@ class StackCookieDisplay {
     trash_button.addClass( [ 'btn' , 'btn-secondary' , 'btn-sm' , 'bi' , 'bi-trash' ] );
     trash_button.click( () => {
       console.log( 'StackCookieDisplay: trash button clicked.' );
-      let details = {
-        url: stack_cookie.url(),
-        name: stack_cookie.cookie.name,
-        storeId: stack_cookie.cookie.storeId,
-        firstPartyDomain: stack_cookie.cookie.firstPartyDomain
+      let details;
+      switch (this.cookiesAPI.browser) {
+        case 'ff':
+          details = {
+            url: stack_cookie.url(),
+            name: stack_cookie.cookie.name,
+            storeId: stack_cookie.cookie.storeId,
+            firstPartyDomain: stack_cookie.cookie.firstPartyDomain
+          }
+          break;
+        case 'chrome':
+          details = {
+            url: stack_cookie.url(),
+            name: stack_cookie.cookie.name,
+            storeId: stack_cookie.cookie.storeId,
+          }
+          break;
       }
       console.log( "details: ", details );
       this.cookiesAPI.cookies.remove( details )
@@ -555,12 +567,14 @@ function on_cookie_changed_listener( cookie_event ) {
 
 function init() {
   const cookiesAPI = {
-    browserAction: '',
+    browser: '',
     cookies: '',
+    runtime: '',
   }
   
-  const setAPI = (r) => {
+  const setAPI = (b, r) => {
     if (cookiesAPI.cookies === '' && cookiesAPI.runtime === '') {
+      cookiesAPI.browser = b;
       cookiesAPI.cookies = r.cookies;
       cookiesAPI.runtime = r.runtime;
     } else {
@@ -569,14 +583,14 @@ function init() {
   }
   
   try {
-    setAPI(browser);
+    setAPI('ff', browser);
   }
   catch (error) {
     console.log(error)
   }
   
   try {
-    setAPI(chrome);
+    setAPI('chrome', chrome);
   }
   catch (error) {
     console.log(error)
@@ -595,8 +609,15 @@ function init() {
   }
 
   // gets all cookies from browser.cookies API and adds them to the Stack
-  var get_all_cookies = cookiesAPI.cookies.getAll( {} );
-  get_all_cookies.then( add_all_cookies );
+  switch (cookiesAPI.browser) {
+    case 'ff':
+      var get_all_cookies = cookiesAPI.cookies.getAll( {} );
+      get_all_cookies.then( add_all_cookies );
+      break;
+    case 'chrome':
+      cookiesAPI.cookies.getAll({}, add_all_cookies);
+      break;
+  }
 }
 
 /*

@@ -4,8 +4,16 @@
   - then calls the update_action_text() function
 */
 const cookie_event_listener = ( change_event ) => {
-  var get_all_cookies = cookiesAPI.cookies.getAll( {} );
-  get_all_cookies.then( update_action_text );
+  switch (cookiesAPI.browser) {
+    case 'ff':
+      var get_all_cookies = cookiesAPI.cookies.getAll( {} );
+      get_all_cookies.then( update_action_text );
+      break;
+    case 'chrome':
+      cookiesAPI.cookies.getAll( {}, update_action_text );
+      break;
+  }
+
 };
 
 
@@ -22,12 +30,14 @@ const update_action_text = ( cookies ) => {
 }
 
 const cookiesAPI = {
+  browser: '',
   browserAction: '',
   cookies: '',
 }
 
-const setAPI = (r) => {
+const setAPI = (b, r) => {
   if (cookiesAPI.cookies === '' && cookiesAPI.browserAction === '') {
+    cookiesAPI.browser = b;
     cookiesAPI.browserAction = r.browserAction;
     cookiesAPI.cookies = r.cookies;
   } else {
@@ -36,14 +46,14 @@ const setAPI = (r) => {
 }
 
 try {
-  setAPI(browser);
+  setAPI('ff', browser);
 }
 catch (error) {
   console.log(error)
 }
 
 try {
-  setAPI(chrome);
+  setAPI('chrome', chrome);
   cookiesAPI.browserAction.setBadgeTextColor = () => {
     
   }
