@@ -86,13 +86,3 @@ cookiesAPI.browserAction.setBadgeBackgroundColor(
   for the event from cookies.onChanged
 */
 cookie_event_listener( {} );
-
-browser.runtime.onMessage.addListener((request) => {
-  if (request.msg === 'get_api') {
-    return Promise.resolve(
-      {
-        api: cookiesAPI,
-      }
-    );
-  }
-});
