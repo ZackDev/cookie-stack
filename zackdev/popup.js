@@ -97,8 +97,9 @@ class StackCookieDisplay {
     }
   }
 
-  constructor( content_root ) {
+  constructor( content_root, api ) {
     this.content_root = content_root;
+    this.cookiesAPI = api;
     this.messages = [];
     this.displaying_message = false;
     this.domain_state = new Map();
@@ -107,12 +108,12 @@ class StackCookieDisplay {
   }
 
   set_version() {
-    var version_str = browser.runtime.getManifest().version;
+    var version_str = this.cookiesAPI.runtime.getManifest().version_name;
     $( '#version' ).html( [ 'version' , version_str ].join( ' ' ) );
   }
 
   set_homepage_link() {
-    var homepage_url = browser.runtime.getManifest().homepage_url;
+    var homepage_url = this.cookiesAPI.runtime.getManifest().homepage_url;
     $( '#homepage-link' ).attr( 'href' , homepage_url );
   }
 
@@ -196,7 +197,7 @@ class StackCookieDisplay {
     trash_button.attr( 'id' , `trash-button-${u_cookie_str}` );
     trash_button.attr( 'type' , 'button' );
     trash_button.addClass( [ 'btn' , 'btn-secondary' , 'btn-sm' , 'bi' , 'bi-trash' ] );
-    trash_button.click( function() {
+    trash_button.click( () => {
       console.log( 'StackCookieDisplay: trash button clicked.' );
       let details = {
         url: stack_cookie.url(),
@@ -205,7 +206,7 @@ class StackCookieDisplay {
         firstPartyDomain: stack_cookie.cookie.firstPartyDomain
       }
       console.log( "details: ", details );
-      browser.cookies.remove( details )
+      this.cookiesAPI.cookies.remove( details )
       .then(
         function resolve(r) {
           console.log(`browser.cookies.remove: resolved with: ${r}`);
@@ -552,22 +553,49 @@ function on_cookie_changed_listener( cookie_event ) {
   }
 }
 
-
-
 function init() {
+  const cookiesAPI = {
+    browserAction: '',
+    cookies: '',
+  }
+  
+  const setAPI = (r) => {
+    if (cookiesAPI.cookies === '' && cookiesAPI.runtime === '') {
+      cookiesAPI.cookies = r.cookies;
+      cookiesAPI.runtime = r.runtime;
+    } else {
+      console.log('cookiesAPI properties already set.');
+    }
+  }
+  
+  try {
+    setAPI(browser);
+  }
+  catch (error) {
+    console.log(error)
+  }
+  
+  try {
+    setAPI(chrome);
+  }
+  catch (error) {
+    console.log(error)
+  }
+  
+
   // creates StackCookieDisplay object with jquery DOM reference
-  var display = new StackCookieDisplay( $( '#content') );
+  var display = new StackCookieDisplay( $( '#content' ), cookiesAPI );
 
   // initializes Stack with a reference to the StackCookieDisplay created above
   this.stack = new Stack( display );
 
   // adds cookies.onChange listener
-  if ( ! browser.cookies.onChanged.hasListener( on_cookie_changed_listener ) ) {
-    browser.cookies.onChanged.addListener( on_cookie_changed_listener );
+  if ( ! cookiesAPI.cookies.onChanged.hasListener( on_cookie_changed_listener ) ) {
+    cookiesAPI.cookies.onChanged.addListener( on_cookie_changed_listener );
   }
 
   // gets all cookies from browser.cookies API and adds them to the Stack
-  var get_all_cookies = browser.cookies.getAll( {} );
+  var get_all_cookies = cookiesAPI.cookies.getAll( {} );
   get_all_cookies.then( add_all_cookies );
 }
 
