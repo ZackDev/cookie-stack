@@ -121,7 +121,6 @@ class StackCookieDisplay {
   // creates and adds 'cookie-wrap' and appends it to an already existing or previously created domain
   on_cookie_added( stack_cookie ) {
     console.log( 'StackCookieDisplay.on_cookie_added()');
-    console.log( stack_cookie );
 
     var domain_wrap = document.getElementById( `domain-wrap-${stack_cookie.unique_domain_string()}` );
     // domain-wrap doesn't exist
@@ -140,7 +139,6 @@ class StackCookieDisplay {
         var compare_wrap = all_domain_wraps[ i ];
         var compare_wrap_domain = compare_wrap.getAttribute( 'domain' );
         console.log( 'StackCookieDisplay.on_cookie_added(): comparing cookie domain to existing domain:' );
-        console.log( stack_cookie.domain() , compare_wrap_domain );
         // lexical domain comparison ('a' < 'b' ) = true, ('a' > 'b') = false
         if (stack_cookie.domain() < compare_wrap_domain ) {
           console.log( 'StackCookieDisplay.on_cookie_added(): prepending domain-wrap' );
@@ -160,7 +158,6 @@ class StackCookieDisplay {
     // at this point, a cookie-domain with cookie wrap exists
     var cookie_wrap = document.getElementById( `cookie-wrap-${stack_cookie.unique_domain_string()}` );
     console.log( 'StackCookieDisplay.on_cookie_added(): adding cookie to cookie_wrap:');
-    console.log( cookie_wrap );
     cookie_wrap.append( this.create_cookie_html( stack_cookie ) );
   }
 
@@ -168,7 +165,6 @@ class StackCookieDisplay {
   // removes 'cookie-domain' from DOM if there are no more cookies in it
   on_cookie_removed( stack_cookie ) {
     console.log( 'StackCookieDisplay.on_cookie_removed(): removing cookie.' );
-    console.log( stack_cookie );
     document.getElementById( `cookie-${stack_cookie.unique_cookie_string()}` ).remove();
     let cookies = document.getElementsByClassName( `cookie ${stack_cookie.unique_domain_string()}` );
     if ( cookies.length === 0 ) {
@@ -213,7 +209,6 @@ class StackCookieDisplay {
           }
           break;
       }
-      console.log( "details: ", details );
       this.cookiesAPI.cookies.remove( details )
       .then(
         function resolve(r) {
@@ -401,7 +396,6 @@ class StackCookieDisplay {
     var u_domain_str = stack_cookie.unique_domain_string();
     var domain_state = this.domain_state.get( u_domain_str );
     console.log( 'StackCookieDisplay.create_domain_wrap_html(): domain_state');
-    console.log( domain_state );
     var collapse_class = '';
     if ( domain_state.collapsed === true ) {
       collapse_class = 'collapsed' ;
@@ -423,7 +417,7 @@ class StackCookieDisplay {
     details_button.setAttribute( 'data-target' , `cookie-wrap-${u_domain_str}` );
     details_button.classList.add( 'details' , 'btn' , 'border' , 'rounded' , 'quadratic-30' , 'arrow-south' );
     details_button.addEventListener("click", (event) => {
-      console.log('details btn clicked.');
+      console.log( 'StackCookieDisplay: details button clicked.' );
       var btn = event.target;
       var collapsed = false;
       var elementToCollapse = document.getElementById(btn.getAttribute( 'data-target' ));
@@ -441,7 +435,7 @@ class StackCookieDisplay {
         btn.classList.remove( 'arrow-north' );
         btn.classList.add( 'arrow-south' );
       }
-      console.log( 'StackCookieDisplay: details button clicked.' );
+
       this.domain_state.set( stack_cookie.unique_domain_string() ,
         {
           collapsed: collapsed
@@ -471,7 +465,6 @@ class StackCookieDisplay {
     ret.append( cookie_wrap_div );
 
     console.log( 'StackCookieDisplay.create_cookie_domain_html():' );
-    console.log( ret );
 
     return ret;
   }
@@ -479,7 +472,6 @@ class StackCookieDisplay {
 
 function on_cookie_changed_listener( cookie_event ) {
   console.log( 'on_cookie_changed_listener(): cookie event caught.' );
-  console.log( cookie_event );
   var stack_cookie = new StackCookie( cookie_event.cookie );
 
   // cookie got collected by the GC
