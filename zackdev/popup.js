@@ -2,7 +2,7 @@
   Helper class
   - static unique_string( str )
   -- returns the concatenated ascii-number representation of the passed string
-  -- solely for generating valid jquery selectors from strings that contain special
+  -- solely for generating valid HTML-Element selectors from strings that contain special
   -- characters like '.' and '#'
   - negative example 'github.com' as selector would select tags named 'github' with class 'com'
 */
@@ -174,7 +174,7 @@ class StackCookieDisplay {
     }
   }
 
-  // creates HTML string for a specific cookie, including the cookie values provided
+  // creates nested HTML-Element for a specific cookie, including the cookie values provided
   create_cookie_html( stack_cookie ) {
     var u_domain_str = stack_cookie.unique_domain_string();
     var u_cookie_str = stack_cookie.unique_cookie_string();
@@ -263,7 +263,7 @@ class StackCookieDisplay {
     cookie_div.append( attribute_row );
 
 
-    //session
+    // session
     var attribute_row = document.createElement( 'div' );
     attribute_row.classList.add( 'attribute-row' , 'border-bottom' );
     var attribute_name = document.createElement( 'span' );
@@ -279,7 +279,7 @@ class StackCookieDisplay {
     cookie_div.append( attribute_row );
 
 
-    //host host only
+    // host host only
     var attribute_row = document.createElement( 'div' );
     attribute_row.classList.add( 'attribute-row' , 'border-bottom' );
     var attribute_name = document.createElement( 'span' );
@@ -295,7 +295,7 @@ class StackCookieDisplay {
     cookie_div.append( attribute_row );
 
 
-    //http only
+    // http only
     var attribute_row = document.createElement( 'div' );
     attribute_row.classList.add( 'attribute-row' , 'border-bottom' );
     var attribute_name = document.createElement( 'span' );
@@ -311,7 +311,7 @@ class StackCookieDisplay {
     cookie_div.append( attribute_row );
 
 
-    //same site
+    // same site
     var attribute_row = document.createElement( 'div' );
     attribute_row.classList.add( 'attribute-row' , 'border-bottom' );
     var attribute_name = document.createElement( 'span' );
@@ -327,7 +327,7 @@ class StackCookieDisplay {
     cookie_div.append( attribute_row );
 
 
-    //expiration date
+    // expiration date
     var attribute_row = document.createElement( 'div' );
     attribute_row.classList.add( 'attribute-row' , 'border-bottom' );
     var attribute_name = document.createElement( 'span' );
@@ -343,7 +343,7 @@ class StackCookieDisplay {
     cookie_div.append( attribute_row );
 
 
-    //first party domain
+    // first party domain
     var attribute_row = document.createElement( 'div' );
     attribute_row.classList.add( 'attribute-row' , 'border-bottom' );
     var attribute_name = document.createElement( 'span' );
@@ -359,7 +359,7 @@ class StackCookieDisplay {
     cookie_div.append( attribute_row );
 
 
-    //store id
+    // store id
     var attribute_row = document.createElement( 'div' );
     attribute_row.classList.add( 'attribute-row' , 'border-bottom' );
     var attribute_name = document.createElement( 'span' );
@@ -375,7 +375,7 @@ class StackCookieDisplay {
     cookie_div.append( attribute_row );
 
 
-    //value
+    // value
     var attribute_row = document.createElement( 'div' );
     attribute_row.classList.add( 'attribute-row' , 'border-bottom' );
     var attribute_value = document.createElement( 'span' );
@@ -389,7 +389,7 @@ class StackCookieDisplay {
     return cookie_div;
   }
 
-  // creates HTML string for a specific domain with the corresponding collapse button
+  // creates a nested HTML-Element for a specific domain with the corresponding collapse button
   create_domain_wrap_html( stack_cookie ) {
     console.log( 'StackCookieDisplay.create_domain_wrap_html()');
 
@@ -443,7 +443,6 @@ class StackCookieDisplay {
       );
     });
 
-    //domain_info_div.append( secure_badge );
     domain_info_div.append( domain_name );
 
     cookie_domain_div.append( domain_info_div);
@@ -519,7 +518,7 @@ function init() {
   }
   
   const setAPI = (b, r) => {
-    if (cookiesAPI.cookies === '' && cookiesAPI.runtime === '') {
+    if (cookiesAPI.browser === '') {
       cookiesAPI.browser = b;
       cookiesAPI.cookies = r.cookies;
       cookiesAPI.runtime = r.runtime;
@@ -543,7 +542,7 @@ function init() {
   }
   
 
-  // creates StackCookieDisplay object with jquery DOM reference
+  // creates StackCookieDisplay object, with the HTML-Element where it attaches to as parameter
   var display = new StackCookieDisplay( document.getElementById( 'content' ), cookiesAPI );
 
   // initializes Stack with a reference to the StackCookieDisplay created above
