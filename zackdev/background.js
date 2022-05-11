@@ -13,7 +13,6 @@ const cookie_event_listener = ( change_event ) => {
       cookiesAPI.cookies.getAll( {}, update_action_text );
       break;
   }
-
 };
 
 

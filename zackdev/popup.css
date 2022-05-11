@@ -6,6 +6,7 @@ body {
   overflow: hidden;
   background-color: #FFF;
   color: #000;
+  user-select: none;
 }
 
 #wrapper {
@@ -13,32 +14,21 @@ body {
 }
 
 #title {
+  font-size: 16px;
   margin: 0 auto;
 }
 
 #subtitle {
+  font-size: 14px;
   margin: 0 auto;
-}
-
-#message-wrap {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto;
-  min-height: 75px;
-}
-
-#message {
-  display: none;
-  width: 100%;
+  color: #555555;
 }
 
 #content-wrap {
   padding: 1px 10px 0px 10px;
   margin: 5px 0px 5px 0px;
-  background-color: #F2F2F2;
-  min-height: 330px;
-  max-height: 330px;
+  min-height: 405px;
+  max-height: 405px;
   overflow-y: scroll;
 }
 
@@ -49,8 +39,33 @@ body {
   min-height: 32px;
   max-height: 32px;
   padding: 0px 5px 0px 5px;
-  color: #383838;
   font-size: 12px;
+}
+
+.btn {
+  border: none;
+  background-color: #FFFFFF;
+}
+
+.btn:hover {
+  background-color: #d4d4d4;
+  cursor: pointer;
+}
+
+.border {
+  border: 1px solid;
+}
+
+.border-top {
+  border-top: 1px solid #d4d4d4;
+}
+
+.border-bottom {
+  border-bottom: 1px solid #d4d4d4;
+}
+
+.rounded {
+  border-radius: 3px;
 }
 
 .header {
@@ -94,10 +109,43 @@ body {
 .cookie .attribute-value {
   overflow-wrap: anywhere;
   font-size: 16px;
-  color: #383838;
 }
 
 .cookie .attribute-name {
   font-size: 16px;
-  color: #212121;
+  color: #555555;
+}
+
+.shadow {
+  box-shadow: 2px 2px 2px #555555;
+}
+
+.arrow-north {
+  background-image: url('./icons/arrow-north.svg');
+}
+
+.arrow-south {
+  background-image: url('./icons/arrow-south.svg');
+}
+
+.trash {
+  background-image: url('./icons/trash.svg');
+}
+
+.quadratic-20 {
+  height: 20px;
+  width: 20px;
+}
+
+.quadratic-30 {
+  height: 30px;
+  width: 30px;
+}
+
+.collapsed {
+
+}
+
+.not-collapsed {
+  display: none;
 }

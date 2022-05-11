@@ -85,23 +85,21 @@ class StackCookie {
   -- adding and removing cookies
   -- displaying cookie values
   -- handling trash and details button clicks
-  -- displaying messages, version and a link to the homepage
+  -- version and a link to the homepage
 */
 class StackCookieDisplay {
   static check_or_x( true_false ) {
     if ( true_false === true ) {
-      return 'bi bi-check';
+      return '&check;';
     }
     else if (true_false === false ) {
-      return 'bi bi-x';
+      return '&cross;';
     }
   }
 
   constructor( content_root, api ) {
     this.content_root = content_root;
     this.cookiesAPI = api;
-    this.messages = [];
-    this.displaying_message = false;
     this.domain_state = new Map();
     this.set_version();
     this.set_homepage_link();
@@ -109,12 +107,14 @@ class StackCookieDisplay {
 
   set_version() {
     var version_str = this.cookiesAPI.runtime.getManifest().version_name;
-    $( '#version' ).html( [ 'version' , version_str ].join( ' ' ) );
+    document.getElementById( 'version' ).innerText = [ 'version' , version_str ].join( ' ' );
   }
 
   set_homepage_link() {
     var homepage_url = this.cookiesAPI.runtime.getManifest().homepage_url;
-    $( '#homepage-link' ).attr( 'href' , homepage_url );
+    var homepage_link = document.getElementById( 'homepage-link' );
+    homepage_link.setAttribute( 'href' , homepage_url );
+    homepage_link.innerText = homepage_url;
   }
 
   // creates and adds 'cookie-domain' div to the DOM if it is the first cookie for this domain
@@ -123,9 +123,9 @@ class StackCookieDisplay {
     console.log( 'StackCookieDisplay.on_cookie_added()');
     console.log( stack_cookie );
 
-    var domain_wrap = $( `#domain-wrap-${stack_cookie.unique_domain_string()}` );
+    var domain_wrap = document.getElementById( `domain-wrap-${stack_cookie.unique_domain_string()}` );
     // domain-wrap doesn't exist
-    if ( domain_wrap.length === 0 ) {
+    if ( domain_wrap === null ) {
       // set the domain state to it's default, 'not collapsed'
       console.log( 'StackCookieDisplay.on_cookie_added(): setting domain state' );
       this.domain_state.set( stack_cookie.unique_domain_string() ,
@@ -135,18 +135,17 @@ class StackCookieDisplay {
       );
       console.log( 'StackCookieDisplay.on_cookie_added(): domain_wrap doesnt exist, going through which to insert to.' );
       var domain_added = false;
-      var all_domain_wraps = $( '.domain-wrap' );
+      var all_domain_wraps = document.getElementsByClassName( 'domain-wrap' );
       for (let i = 0; i < all_domain_wraps.length; i++) {
-        var compare_wrap = $( all_domain_wraps[ i ]);
-        var compare_wrap_domain = $( compare_wrap ).attr( 'domain' );
+        var compare_wrap = all_domain_wraps[ i ];
+        var compare_wrap_domain = compare_wrap.getAttribute( 'domain' );
         console.log( 'StackCookieDisplay.on_cookie_added(): comparing cookie domain to existing domain:' );
-        console.log( stack_cookie.domain() );
-        console.log( compare_wrap_domain );
+        console.log( stack_cookie.domain() , compare_wrap_domain );
         // lexical domain comparison ('a' < 'b' ) = true, ('a' > 'b') = false
         if (stack_cookie.domain() < compare_wrap_domain ) {
           console.log( 'StackCookieDisplay.on_cookie_added(): prepending domain-wrap' );
           // add domain-wrap for stack_cookie before the compared element, set domain_added flag to true, leave the for loop
-          $( all_domain_wraps[ i ] ).before( this.create_domain_wrap_html( stack_cookie ) );
+          document.getElementById( 'content' ).insertBefore( this.create_domain_wrap_html( stack_cookie ) , all_domain_wraps[ i ] );
           domain_added = true;
           break;
         }
@@ -159,12 +158,10 @@ class StackCookieDisplay {
       }
     }
     // at this point, a cookie-domain with cookie wrap exists
-    var cookie_wrap = $( `#cookie-wrap-${stack_cookie.unique_domain_string()}` );
+    var cookie_wrap = document.getElementById( `cookie-wrap-${stack_cookie.unique_domain_string()}` );
     console.log( 'StackCookieDisplay.on_cookie_added(): adding cookie to cookie_wrap:');
     console.log( cookie_wrap );
     cookie_wrap.append( this.create_cookie_html( stack_cookie ) );
-
-    this.add_message( `cookie "${stack_cookie.cookie.domain}${stack_cookie.cookie.path}${stack_cookie.cookie.name}" added.` );
   }
 
   // removes a single cookie from the DOM
@@ -172,32 +169,31 @@ class StackCookieDisplay {
   on_cookie_removed( stack_cookie ) {
     console.log( 'StackCookieDisplay.on_cookie_removed(): removing cookie.' );
     console.log( stack_cookie );
-    $( `#cookie-${stack_cookie.unique_cookie_string()}` ).remove();
-    let cookies = $( `.cookie.${stack_cookie.unique_domain_string()}` );
+    document.getElementById( `cookie-${stack_cookie.unique_cookie_string()}` ).remove();
+    let cookies = document.getElementsByClassName( `cookie ${stack_cookie.unique_domain_string()}` );
     if ( cookies.length === 0 ) {
       console.log( 'StackCookieDisplay.on_cookie_removed(): removing domain-wrap' );
-      $( `#domain-wrap-${stack_cookie.unique_domain_string()}` ).remove();
+      document.getElementById( `domain-wrap-${stack_cookie.unique_domain_string()}` ).remove();
       this.domain_state.delete( stack_cookie.unique_domain_string() );
     }
-    this.add_message( `cookie "${stack_cookie.cookie.domain}${stack_cookie.cookie.path}${stack_cookie.cookie.name}" removed.` );
   }
 
   // creates HTML string for a specific cookie, including the cookie values provided
   create_cookie_html( stack_cookie ) {
     var u_domain_str = stack_cookie.unique_domain_string();
     var u_cookie_str = stack_cookie.unique_cookie_string();
-    var cookie_div = $( '<div></div>' );
-    cookie_div.attr( 'id' , `cookie-${u_cookie_str}` );
-    cookie_div.addClass( [ 'cookie' , `${u_domain_str}` ] );
+    var cookie_div = document.createElement( 'div' );
+    cookie_div.setAttribute( 'id' , `cookie-${u_cookie_str}` );
+    cookie_div.classList.add( 'cookie' , `${u_domain_str}` );
 
-    var cookie_action_div = $( '<div></div>' );
-    cookie_action_div.addClass( [ 'cookie-action' , 'border-top' ] );
+    var cookie_action_div = document.createElement( 'div' );
+    cookie_action_div.classList.add( 'cookie-action' );
 
-    var trash_button = $( '<button></button>' );
-    trash_button.attr( 'id' , `trash-button-${u_cookie_str}` );
-    trash_button.attr( 'type' , 'button' );
-    trash_button.addClass( [ 'btn' , 'btn-secondary' , 'btn-sm' , 'bi' , 'bi-trash' ] );
-    trash_button.click( () => {
+    var trash_button = document.createElement( 'button' );
+    trash_button.setAttribute( 'id' , `trash-button-${u_cookie_str}` );
+    trash_button.setAttribute( 'type' , 'button' );
+    trash_button.classList.add( 'btn', 'border' , 'rounded' , 'quadratic-30' , 'trash' );
+    trash_button.addEventListener( "click", () => {
       console.log( 'StackCookieDisplay: trash button clicked.' );
       let details;
       switch (this.cookiesAPI.browser) {
@@ -229,22 +225,23 @@ class StackCookieDisplay {
         rej => console.log(`browser.cookies.remove resolved with: ${rej}`)
       );
     });
+
     cookie_action_div.append( trash_button );
     cookie_div.append( cookie_action_div );
 
     // path/name
-    var attribute_row = $( '<div></div>' );
-    attribute_row.addClass( [ 'attribute-row' , 'border-bottom' ] );
-    var attribute_name = $( '<span></span>' );
-    attribute_name.addClass( 'attribute-name' );
-    attribute_name.text( 'path & name' );
-    var attribute_value_wrap = $( '<div></div>' );
-    attribute_value_wrap.addClass( 'attribute-value' );
-    var attribute_value_path = $( '<span></span>' );
-    attribute_value_path.addClass( [ 'badge' , 'badge-dark' ] );
-    attribute_value_path.text( `${stack_cookie.cookie.path}` );
-    var attribute_value_name = $( '<span></span>' );
-    attribute_value_name.text( `${stack_cookie.cookie.name}` );
+    var attribute_row = document.createElement( 'div' );
+    attribute_row.classList.add( 'attribute-row' , 'border-bottom' );
+    var attribute_name = document.createElement( 'span' );
+    attribute_name.classList.add( 'attribute-name' );
+    attribute_name.innerText = 'path & name' ;
+    var attribute_value_wrap = document.createElement( 'div' );
+    attribute_value_wrap.classList.add( 'attribute-value' );
+    var attribute_value_path = document.createElement( 'span' );
+    attribute_value_path.classList.add( 'badge' , 'badge-dark' );
+    attribute_value_path.innerText = `${stack_cookie.cookie.path}` ;
+    var attribute_value_name = document.createElement( 'span' );
+    attribute_value_name.innerText = `${stack_cookie.cookie.name}` ;
 
     attribute_value_wrap.append( attribute_value_path );
     attribute_value_wrap.append( attribute_value_name );
@@ -256,14 +253,14 @@ class StackCookieDisplay {
 
 
     // secure
-    var attribute_row = $( '<div></div>' );
-    attribute_row.addClass( [ 'attribute-row' , 'border-bottom' ] );
-    var attribute_name = $( '<span></span>' );
-    attribute_name.addClass( 'attribute-name' );
-    attribute_name.text( 'secure' );
-    var attribute_value = $( '<span></span>' );
-    attribute_value.addClass( 'attribute-value' );
-    attribute_value.addClass( `${StackCookieDisplay.check_or_x(stack_cookie.cookie.secure)}` );
+    var attribute_row = document.createElement( 'div' );
+    attribute_row.classList.add( 'attribute-row' , 'border-bottom' );
+    var attribute_name = document.createElement( 'span' );
+    attribute_name.classList.add( 'attribute-name' );
+    attribute_name.innerText = 'secure' ;
+    var attribute_value = document.createElement( 'span' );
+    attribute_value.classList.add( 'attribute-value' );
+    attribute_value.innerHTML = StackCookieDisplay.check_or_x(stack_cookie.cookie.secure);
 
     attribute_row.append( attribute_name );
     attribute_row.append( attribute_value );
@@ -272,14 +269,14 @@ class StackCookieDisplay {
 
 
     //session
-    var attribute_row = $( '<div></div>' );
-    attribute_row.addClass( [ 'attribute-row' , 'border-bottom' ] );
-    var attribute_name = $( '<span></span>' );
-    attribute_name.addClass( 'attribute-name' );
-    attribute_name.text( 'session' );
-    var attribute_value = $( '<span></span>' );
-    attribute_value.addClass( 'attribute-value' );
-    attribute_value.addClass( `${StackCookieDisplay.check_or_x(stack_cookie.cookie.session)}` );
+    var attribute_row = document.createElement( 'div' );
+    attribute_row.classList.add( 'attribute-row' , 'border-bottom' );
+    var attribute_name = document.createElement( 'span' );
+    attribute_name.classList.add( 'attribute-name' );
+    attribute_name.innerText = 'session' ;
+    var attribute_value = document.createElement( 'span' );
+    attribute_value.classList.add( 'attribute-value' );
+    attribute_value.innerHTML = StackCookieDisplay.check_or_x(stack_cookie.cookie.session);
 
     attribute_row.append( attribute_name );
     attribute_row.append( attribute_value );
@@ -288,14 +285,14 @@ class StackCookieDisplay {
 
 
     //host host only
-    var attribute_row = $( '<div></div>' );
-    attribute_row.addClass( [ 'attribute-row' , 'border-bottom' ] );
-    var attribute_name = $( '<span></span>' );
-    attribute_name.addClass( 'attribute-name' );
-    attribute_name.text( 'host only' );
-    var attribute_value = $( '<span></span>' );
-    attribute_value.addClass( 'attribute-value' );
-    attribute_value.addClass( `${StackCookieDisplay.check_or_x(stack_cookie.cookie.hostOnly)}` );
+    var attribute_row = document.createElement( 'div' );
+    attribute_row.classList.add( 'attribute-row' , 'border-bottom' );
+    var attribute_name = document.createElement( 'span' );
+    attribute_name.classList.add( 'attribute-name' );
+    attribute_name.innerText = 'host only' ;
+    var attribute_value = document.createElement( 'span' );
+    attribute_value.classList.add( 'attribute-value' );
+    attribute_value.innerHTML = StackCookieDisplay.check_or_x(stack_cookie.cookie.hostOnly);
 
     attribute_row.append( attribute_name );
     attribute_row.append( attribute_value );
@@ -304,14 +301,14 @@ class StackCookieDisplay {
 
 
     //http only
-    var attribute_row = $( '<div></div>' );
-    attribute_row.addClass( [ 'attribute-row' , 'border-bottom' ] );
-    var attribute_name = $( '<span></span>' );
-    attribute_name.addClass( 'attribute-name' );
-    attribute_name.text( 'http only' );
-    var attribute_value = $( '<span></span>' );
-    attribute_value.addClass( 'attribute-value' );
-    attribute_value.addClass( `${StackCookieDisplay.check_or_x(stack_cookie.cookie.httpOnly)}` );
+    var attribute_row = document.createElement( 'div' );
+    attribute_row.classList.add( 'attribute-row' , 'border-bottom' );
+    var attribute_name = document.createElement( 'span' );
+    attribute_name.classList.add( 'attribute-name' );
+    attribute_name.innerText = 'http only' ;
+    var attribute_value = document.createElement( 'span' );
+    attribute_value.classList.add( 'attribute-value' );
+    attribute_value.innerHTML = StackCookieDisplay.check_or_x(stack_cookie.cookie.httpOnly);
 
     attribute_row.append( attribute_name );
     attribute_row.append( attribute_value );
@@ -320,14 +317,14 @@ class StackCookieDisplay {
 
 
     //same site
-    var attribute_row = $( '<div></div>' );
-    attribute_row.addClass( [ 'attribute-row' , 'border-bottom' ] );
-    var attribute_name = $( '<span></span>' );
-    attribute_name.addClass( 'attribute-name' );
-    attribute_name.text( 'same site' );
-    var attribute_value = $( '<span></span>' );
-    attribute_value.addClass( 'attribute-value' );
-    attribute_value.text( `${stack_cookie.cookie.sameSite}` );
+    var attribute_row = document.createElement( 'div' );
+    attribute_row.classList.add( 'attribute-row' , 'border-bottom' );
+    var attribute_name = document.createElement( 'span' );
+    attribute_name.classList.add( 'attribute-name' );
+    attribute_name.innerText = 'same site' ;
+    var attribute_value = document.createElement( 'span' );
+    attribute_value.classList.add( 'attribute-value' );
+    attribute_value.innerText = `${stack_cookie.cookie.sameSite}` ;
 
     attribute_row.append( attribute_name );
     attribute_row.append( attribute_value );
@@ -336,14 +333,14 @@ class StackCookieDisplay {
 
 
     //expiration date
-    var attribute_row = $( '<div></div>' );
-    attribute_row.addClass( [ 'attribute-row' , 'border-bottom' ] );
-    var attribute_name = $( '<span></span>' );
-    attribute_name.addClass( 'attribute-name' );
-    attribute_name.text( 'expiration date' );
-    var attribute_value = $( '<span></span>' );
-    attribute_value.addClass( 'attribute-value' );
-    attribute_value.text( `${stack_cookie.cookie.expirationDate}` );
+    var attribute_row = document.createElement( 'div' );
+    attribute_row.classList.add( 'attribute-row' , 'border-bottom' );
+    var attribute_name = document.createElement( 'span' );
+    attribute_name.classList.add( 'attribute-name' );
+    attribute_name.innerText = 'expiration date' ;
+    var attribute_value = document.createElement( 'span' );
+    attribute_value.classList.add( 'attribute-value' );
+    attribute_value.innerText = `${stack_cookie.cookie.expirationDate}` ;
 
     attribute_row.append( attribute_name );
     attribute_row.append( attribute_value );
@@ -352,14 +349,14 @@ class StackCookieDisplay {
 
 
     //first party domain
-    var attribute_row = $( '<div></div>' );
-    attribute_row.addClass( [ 'attribute-row' , 'border-bottom' ] );
-    var attribute_name = $( '<span></span>' );
-    attribute_name.addClass( 'attribute-name' );
-    attribute_name.text( 'first party domain' );
-    var attribute_value = $( '<span></span>' );
-    attribute_value.addClass( 'attribute-value' );
-    attribute_value.text( `${stack_cookie.cookie.firstPartyDomain}` );
+    var attribute_row = document.createElement( 'div' );
+    attribute_row.classList.add( 'attribute-row' , 'border-bottom' );
+    var attribute_name = document.createElement( 'span' );
+    attribute_name.classList.add( 'attribute-name' );
+    attribute_name.innerText = 'first party domain' ;
+    var attribute_value = document.createElement( 'span' );
+    attribute_value.classList.add( 'attribute-value' );
+    attribute_value.innerText = `${stack_cookie.cookie.firstPartyDomain}` ;
 
     attribute_row.append( attribute_name );
     attribute_row.append( attribute_value );
@@ -368,14 +365,14 @@ class StackCookieDisplay {
 
 
     //store id
-    var attribute_row = $( '<div></div>' );
-    attribute_row.addClass( [ 'attribute-row' , 'border-bottom' ] );
-    var attribute_name = $( '<span></span>' );
-    attribute_name.addClass( 'attribute-name' );
-    attribute_name.text( 'store id' );
-    var attribute_value = $( '<span></span>');
-    attribute_value.addClass( 'attribute-value' );
-    attribute_value.text( `${stack_cookie.cookie.storeId}` );
+    var attribute_row = document.createElement( 'div' );
+    attribute_row.classList.add( 'attribute-row' , 'border-bottom' );
+    var attribute_name = document.createElement( 'span' );
+    attribute_name.classList.add( 'attribute-name' );
+    attribute_name.innerText = 'store id' ;
+    var attribute_value = document.createElement( 'span' );
+    attribute_value.classList.add( 'attribute-value' );
+    attribute_value.innerText = `${stack_cookie.cookie.storeId}` ;
 
     attribute_row.append( attribute_name );
     attribute_row.append( attribute_value );
@@ -384,11 +381,11 @@ class StackCookieDisplay {
 
 
     //value
-    var attribute_row = $( '<div></div>' );
-    attribute_row.addClass( [ 'attribute-row' , 'border-bottom' ] );
-    var attribute_value = $( '<span></span>' );
-    attribute_value.addClass( 'attribute-value' );
-    attribute_value.text( `${stack_cookie.cookie.value}` );
+    var attribute_row = document.createElement( 'div' );
+    attribute_row.classList.add( 'attribute-row' , 'border-bottom' );
+    var attribute_value = document.createElement( 'span' );
+    attribute_value.classList.add( 'attribute-value' );
+    attribute_value.innerText = `${stack_cookie.cookie.value}` ;
 
     attribute_row.append( attribute_value );
 
@@ -407,49 +404,45 @@ class StackCookieDisplay {
     console.log( domain_state );
     var collapse_class = '';
     if ( domain_state.collapsed === true ) {
-      collapse_class = 'show' ;
+      collapse_class = 'collapsed' ;
     }
     console.log( 'StackCookieDisplay.create_domain_wrap_html(): creating html elements');
-    var cookie_domain_div = $( '<div></div>' );
-    cookie_domain_div.attr( 'id' , `cookie-domain-${u_domain_str}` );
-    cookie_domain_div.addClass( [ 'cookie-domain' , 'border-top' ] );
+    var cookie_domain_div = document.createElement( 'div' );
+    cookie_domain_div.setAttribute( 'id' , `cookie-domain-${u_domain_str}` );
+    cookie_domain_div.classList.add( 'cookie-domain' , 'border-top' );
 
-    var domain_info_div = $( '<div></div>' );
+    var domain_info_div = document.createElement( 'div' );
 
-    /*
-    var secure_badge = $( '<span></span>' );
-    secure_badge.addClass( [ 'badge' , 'badge-light' ] );
-    secure_badge.addClass( `${StackCookieDisplay.check_or_x(stack_cookie.cookie.secure)}` );
-    secure_badge.text( 'secure' );
-    */
+    var domain_name = document.createElement( 'span' );
+    domain_name.classList.add( 'attribute-value' );
+    domain_name.innerText = `${stack_cookie.cookie.domain}` ;
 
-    var domain_name = $( '<span></span>' );
-    domain_name.addClass( 'attribute-value' );
-    domain_name.text( `${stack_cookie.cookie.domain}` );
-
-    var details_button = $( '<button></button>' );
-    details_button.attr( 'type' , 'button' );
-    details_button.attr( 'id' , `details-button-${u_domain_str}` );
-    details_button.attr( 'data-toogle' , 'collapse' );
-    details_button.attr( 'data-target' , `#cookie-wrap-${u_domain_str}` );
-    details_button.addClass( [ 'details' , 'btn' , 'btn-secondary' , 'btn-sm' , 'bi' , 'bi-arrow-down' ] );
-    details_button.click( this, function( event ) {
+    var details_button = document.createElement( 'button' );
+    details_button.setAttribute( 'type' , 'button' );
+    details_button.setAttribute( 'id' , `details-button-${u_domain_str}` );
+    details_button.setAttribute( 'data-target' , `cookie-wrap-${u_domain_str}` );
+    details_button.classList.add( 'details' , 'btn' , 'border' , 'rounded' , 'quadratic-30' , 'arrow-north' );
+    details_button.addEventListener("click", (event) => {
+      console.log('details btn clicked.');
+      var btn = event.target;
       var collapsed = false;
-      if ( $( this ).hasClass( 'bi-arrow-up' ) ) {
+      var elementToCollapse = document.getElementById(btn.getAttribute( 'data-target' ));
+      if ( btn.classList.contains( 'arrow-north' ) ) {
         collapsed = false;
-        $( this ).removeClass( 'bi-arrow-up' );
-        $( this ).addClass( 'bi-arrow-down' );
+        elementToCollapse.classList.add( 'collapsed' );
+        elementToCollapse.classList.remove( 'not-collapsed' );
+        btn.classList.remove( 'arrow-north' );
+        btn.classList.add( 'arrow-south' );
       }
-      else if ( $( this ).hasClass( 'bi-arrow-down' ) ) {
+      else if ( btn.classList.contains( 'arrow-south' ) ) {
         collapsed = true;
-        $( this ).removeClass( 'bi-arrow-down' );
-        $( this ).addClass( 'bi-arrow-up' );
+        elementToCollapse.classList.remove( 'collapsed' );
+        elementToCollapse.classList.add( 'not-collapsed' );
+        btn.classList.remove( 'arrow-south' );
+        btn.classList.add( 'arrow-north' );
       }
-
-      var collapse_target_id = $( this ).attr( 'data-target' );
-      $( collapse_target_id ).collapse( 'toggle' );
       console.log( 'StackCookieDisplay: details button clicked.' );
-      event.data.domain_state.set( stack_cookie.unique_domain_string() ,
+      this.domain_state.set( stack_cookie.unique_domain_string() ,
         {
           collapsed: collapsed
         }
@@ -462,17 +455,18 @@ class StackCookieDisplay {
     cookie_domain_div.append( domain_info_div);
     cookie_domain_div.append( details_button );
 
-    var cookie_wrap_div = $( '<div></div>' );
-    cookie_wrap_div.attr( 'id' , `cookie-wrap-${u_domain_str}` );
-    cookie_wrap_div.addClass( [ 'cookie-wrap' , 'collapse' ] );
-    cookie_wrap_div.addClass( `${collapse_class}` );
+    var cookie_wrap_div = document.createElement( 'div' );
+    cookie_wrap_div.setAttribute( 'id' , `cookie-wrap-${u_domain_str}` );
+    cookie_wrap_div.classList.add( 'cookie-wrap' , 'not-collapsed' );
+    if (collapse_class !== '') {
+      cookie_wrap_div.classList.add( `${collapse_class}` );
+      cookie_wrap_div.classList.remove( 'not-collapsed' );
+    }
 
-
-
-    var ret = $( '<div></div>' );
-    ret.addClass( 'domain-wrap' );
-    ret.attr( 'id' , `domain-wrap-${u_domain_str}` );
-    ret.attr( 'domain' , `${stack_cookie.domain()}` );
+    var ret = document.createElement( 'div' );
+    ret.classList.add( 'domain-wrap' );
+    ret.setAttribute( 'id' , `domain-wrap-${u_domain_str}` );
+    ret.setAttribute( 'domain' , `${stack_cookie.domain()}` );
     ret.append( cookie_domain_div );
     ret.append( cookie_wrap_div );
 
@@ -480,39 +474,6 @@ class StackCookieDisplay {
     console.log( ret );
 
     return ret;
-
-  }
-
-  add_message( msg ) {
-    this.messages.push( msg );
-    this.display_message();
-  }
-
-  /*
-  sequentially displaying messages like 'cookie ... added' and 'cookie ... removed'
-  - pseudo recursion of display_message() by setTimeout(...) if 'this.messages' contains elements
-  - 'this.displaying_message' is true as long as the animation fadeIn() + fadeOut() is active
-  - removes displayed messages from 'this.messages'
-  */
-  display_message() {
-    if ( this.displaying_message === false ) {
-      if ( this.messages.length > 0 ) {
-        var message = this.messages[ 0 ];
-        this.displaying_message = true;
-        var message_div = $( '#message' );
-        message_div.html( message );
-        message_div.fadeIn( 500, function() {
-          $( this ).fadeOut( 2500 );
-        });
-        setTimeout( function() {
-          this.messages.shift();
-          this.displaying_message = false;
-          if ( this.messages.length > 0 ) {
-            this.display_message();
-          }
-        }.bind( this ) , 4000);
-      }
-    }
   }
 }
 
@@ -520,14 +481,7 @@ function on_cookie_changed_listener( cookie_event ) {
   console.log( 'on_cookie_changed_listener(): cookie event caught.' );
   console.log( cookie_event );
   var stack_cookie = new StackCookie( cookie_event.cookie );
-  /*
-  if ( cookie_event.removed === true ) {
-    this.stack.remove_cookie( cookie_event.cookie );
-  }
-  else if ( cookie_event.removed === false ) {
-    this.stack.add_cookie( cookie_event.cookie );
-  }
-  */
+
   // cookie got collected by the GC
   if ( cookie_event.cause === 'evicted' ) {
     console.log( 'handling cookie event "evicted". removing cookie.' );
@@ -598,7 +552,7 @@ function init() {
   
 
   // creates StackCookieDisplay object with jquery DOM reference
-  var display = new StackCookieDisplay( $( '#content' ), cookiesAPI );
+  var display = new StackCookieDisplay( document.getElementById( 'content' ), cookiesAPI );
 
   // initializes Stack with a reference to the StackCookieDisplay created above
   this.stack = new Stack( display );
@@ -638,6 +592,8 @@ function on_cookie_remove_error( error ) {
   console.log( error );
 }
 
-$( document ).ready( function() {
-  init();
-});
+document.onreadystatechange = () => {
+  if (document.readyState === 'complete') {
+    init();
+  }
+};
