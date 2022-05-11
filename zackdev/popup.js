@@ -421,25 +421,25 @@ class StackCookieDisplay {
     details_button.setAttribute( 'type' , 'button' );
     details_button.setAttribute( 'id' , `details-button-${u_domain_str}` );
     details_button.setAttribute( 'data-target' , `cookie-wrap-${u_domain_str}` );
-    details_button.classList.add( 'details' , 'btn' , 'border' , 'rounded' , 'quadratic-30' , 'arrow-north' );
+    details_button.classList.add( 'details' , 'btn' , 'border' , 'rounded' , 'quadratic-30' , 'arrow-south' );
     details_button.addEventListener("click", (event) => {
       console.log('details btn clicked.');
       var btn = event.target;
       var collapsed = false;
       var elementToCollapse = document.getElementById(btn.getAttribute( 'data-target' ));
-      if ( btn.classList.contains( 'arrow-north' ) ) {
+      if ( btn.classList.contains( 'arrow-south' ) ) {
         collapsed = false;
         elementToCollapse.classList.add( 'collapsed' );
         elementToCollapse.classList.remove( 'not-collapsed' );
-        btn.classList.remove( 'arrow-north' );
-        btn.classList.add( 'arrow-south' );
+        btn.classList.remove( 'arrow-south' );
+        btn.classList.add( 'arrow-north' );
       }
-      else if ( btn.classList.contains( 'arrow-south' ) ) {
+      else if ( btn.classList.contains( 'arrow-north' ) ) {
         collapsed = true;
         elementToCollapse.classList.remove( 'collapsed' );
         elementToCollapse.classList.add( 'not-collapsed' );
-        btn.classList.remove( 'arrow-south' );
-        btn.classList.add( 'arrow-north' );
+        btn.classList.remove( 'arrow-north' );
+        btn.classList.add( 'arrow-south' );
       }
       console.log( 'StackCookieDisplay: details button clicked.' );
       this.domain_state.set( stack_cookie.unique_domain_string() ,
