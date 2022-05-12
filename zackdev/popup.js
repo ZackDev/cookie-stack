@@ -17,31 +17,9 @@ class Helper {
 }
 
 /*
-  Stack class
-  manages the cookies indicated by the cookies.onChanged events and informs the
-  StackCookieDisplay
-*/
-class Stack {
-  constructor( display ) {
-    this.cookies = new Map();
-    this.display = display;
-  }
-
-  add_cookie( stack_cookie ) {
-    this.cookies.set( stack_cookie.unique_cookie_string() , stack_cookie );
-    this.display.on_cookie_added( stack_cookie );
-  }
-
-  remove_cookie( stack_cookie ) {
-    this.cookies.delete( stack_cookie.unique_cookie_string() );
-    this.display.on_cookie_removed( stack_cookie );
-  }
-}
-
-/*
   StackCookie class
   - wrapper class for cookies provided by the cookies.onChanged event
-  - adds functionality that is used by Stack and StackCookieDisplay
+  - adds functionality that is used by StackCookieDisplay
 */
 class StackCookie {
   constructor( cookie ) {
@@ -472,41 +450,35 @@ class StackCookieDisplay {
 function on_cookie_changed_listener( cookie_event ) {
   console.log( 'on_cookie_changed_listener(): cookie event caught.' );
   var stack_cookie = new StackCookie( cookie_event.cookie );
+  switch (cookie_event.cause) {
 
-  // cookie got collected by the GC
-  if ( cookie_event.cause === 'evicted' ) {
-    console.log( 'handling cookie event "evicted". removing cookie.' );
-    this.stack.remove_cookie( stack_cookie );
-  }
+    case 'evicted':
+      // cookie got collected by the GC
+      console.log( 'handling cookie event "evicted". removing cookie.' );
+      this.display.on_cookie_removed( stack_cookie );
+      break;
 
-  // cookie expired
-  else if ( cookie_event.cause === 'expired' ) {
-    console.log( 'handling cookie event "expired". removing cookie.');
-    this.stack.remove_cookie( stack_cookie );
-  }
+    case 'explicit':
+      // cookie got explicitly added or removed
+      if ( cookie_event.removed === true ) {
+        console.log( 'handling cookie event "explicit". removing cookie.' );
+        this.display.on_cookie_removed( stack_cookie );
+      }
+      else if ( cookie_event.removed === false ) {
+        console.log( 'handling cookie event "explicit". adding cookie.' );
+        this.display.on_cookie_added( stack_cookie );
+      }
+      break;
 
-  // cookie got explicitly added or removed
-  else if ( cookie_event.cause === 'explicit' ) {
-    if ( cookie_event.removed === true ) {
-      console.log( 'handling cookie event "explicit". removing cookie.' );
-      this.stack.remove_cookie( stack_cookie );
+    case 'expired_overwrite':
+      console.log( 'handling cookie event "expired_overwrite". removing cookie.' );
+      this.display.on_cookie_removed( stack_cookie );
+      break;
 
-    }
-    else if ( cookie_event.removed === false ) {
-      console.log( 'handling cookie event "explicit". adding cookie.' );
-      this.stack.add_cookie( stack_cookie );
-    }
-  }
-
-  else if ( cookie_event.cause === 'expired_overwrite') {
-    console.log( 'handling cookie event "expired_overwrite". removing cookie.' );
-    this.stack.remove_cookie( stack_cookie );
-  }
-
-  // this cookie got overwritten by a new one
-  else if ( cookie_event.cause === 'overwrite' ) {
-    console.log( 'handling cookie event "overwrite". removing cookie.' );
-    this.stack.remove_cookie( stack_cookie );
+    case 'overwrite':
+      console.log( 'handling cookie event "overwrite". removing cookie.' );
+      this.display.on_cookie_removed( stack_cookie );
+      break;
   }
 }
 
@@ -543,10 +515,7 @@ function init() {
   
 
   // creates StackCookieDisplay object, with the HTML-Element where it attaches to as parameter
-  var display = new StackCookieDisplay( document.getElementById( 'content' ), cookiesAPI );
-
-  // initializes Stack with a reference to the StackCookieDisplay created above
-  this.stack = new Stack( display );
+  this.display = new StackCookieDisplay( document.getElementById( 'content' ), cookiesAPI );
 
   // adds cookies.onChange listener
   if ( ! cookiesAPI.cookies.onChanged.hasListener( on_cookie_changed_listener ) ) {
@@ -570,7 +539,7 @@ function init() {
 */
 function add_all_cookies( cookies ) {
   for (let i = 0; i < cookies.length; i++) {
-    this.stack.add_cookie( new StackCookie( cookies[i] ) );
+    this.display.on_cookie_added( new StackCookie( cookies[i] ) );
   }
 }
 
