@@ -67,11 +67,11 @@ class StackCookie {
   -- version and a link to the homepage
 */
 class StackCookieDisplay {
-  static check_or_x(true_false) {
-    if (true_false === true) {
+  static check_or_x(b) {
+    if (b === true) {
       return '&check;';
     }
-    else if (true_false === false) {
+    else if (b === false) {
       return '&cross;';
     }
   }
@@ -170,34 +170,7 @@ class StackCookieDisplay {
     trash_button.classList.add('btn', 'border', 'rounded', 'quadratic-30', 'trash');
     trash_button.addEventListener("click", () => {
       console.log('StackCookieDisplay: trash button clicked.');
-      let details;
-      switch (this.cookiesAPI.browser) {
-        case 'ff':
-          details = {
-            url: stack_cookie.url(),
-            name: stack_cookie.cookie.name,
-            storeId: stack_cookie.cookie.storeId,
-            firstPartyDomain: stack_cookie.cookie.firstPartyDomain
-          }
-          break;
-        case 'chrome':
-          details = {
-            url: stack_cookie.url(),
-            name: stack_cookie.cookie.name,
-            storeId: stack_cookie.cookie.storeId,
-          }
-          break;
-      }
-      this.cookiesAPI.cookies.remove(details)
-        .then(
-          function resolve(r) {
-            console.log(`browser.cookies.remove: resolved with: ${r}`);
-            if (r === null) {
-              console.log(`browser.cookies.remove lastError: ${browser.runtime.lastError}`);
-            }
-          },
-          rej => console.log(`browser.cookies.remove resolved with: ${rej}`)
-        );
+      this.cookiesAPI.remove(stack_cookie);
     });
 
     cookie_action_div.append(trash_button);
@@ -497,8 +470,30 @@ function init() {
       cookiesAPI.browser = b;
       cookiesAPI.cookies = r.cookies;
       cookiesAPI.runtime = r.runtime;
-    } else {
+    }
+    else {
       console.log('cookiesAPI properties already set.');
+    }
+    if (b === 'ff') {
+      cookiesAPI.remove = (stack_cookie) => {
+        let details = {
+          name: stack_cookie.cookie.name,
+          url: stack_cookie.url(),
+          storeId: stack_cookie.cookie.storeId,
+          firstPartyDomain: stack_cookie.cookie.firstPartyDomain,
+        }
+        cookiesAPI.cookies.remove(details);
+      }
+    }
+    if (b === 'chrome') {
+      cookiesAPI.remove = (stack_cookie) => {
+        let details = {
+          name: stack_cookie.cookie.name,
+          url: stack_cookie.url(),
+          storeId: stack_cookie.cookie.storeId,
+        }
+        cookiesAPI.cookies.remove(details);
+      }
     }
   }
 
