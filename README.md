@@ -24,7 +24,7 @@ A Firefox/Chromium extension for viewing and deleting cookies.
 
 The add-on adds an icon to the toolbar of your browser, displaying the number of cookies currently set.
 
-![Screenshot](./zackdev/extension-screenshot.png)
+![Screenshot](./extension-screenshot.png)
 
 * Click the toolbar icon to get an overview of domains they belong to
 * Expand or contract those domains by clicking the down or up facing arrow to view specific cookies
