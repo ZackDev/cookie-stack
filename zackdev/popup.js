@@ -473,27 +473,30 @@ function init() {
     }
     else {
       console.log('cookiesAPI properties already set.');
+      return;
     }
-    if (b === 'ff') {
-      cookiesAPI.remove = (stack_cookie) => {
-        let details = {
-          name: stack_cookie.cookie.name,
-          url: stack_cookie.url(),
-          storeId: stack_cookie.cookie.storeId,
-          firstPartyDomain: stack_cookie.cookie.firstPartyDomain,
+    switch (b) {
+      case 'ff':
+        cookiesAPI.remove = (stack_cookie) => {
+          let details = {
+            name: stack_cookie.cookie.name,
+            url: stack_cookie.url(),
+            storeId: stack_cookie.cookie.storeId,
+            firstPartyDomain: stack_cookie.cookie.firstPartyDomain,
+          }
+          cookiesAPI.cookies.remove(details);
         }
-        cookiesAPI.cookies.remove(details);
-      }
-    }
-    if (b === 'chrome') {
-      cookiesAPI.remove = (stack_cookie) => {
-        let details = {
-          name: stack_cookie.cookie.name,
-          url: stack_cookie.url(),
-          storeId: stack_cookie.cookie.storeId,
+        break;
+      case 'chrome':
+        cookiesAPI.remove = (stack_cookie) => {
+          let details = {
+            name: stack_cookie.cookie.name,
+            url: stack_cookie.url(),
+            storeId: stack_cookie.cookie.storeId,
+          }
+          cookiesAPI.cookies.remove(details);
         }
-        cookiesAPI.cookies.remove(details);
-      }
+        break;
     }
   }
 
@@ -510,7 +513,6 @@ function init() {
   catch (error) {
     console.log(error)
   }
-
 
   // creates StackCookieDisplay object, with the HTML-Element where it attaches to as parameter
   this.display = new StackCookieDisplay(document.getElementById('content'), cookiesAPI);
