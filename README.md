@@ -26,11 +26,11 @@ The add-on adds an icon to the toolbar of your browser, displaying the number of
 
 ![Screenshot](./extension-screenshot.png)
 
-* Click the toolbar icon to get an overview of domains they belong to
-* Expand or contract those domains by clicking the down or up facing arrow to view specific cookies
-* Delete a cookie by clicking the trash icon
+* click the toolbar icon to get an overview of domains they belong to
+* expand or contract those domains by clicking the down or up facing arrow to view specific cookies
+* delete a cookie by clicking the trash icon
 
 # Issues:
 
 **firefox**:
-* Cookies, whose url (domain + path) isn't fully recontructible by the cookies returned by `browser.coolies.getAll({})` API call, can't be removed by this extension.
+* cookies, whose url (domain + path) isn't fully recontructible by the cookies returned by `browser.coolies.getAll({})` API call, can't be removed by this extension.
