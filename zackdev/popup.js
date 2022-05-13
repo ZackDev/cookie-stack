@@ -416,8 +416,6 @@ class StackCookieDisplay {
     ret.append(cookie_domain_div);
     ret.append(cookie_wrap_div);
 
-    console.log('StackCookieDisplay.create_cookie_domain_html():');
-
     return ret;
   }
 }
@@ -475,7 +473,9 @@ function init() {
       console.log('cookiesAPI properties already set.');
       return;
     }
+    
     switch (b) {
+      
       case 'ff':
         cookiesAPI.remove = (stack_cookie) => {
           let details = {
@@ -486,7 +486,14 @@ function init() {
           }
           cookiesAPI.cookies.remove(details);
         }
+        cookiesAPI.getAll = (o, fn) => {
+          cookiesAPI.cookies.getAll(o)
+            .then((c) => {
+              fn(c);
+            });
+        }
         break;
+      
       case 'chrome':
         cookiesAPI.remove = (stack_cookie) => {
           let details = {
@@ -496,6 +503,7 @@ function init() {
           }
           cookiesAPI.cookies.remove(details);
         }
+        cookiesAPI.getAll = r.cookies.getAll;
         break;
     }
   }
@@ -522,16 +530,8 @@ function init() {
     cookiesAPI.cookies.onChanged.addListener(on_cookie_changed_listener);
   }
 
-  // gets all cookies from browser.cookies API and adds them to the Stack
-  switch (cookiesAPI.browser) {
-    case 'ff':
-      var get_all_cookies = cookiesAPI.cookies.getAll({});
-      get_all_cookies.then(add_all_cookies);
-      break;
-    case 'chrome':
-      cookiesAPI.cookies.getAll({}, add_all_cookies);
-      break;
-  }
+  // gets all cookies from browser.cookies API and adds them to the CookieDisplay
+  cookiesAPI.getAll({}, add_all_cookies);
 }
 
 /*
