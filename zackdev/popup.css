@@ -21,7 +21,7 @@ body {
 #subtitle {
   font-size: 14px;
   margin: 0 auto;
-  color: #555555;
+  color: #546e7a;
 }
 
 #content-wrap {
@@ -44,12 +44,12 @@ body {
 
 .btn {
   border: none;
-  background-color: #FFFFFF;
+  background-color: #e7e7e7;
 }
 
 .btn:hover {
-  background-color: #d4d4d4;
   cursor: pointer;
+  background-color: #FFFFFF;
 }
 
 .border {
@@ -57,11 +57,11 @@ body {
 }
 
 .border-top {
-  border-top: 1px solid #d4d4d4;
+  border-top: 1px solid #e7e7e7;
 }
 
 .border-bottom {
-  border-bottom: 1px solid #d4d4d4;
+  border-bottom: 1px solid #e7e7e7;
 }
 
 .rounded {
@@ -77,16 +77,14 @@ body {
 .cookie-domain {
   min-height: 45px;
   font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .cookie {
   align-items: center;
-}
-
-.cookie-domain {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  color: #5f5f5f;
 }
 
 .domain-wrap {
@@ -94,6 +92,7 @@ body {
 }
 
 .cookie-action {
+  margin: 30px 0 0 0;
   display: flex;
   align-items: center;
   justify-content: flex-end;
@@ -104,6 +103,11 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  border-bottom: 1px solid #e7e7e7;
+}
+
+.cookie .attribute-row:last-child {
+  border-bottom: none;
 }
 
 .cookie .attribute-value {
@@ -113,11 +117,6 @@ body {
 
 .cookie .attribute-name {
   font-size: 16px;
-  color: #555555;
-}
-
-.shadow {
-  box-shadow: 2px 2px 2px #555555;
 }
 
 .arrow-north {

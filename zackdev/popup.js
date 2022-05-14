@@ -178,7 +178,7 @@ class StackCookieDisplay {
 
     // path/name
     var attribute_row = document.createElement('div');
-    attribute_row.classList.add('attribute-row', 'border-bottom');
+    attribute_row.classList.add('attribute-row');
     var attribute_name = document.createElement('span');
     attribute_name.classList.add('attribute-name');
     attribute_name.innerText = 'path & name';
@@ -201,7 +201,7 @@ class StackCookieDisplay {
 
     // secure
     var attribute_row = document.createElement('div');
-    attribute_row.classList.add('attribute-row', 'border-bottom');
+    attribute_row.classList.add('attribute-row');
     var attribute_name = document.createElement('span');
     attribute_name.classList.add('attribute-name');
     attribute_name.innerText = 'secure';
@@ -217,7 +217,7 @@ class StackCookieDisplay {
 
     // session
     var attribute_row = document.createElement('div');
-    attribute_row.classList.add('attribute-row', 'border-bottom');
+    attribute_row.classList.add('attribute-row');
     var attribute_name = document.createElement('span');
     attribute_name.classList.add('attribute-name');
     attribute_name.innerText = 'session';
@@ -233,7 +233,7 @@ class StackCookieDisplay {
 
     // host host only
     var attribute_row = document.createElement('div');
-    attribute_row.classList.add('attribute-row', 'border-bottom');
+    attribute_row.classList.add('attribute-row');
     var attribute_name = document.createElement('span');
     attribute_name.classList.add('attribute-name');
     attribute_name.innerText = 'host only';
@@ -249,7 +249,7 @@ class StackCookieDisplay {
 
     // http only
     var attribute_row = document.createElement('div');
-    attribute_row.classList.add('attribute-row', 'border-bottom');
+    attribute_row.classList.add('attribute-row');
     var attribute_name = document.createElement('span');
     attribute_name.classList.add('attribute-name');
     attribute_name.innerText = 'http only';
@@ -265,7 +265,7 @@ class StackCookieDisplay {
 
     // same site
     var attribute_row = document.createElement('div');
-    attribute_row.classList.add('attribute-row', 'border-bottom');
+    attribute_row.classList.add('attribute-row');
     var attribute_name = document.createElement('span');
     attribute_name.classList.add('attribute-name');
     attribute_name.innerText = 'same site';
@@ -281,7 +281,7 @@ class StackCookieDisplay {
 
     // expiration date
     var attribute_row = document.createElement('div');
-    attribute_row.classList.add('attribute-row', 'border-bottom');
+    attribute_row.classList.add('attribute-row');
     var attribute_name = document.createElement('span');
     attribute_name.classList.add('attribute-name');
     attribute_name.innerText = 'expiration date';
@@ -297,7 +297,7 @@ class StackCookieDisplay {
 
     // first party domain
     var attribute_row = document.createElement('div');
-    attribute_row.classList.add('attribute-row', 'border-bottom');
+    attribute_row.classList.add('attribute-row');
     var attribute_name = document.createElement('span');
     attribute_name.classList.add('attribute-name');
     attribute_name.innerText = 'first party domain';
@@ -313,7 +313,7 @@ class StackCookieDisplay {
 
     // store id
     var attribute_row = document.createElement('div');
-    attribute_row.classList.add('attribute-row', 'border-bottom');
+    attribute_row.classList.add('attribute-row');
     var attribute_name = document.createElement('span');
     attribute_name.classList.add('attribute-name');
     attribute_name.innerText = 'store id';
@@ -329,7 +329,7 @@ class StackCookieDisplay {
 
     // value
     var attribute_row = document.createElement('div');
-    attribute_row.classList.add('attribute-row', 'border-bottom');
+    attribute_row.classList.add('attribute-row');
     var attribute_value = document.createElement('span');
     attribute_value.classList.add('attribute-value');
     attribute_value.innerText = `${stack_cookie.cookie.value}`;
