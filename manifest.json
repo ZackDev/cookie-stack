@@ -18,5 +18,8 @@
     "default_title": "Cookie Stack",
     "default_popup": "/zackdev/popup.html",
     "browser_style": true
+  },
+  "options_ui": {
+    "page": "/zackdev/options.html"
   }
 }
