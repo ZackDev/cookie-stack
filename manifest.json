@@ -6,12 +6,13 @@
   "homepage_url": "https://github.com/ZackDev/cookie-stack",
   "permissions": [
     "<all_urls>",
-    "cookies"
+    "cookies",
+    "storage"
   ],
   "background": {
-    "scripts": ["/zackdev/background.js"]
+    "page": "/zackdev/background.html"
   },
-  "browser_action" : {
+  "browser_action": {
     "default_icon": {
       "16": "/zackdev/icons/favicon-16x16.png"
     },

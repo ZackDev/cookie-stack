@@ -2,22 +2,28 @@
 <html lang="en" dir="ltr">
   <head>
     <link type="text/css" rel="stylesheet" href="/zackdev/options.css">
-    <script type="text/javascript" src="/zackdev/options.js"></script>
+    <script type="module" src="/zackdev/options.js"></script>
     <meta charset="utf-8">
     <title></title>
   </head>
   <body>
-    <div id="wrapper">
-      <div id="content-wrap" class="rounded border-bottom">
-        <div id="content">
-            <p>Allow or prohibit cookies to be set for specific domains.</p>
-            <h1>Allow-List</h1>
-            <div id="allow-list">
-            </div>
-            <h1>Prohibit-List</h1>
-            <div id="prohibit-list">
-            </div>
+    <div id="wrapper" class="rounded border-bottom">
+      <div id="content">
+        <p>Allow or deny cookies to be set for specific domains.</p>
+        <hr>
+        <input type="radio" id="disable-radio" name="manage-lists">disable</input>
+        <br>
+        <input type="radio" id="allow-list-radio" name="manage-lists">allowlist</input>
+        <div id="allow-list" class="flex-row">
         </div>
+        <input type="text" id="allow-input"/>
+        <button type="button" id="allow-add-btn">add</button>
+        <hr>
+        <input type="radio" id="deny-list-radio" name="manage-lists">denylist</input>
+        <div id="deny-list" class="flex-row">
+        </div>
+        <input type="text" id="deny-input"/>
+        <button type="button" id="deny-add-btn">add</button> 
       </div>
     </div>
   </body>
