@@ -1,9 +1,19 @@
 .flex-row {
     display: flex;
     flex-direction: row;
+    gap: 2px;
 }
 
 .flex-item {
-    border: 1px solid gainsboro;
-    border-radius: 5px;
+    border: 2px solid gainsboro;
+    border-radius: 2px;
+    padding: 2px;
+}
+
+.clickable {
+    cursor: pointer;
+}
+
+.clickable:hover {
+    color: rgb(0, 34, 0);
 }

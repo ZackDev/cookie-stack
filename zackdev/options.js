@@ -108,7 +108,7 @@ const updateFilter = (t, d, a) => {
                     else if (a === 'remove') {
                         let i = fia.indexOf(d);
                         if (i > -1) {
-                            fia.splice(d, 1);
+                            fia.splice(i, 1);
                             cookiesAPI.storeValue({ fa: fia });
                         }
                     };
@@ -127,7 +127,7 @@ const updateFilter = (t, d, a) => {
                     else if (a === 'remove') {
                         let i = fid.indexOf(d);
                         if (i > -1) {
-                            fid.splice(d, 1);
+                            fid.splice(i, 1);
                             cookiesAPI.storeValue({ fd: fid });
                         }
                     }
@@ -207,17 +207,19 @@ const onStorageUpdated = (c, a) => {
 const updateList = (l, v) => {
     let list = document.getElementById(l);
     let d = document.createElement('div');
-    d.classList.add('flex-item');
+    d.classList.add('flex-item', 'clickable');
     d.innerText = v;
     switch (l) {
         case 'allow-list':
-            d.addEventListener("click", (v) => {
-                updateFilter('allow', v, 'remove');
+            d.addEventListener("click", (e) => {
+                e.stopImmediatePropagation();
+                updateFilter('allow', e.target.innerText, 'remove');
             });
             break;
         case 'deny-list':
-            d.addEventListener("click", (v) => {
-                updateFilter('deny', v, 'remove');
+            d.addEventListener("click", (e) => {
+                e.stopImmediatePropagation();
+                updateFilter('deny', e.target.innerText, 'remove');
             });
             break;
     }
