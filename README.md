@@ -22,13 +22,26 @@ A Firefox/Chromium extension for viewing and deleting cookies.
 
 # How to use the extension:
 
-The add-on adds an icon to the toolbar of your browser, displaying the number of cookies currently set.
+The extension adds two funtionalities to the browser:
+
+## View and remove cookies
+
+Access it by clicking the icon at the toolbar of your browser, displaying the number of cookies currently set.
 
 ![Screenshot](./extension-screenshot.png)
 
 * click the toolbar icon to get an overview of domains they belong to
 * expand or contract those domains by clicking the down or up facing arrow to view specific cookies
 * delete a cookie by clicking the trash icon
+
+## Automatically filter incoming cookies by domain
+
+* go to the preferences (firefox), options (chromium) to view, edit and set the active filter
+* *disabled*: no filter gets applied
+* *allowlist*: allow every cookie on the list, remove the rest
+* *denylist*: deny every cookie specified, allow the rest
+
+**NOTE**: This doesn't prevent cookies from getting initially stored. The filter gets applied *afterwards*. Some websites continuosly try to store cookies on your machine, even after the first pageload. This might cause the filter also to continuosly remove said cookies.
 
 # Issues:
 
