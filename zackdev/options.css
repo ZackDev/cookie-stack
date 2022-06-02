@@ -17,3 +17,11 @@
 .clickable:hover {
     color: rgb(0, 34, 0);
 }
+
+.mtb-5 {
+    margin: 5px 0 5px 0;
+}
+
+.vam {
+    vertical-align: middle;
+}
