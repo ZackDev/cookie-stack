@@ -1,5 +1,9 @@
 export { getCookiesAPI, StackCookie, Helper }
 
+/**
+ * 
+ * @returns a cookiesAPI object
+ */
 const getCookiesAPI = () => {
     try {
         setAPI('ff', browser);
@@ -17,10 +21,19 @@ const getCookiesAPI = () => {
     return cookiesAPI;
 }
 
+/**
+ * facade bundling select browser functionality
+ */
 const cookiesAPI = {
     browser: '',
 }
 
+/**
+ * determines the used browser and builds the cookiesAPI facade to partially uniform the usage of chromium's and firefox's WebAPI
+ * @param {String} b shorthand name of the browser 'ff' or 'chrome' 
+ * @param {Object} r the browser's top level access to the WebAPI 
+ * @returns {cookiesAPI}
+ */
 const setAPI = (b, r) => {
     if (cookiesAPI.browser === '') {
         cookiesAPI.browser = b;
@@ -112,7 +125,7 @@ class Helper {
 /*
   StackCookie class
   - wrapper class for cookies provided by the cookies.onChanged event
-  - adds functionality that is used by StackCookieDisplay
+  - adds functionality that is used by the extension
 */
 class StackCookie {
     constructor(cookie) {
