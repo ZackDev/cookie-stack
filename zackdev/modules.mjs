@@ -6,14 +6,14 @@ export { getCookiesAPI, StackCookie, Helper }
  */
 const getCookiesAPI = () => {
     try {
-        setAPI('ff', browser);
+        setAPI('firefox', browser);
     }
     catch (error) {
         console.log(error)
     }
 
     try {
-        setAPI('chrome', chrome);
+        setAPI('chromium', chrome);
     }
     catch (error) {
         console.log(error)
@@ -49,7 +49,7 @@ const setAPI = (b, r) => {
 
     switch (b) {
 
-        case 'ff':
+        case 'firefox':
             cookiesAPI.remove = (stack_cookie) => {
                 let details = {
                     name: stack_cookie.cookie.name,
@@ -73,7 +73,7 @@ const setAPI = (b, r) => {
             }
             break;
 
-        case 'chrome':
+        case 'chromium':
             cookiesAPI.remove = (stack_cookie) => {
                 let details = {
                     name: stack_cookie.cookie.name,
