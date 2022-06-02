@@ -94,45 +94,31 @@ const setFilterState = (s) => {
 }
 
 const updateFilter = (t, d, a) => {
-    switch (t) {
-        case 'allow':
-            getFilter(t)
-                .then((r) => {
-                    let fia = r.fa;
-                    if (a === 'add') {
-                        if (!fia.includes(d)) {
-                            fia.push(d);
-                            cookiesAPI.storeValue({ fa: fia });
-                        }
+    if (['allow', 'deny'].includes(t)) {
+        getFilter(t)
+            .then((r) => {
+                let filter = r[Object.keys(r)[0]];
+                if (a === 'add') {
+                    if (!filter.includes(d)) {
+                        filter.push(d);
+                        filter.sort();
                     }
-                    else if (a === 'remove') {
-                        let i = fia.indexOf(d);
-                        if (i > -1) {
-                            fia.splice(i, 1);
-                            cookiesAPI.storeValue({ fa: fia });
-                        }
-                    };
-                });
-            break;
-        case 'deny':
-            getFilter(t)
-                .then((r) => {
-                    let fid = r.fd;
-                    if (a === 'add') {
-                        if (!fid.includes(d)) {
-                            fid.push(d);
-                            cookiesAPI.storeValue({ fd: fid });
-                        }
+                }
+                else if (a === 'remove') {
+                    let i = filter.indexOf(d);
+                    if (i > -1) {
+                        filter.splice(i, 1);
                     }
-                    else if (a === 'remove') {
-                        let i = fid.indexOf(d);
-                        if (i > -1) {
-                            fid.splice(i, 1);
-                            cookiesAPI.storeValue({ fd: fid });
-                        }
-                    }
-                });
-            break;
+                }
+                switch (t) {
+                    case 'allow':
+                        cookiesAPI.storeValue({ fa: filter });
+                        break;
+                    case 'deny':
+                        cookiesAPI.storeValue({ fd: filter });
+                        break;
+                }
+            });
     }
 }
 
