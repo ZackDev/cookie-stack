@@ -131,6 +131,10 @@ body {
   background-image: url('./icons/trash.svg');
 }
 
+.wrench {
+  background-image: url('./icons/wrench.svg');
+}
+
 .quadratic-20 {
   height: 20px;
   width: 20px;
@@ -147,4 +151,13 @@ body {
 
 .not-collapsed {
   display: none;
+}
+
+#options-icon {
+  background-color: #e7e7e7;
+}
+
+#options-icon:hover {
+  cursor: pointer;
+  background-color: #FFFFFF;
 }

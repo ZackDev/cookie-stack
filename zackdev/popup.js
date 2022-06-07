@@ -24,7 +24,7 @@ class StackCookieDisplay {
     this.cookiesAPI = api;
     this.domain_state = new Map();
     this.set_version();
-    this.set_homepage_link();
+    this.set_options_link();
   }
 
   set_version() {
@@ -32,11 +32,11 @@ class StackCookieDisplay {
     document.getElementById('version').innerText = ['version', version_str].join(' ');
   }
 
-  set_homepage_link() {
-    var homepage_url = this.cookiesAPI.runtime.getManifest().homepage_url;
-    var homepage_link = document.getElementById('homepage-link');
-    homepage_link.setAttribute('href', homepage_url);
-    homepage_link.innerText = homepage_url;
+  set_options_link() {
+    var options_icon = document.getElementById('options-icon');
+    options_icon.addEventListener("click", () => {
+      this.cookiesAPI.runtime.openOptionsPage();
+    });
   }
 
   // creates and adds 'cookie-domain' div to the DOM if it is the first cookie for this domain
