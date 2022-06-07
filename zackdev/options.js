@@ -93,6 +93,13 @@ const setFilterState = (s) => {
     cookiesAPI.storeValue({ ss: s });
 }
 
+
+/**
+ * 
+ * @param {String} t - type of the filter: 'allow' or 'deny'
+ * @param {String} d - data
+ * @param {String} a - action: 'add' or 'remove'
+ */
 const updateFilter = (t, d, a) => {
     if (['allow', 'deny'].includes(t)) {
         getFilter(t)

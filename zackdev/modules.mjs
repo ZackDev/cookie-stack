@@ -30,7 +30,7 @@ const cookiesAPI = {
 
 /**
  * determines the used browser and builds the cookiesAPI facade to partially uniform the usage of chromium's and firefox's WebAPI
- * @param {String} b shorthand name of the browser 'ff' or 'chrome' 
+ * @param {String} b shorthand name of the browser 'firefox' or 'chromium' 
  * @param {Object} r the browser's top level access to the WebAPI 
  * @returns {cookiesAPI}
  */

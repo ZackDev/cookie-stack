@@ -14,9 +14,7 @@ const cookie_event_listener = (change_event) => {
 /** */
 const cookies_callback = (cookies) => {
   update_action_text(cookies);
-  for (let c of cookies) {
-    applyFilter(c);
-  }
+  applyFilter(cookies);
 }
 
 /*
@@ -60,21 +58,27 @@ cookiesAPI.browserAction.setBadgeBackgroundColor(
 
 
 /** */
-const applyFilter = (c) => {
+const applyFilter = (cookies) => {
   switch (filter.ss) {
     case 'disabled':
       break;
 
     case 'allowlist':
-      if (!filter.fa.includes(c.domain)) {
+      var cookiesToDelete = cookies.filter((c) => {
+        return !filter.fa.includes(c.domain);
+      });
+      cookiesToDelete.forEach((c) => {
         cookiesAPI.remove(new StackCookie(c));
-      }
+      });
       break;
 
     case 'denylist':
-      if (filter.fd.includes(c.domain)) {
+      var cookiesToDelete = cookies.filter((c) => {
+        return filter.fa.includes(c.domain);
+      });
+      cookiesToDelete.forEach((c) => {
         cookiesAPI.remove(new StackCookie(c));
-      }
+      });
       break;
   }
 }
