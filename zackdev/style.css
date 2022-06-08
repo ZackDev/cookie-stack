@@ -153,11 +153,29 @@ body {
   display: none;
 }
 
-#options-icon {
+.flex-row {
+  display: flex;
+  flex-direction: row;
+  gap: 5px;
+}
+
+.clickable {
+  cursor: pointer;
   background-color: #e7e7e7;
 }
 
-#options-icon:hover {
-  cursor: pointer;
+.clickable:hover {
   background-color: #FFFFFF;
+}
+
+.mtb-5 {
+  margin: 5px 0 5px 0;
+}
+
+.vam {
+  vertical-align: middle;
+}
+
+.filter-item {
+  padding: 2px;
 }
