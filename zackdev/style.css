@@ -23,6 +23,7 @@ body {
 }
 
 #content-wrap {
+  max-height: 200px;
   padding: 1px 10px 0px 10px;
   margin: 5px 0px 5px 0px;
   overflow-y: scroll;
@@ -112,7 +113,8 @@ body {
 }
 
 .arrow-south {
-  background-image: url('./icons/arrow-south.svg');
+  background-image: url('./icons/arrow-north.svg');
+  rotate: 180deg;
 }
 
 .trash {
