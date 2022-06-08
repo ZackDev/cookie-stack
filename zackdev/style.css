@@ -1,7 +1,6 @@
 body {
   min-width: 500px;
   max-width: 500px;
-  overflow: hidden;
   background-color: #FFF;
   color: #000;
   user-select: none;
@@ -158,6 +157,10 @@ body {
 
 .p5 {
   padding: 5px;
+}
+
+.mb-20 {
+  margin: 0 0 20px 0;
 }
 
 .mtb-5 {
