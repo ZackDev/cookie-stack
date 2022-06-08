@@ -110,7 +110,7 @@ class StackCookieDisplay {
     var trash_button = document.createElement('button');
     trash_button.setAttribute('id', `trash-button-${u_cookie_str}`);
     trash_button.setAttribute('type', 'button');
-    trash_button.classList.add('btn', 'border', 'rounded', 'quadratic-30', 'trash');
+    trash_button.classList.add('clickable', 'border', 'rounded', 'quadratic-30', 'trash');
     trash_button.addEventListener("click", () => {
       console.log('StackCookieDisplay: trash button clicked.');
       this.cookiesAPI.remove(stack_cookie);
@@ -310,7 +310,7 @@ class StackCookieDisplay {
     details_button.setAttribute('type', 'button');
     details_button.setAttribute('id', `details-button-${u_domain_str}`);
     details_button.setAttribute('data-target', `cookie-wrap-${u_domain_str}`);
-    details_button.classList.add('details', 'btn', 'border', 'rounded', 'quadratic-30', 'arrow-south');
+    details_button.classList.add('details', 'clickable', 'border', 'rounded', 'quadratic-30', 'arrow-south');
     details_button.addEventListener("click", (event) => {
       console.log('StackCookieDisplay: details button clicked.');
       var btn = event.target;
