@@ -1,8 +1,6 @@
 body {
   min-width: 500px;
   max-width: 500px;
-  min-height: 500px;
-  max-height: 500px;
   overflow: hidden;
   background-color: #FFF;
   color: #000;
@@ -27,8 +25,6 @@ body {
 #content-wrap {
   padding: 1px 10px 0px 10px;
   margin: 5px 0px 5px 0px;
-  min-height: 405px;
-  max-height: 405px;
   overflow-y: scroll;
 }
 
@@ -36,9 +32,8 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  min-height: 32px;
   max-height: 32px;
-  padding: 0px 5px 0px 5px;
+  padding: 0 22px 0 5px;
   font-size: 12px;
 }
 
