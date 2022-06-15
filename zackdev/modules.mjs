@@ -1,4 +1,4 @@
-export { getCookiesAPI, StackCookie, Helper }
+export { AttributeValuePair, Filter, FilterSet, getCookiesAPI, StackCookie, Helper }
 
 /**
  * 
@@ -159,5 +159,149 @@ class StackCookie {
         let domain_str = ''
         domain_str += this.cookie.domain;
         return domain_str;
+    }
+}
+
+class FilterSet {
+    constructor() {
+        this.type = '';
+        this.filters = [];
+    }
+
+    addFilter(filter) {
+        this.filters.push(filter);
+    }
+
+    toString(){
+        let res = '';
+        res += ['default_action', this.type].join(' ') + ';\n';
+        for(let filter of this.filters) {
+            res += filter.toString();
+        }
+        return res;
+    }
+
+    static fromString(str){
+        let filterSet = new FilterSet();
+        str = str.replace('\n', '');
+        let lines = str.split(';');
+        let defaultAction = lines.shift();
+        let defaultActionArray = defaultAction.split(' ');
+        if (defaultActionArray.length === 2) {
+            if (defaultActionArray[0] === 'default_action') {
+                if (['allow', 'deny'].includes(defaultActionArray[1])) {
+                    filterSet.type = defaultActionArray[1];
+                }
+                else {
+                    throw new Error('expected value for default_action is <allow|deny>');
+                }
+            }
+            else {
+                throw new Error('filter definition must start with "default_action"');
+            }
+        }
+        else {
+            throw new Error('expected value: "default_action <allow|deny>;"');
+        }
+        for (let line of lines) {
+            try {
+                let elements = line.split(' ');
+                if (elements.length % 2 === 0) {
+                    let filter = new Filter();
+                    for (let i = 0; i+=2; i < elements.length) {
+                        try {
+                            let attribute = elements[i];
+                            let value = elements[i+1];
+                            if (attribute !== undefined && value !== undefined) {
+                                let avpair = new AttributeValuePair(attribute, value);
+                                filter.addAttributeValuePair(avpair);
+                            }
+                        }
+                        catch(e) {
+                            console.log(e);
+                            throw new Error(e);
+                        }
+                    }
+                    filterSet.addFilter(filter);
+                }
+            }
+            catch(e) {
+                console.log(e);
+                throw new Error(e);
+            }
+        }
+        return filterSet;
+    }
+}
+
+class Filter {
+    constructor(){
+        this.attributeValuePairs = [];
+    }
+    addAttributeValuePair(avpair) {
+        this.attributeValuePairs.push(avpair);
+    }
+    toString() {
+        let ret = '';
+        if (this.attributeValuePairs.length > 0) {
+            let index = 0;
+            for( let avpair of this.attributeValuePairs) {
+                if (index > 0 && index <= this.attributeValuePairs.length -1) {
+                    ret += ' ';
+                }
+                ret += [avpair.getAttribute(), avpair.getValue()].join(' ');
+                index += 1;
+            }
+            ret += ';\n';
+        }
+        return ret;
+    }
+}
+
+class AttributeValuePair {
+    static attributeTypeMap = new Map();
+    static {
+        this.attributeTypeMap.set("domain", "string");
+        this.attributeTypeMap.set("name", "string");
+        this.attributeTypeMap.set("path", "string");
+        this.attributeTypeMap.set("same_site", "string");
+        this.attributeTypeMap.set("expiration_date", "string");
+        this.attributeTypeMap.set("first_party_domain", "string");
+        this.attributeTypeMap.set("store_id", "string");
+        this.attributeTypeMap.set("value", "string");
+        this.attributeTypeMap.set("secure", "boolean");
+        this.attributeTypeMap.set("http_only", "boolean");
+        this.attributeTypeMap.set("session", "boolean");
+    }
+    constructor(attribute, value) {
+        this.attribute = '';
+        this.value = '';
+        if (AttributeValuePair.attributeTypeMap.has(attribute)) {
+            let expectedType = AttributeValuePair.attributeTypeMap.get(attribute);
+            if (expectedType === "boolean" && (value === 'true' || value === 'false')) {
+                if (value === 'true') {
+                    value = true;
+                }
+                else if (value === 'false') {
+                    value = false;
+                }
+            }
+            if (typeof value === AttributeValuePair.attributeTypeMap.get(attribute)) {
+                this.attribute = attribute;
+                this.value = value;
+            }
+            else {
+                throw new TypeError(`value: ${value} expected type: ${AttributeValuePair.attributeTypeMap.get(attribute)}`);
+            }
+        }
+        else {
+            throw new Error(`attribute: ${attribute} not found.`);
+        }
+    }
+    getAttribute() {
+        return this.attribute;
+    }
+    getValue() {
+        return this.value;
     }
 }

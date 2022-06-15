@@ -1,4 +1,4 @@
-import { getCookiesAPI } from '/zackdev/modules.mjs';
+import { AttributeValuePair, Filter, FilterSet, getCookiesAPI } from '/zackdev/modules.mjs';
 
 const cookiesAPI = getCookiesAPI();
 
@@ -59,6 +59,43 @@ document.onreadystatechange = function () {
         document.getElementById('deny-list-radio').addEventListener("click", () => {
             setFilterState('denylist');
         });
+
+        document.getElementById('custom-filter').addEventListener("input", (e) => {
+            document.getElementById('custom-filter-log').innerText = '';
+            let input = e.target.value;
+            try {
+                let filterSet = FilterSet.fromString(input);
+                document.getElementById('custom-filter-log').innerText = 'success';
+
+            }
+            catch(e) {
+                document.getElementById('custom-filter-log').innerText = e.message;
+            }
+        });
+
+        /** testing */
+        try {
+            let fs = new FilterSet();
+            fs.type = 'allow';
+
+            let a = new AttributeValuePair('name', '123');
+            let b = new AttributeValuePair('domain', 'google.de');
+            let c = new AttributeValuePair('secure', true);
+
+            let f1 = new Filter();
+            f1.addAttributeValuePair(a);
+            f1.addAttributeValuePair(b);
+
+            let f2 = new Filter();
+            f2.addAttributeValuePair(c);
+
+            fs.addFilter(f1);
+            fs.addFilter(f2);
+
+            document.getElementById('custom-filter-log').innerText = fs.toString();
+        } catch(e) {
+            document.getElementById('custom-filter-log').innerText = e.message;
+        }
     }
 };
 
