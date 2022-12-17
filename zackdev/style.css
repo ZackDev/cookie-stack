@@ -6,6 +6,10 @@ body {
   user-select: none;
 }
 
+input[type=radio] {
+  margin: 5px 0 5px 0;
+}
+
 #wrapper {
   padding: 5px;
 }
@@ -146,6 +150,10 @@ body {
   gap: 5px;
 }
 
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
 .clickable {
   cursor: pointer;
   background-color: #e7e7e7;
@@ -165,6 +173,10 @@ body {
 
 .mtb-5 {
   margin: 5px 0 5px 0;
+}
+
+.mtb-20 {
+  margin: 20px 0 20px 0;
 }
 
 .vam {
