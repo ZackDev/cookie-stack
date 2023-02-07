@@ -1,6 +1,5 @@
 import { getCookiesAPI, StackCookie, Helper } from '/zackdev/modules.mjs';
 
-
 /*
   StackCookieDisplay class
   - responsible for DOM manipulation
@@ -25,6 +24,30 @@ class StackCookieDisplay {
     this.domain_state = new Map();
     this.set_version();
     this.set_options_link();
+  }
+
+  create_cookie_attribute_row(name, value) {
+    let value_type = typeof(value);
+
+    var attribute_row = document.createElement('div');
+    attribute_row.classList.add('attribute-row');
+    var attribute_name = document.createElement('span');
+    attribute_name.classList.add('attribute-name');
+    attribute_name.innerText = name;
+    var attribute_value = document.createElement('span');
+    attribute_value.classList.add('attribute-value');
+    
+    if (value_type == 'string') {
+      attribute_value.innerText = `${value}`;
+    }
+    else if (value_type == 'boolean') {
+      attribute_value.innerHTML = StackCookieDisplay.check_or_x(value);
+    }
+
+    attribute_row.append(attribute_name);
+    attribute_row.append(attribute_value);
+
+    return attribute_row;
   }
 
   set_version() {
@@ -119,167 +142,38 @@ class StackCookieDisplay {
     cookie_action_div.append(trash_button);
     cookie_div.append(cookie_action_div);
 
-    // path/name
-    var attribute_row = document.createElement('div');
-    attribute_row.classList.add('attribute-row');
-    var attribute_name = document.createElement('span');
-    attribute_name.classList.add('attribute-name');
-    attribute_name.innerText = 'path & name';
-    var attribute_value_wrap = document.createElement('div');
-    attribute_value_wrap.classList.add('attribute-value');
-    var attribute_value_path = document.createElement('span');
-    attribute_value_path.classList.add('badge', 'badge-dark');
-    attribute_value_path.innerText = `${stack_cookie.cookie.path}`;
-    var attribute_value_name = document.createElement('span');
-    attribute_value_name.innerText = `${stack_cookie.cookie.name}`;
+    // path
+    cookie_div.append(this.create_cookie_attribute_row('path', stack_cookie.cookie.path));
 
-    attribute_value_wrap.append(attribute_value_path);
-    attribute_value_wrap.append(attribute_value_name);
-
-    attribute_row.append(attribute_name);
-    attribute_row.append(attribute_value_wrap);
-
-    cookie_div.append(attribute_row);
-
+    // name
+    cookie_div.append(this.create_cookie_attribute_row('name', stack_cookie.cookie.name));
 
     // secure
-    var attribute_row = document.createElement('div');
-    attribute_row.classList.add('attribute-row');
-    var attribute_name = document.createElement('span');
-    attribute_name.classList.add('attribute-name');
-    attribute_name.innerText = 'secure';
-    var attribute_value = document.createElement('span');
-    attribute_value.classList.add('attribute-value');
-    attribute_value.innerHTML = StackCookieDisplay.check_or_x(stack_cookie.cookie.secure);
-
-    attribute_row.append(attribute_name);
-    attribute_row.append(attribute_value);
-
-    cookie_div.append(attribute_row);
-
+    cookie_div.append(this.create_cookie_attribute_row('secure', stack_cookie.cookie.secure));
 
     // session
-    var attribute_row = document.createElement('div');
-    attribute_row.classList.add('attribute-row');
-    var attribute_name = document.createElement('span');
-    attribute_name.classList.add('attribute-name');
-    attribute_name.innerText = 'session';
-    var attribute_value = document.createElement('span');
-    attribute_value.classList.add('attribute-value');
-    attribute_value.innerHTML = StackCookieDisplay.check_or_x(stack_cookie.cookie.session);
-
-    attribute_row.append(attribute_name);
-    attribute_row.append(attribute_value);
-
-    cookie_div.append(attribute_row);
-
+    cookie_div.append(this.create_cookie_attribute_row('session', stack_cookie.cookie.session));
 
     // host host only
-    var attribute_row = document.createElement('div');
-    attribute_row.classList.add('attribute-row');
-    var attribute_name = document.createElement('span');
-    attribute_name.classList.add('attribute-name');
-    attribute_name.innerText = 'host only';
-    var attribute_value = document.createElement('span');
-    attribute_value.classList.add('attribute-value');
-    attribute_value.innerHTML = StackCookieDisplay.check_or_x(stack_cookie.cookie.hostOnly);
-
-    attribute_row.append(attribute_name);
-    attribute_row.append(attribute_value);
-
-    cookie_div.append(attribute_row);
-
+    cookie_div.append(this.create_cookie_attribute_row('host only', stack_cookie.cookie.hostOnly));
 
     // http only
-    var attribute_row = document.createElement('div');
-    attribute_row.classList.add('attribute-row');
-    var attribute_name = document.createElement('span');
-    attribute_name.classList.add('attribute-name');
-    attribute_name.innerText = 'http only';
-    var attribute_value = document.createElement('span');
-    attribute_value.classList.add('attribute-value');
-    attribute_value.innerHTML = StackCookieDisplay.check_or_x(stack_cookie.cookie.httpOnly);
-
-    attribute_row.append(attribute_name);
-    attribute_row.append(attribute_value);
-
-    cookie_div.append(attribute_row);
-
+    cookie_div.append(this.create_cookie_attribute_row('http only', stack_cookie.cookie.httpOnly));
 
     // same site
-    var attribute_row = document.createElement('div');
-    attribute_row.classList.add('attribute-row');
-    var attribute_name = document.createElement('span');
-    attribute_name.classList.add('attribute-name');
-    attribute_name.innerText = 'same site';
-    var attribute_value = document.createElement('span');
-    attribute_value.classList.add('attribute-value');
-    attribute_value.innerText = `${stack_cookie.cookie.sameSite}`;
-
-    attribute_row.append(attribute_name);
-    attribute_row.append(attribute_value);
-
-    cookie_div.append(attribute_row);
-
+    cookie_div.append(this.create_cookie_attribute_row('same site', stack_cookie.cookie.sameSite));
 
     // expiration date
-    var attribute_row = document.createElement('div');
-    attribute_row.classList.add('attribute-row');
-    var attribute_name = document.createElement('span');
-    attribute_name.classList.add('attribute-name');
-    attribute_name.innerText = 'expiration date';
-    var attribute_value = document.createElement('span');
-    attribute_value.classList.add('attribute-value');
-    attribute_value.innerText = `${stack_cookie.cookie.expirationDate}`;
-
-    attribute_row.append(attribute_name);
-    attribute_row.append(attribute_value);
-
-    cookie_div.append(attribute_row);
-
+    cookie_div.append(this.create_cookie_attribute_row('expiration date', stack_cookie.cookie.expirationDate));
 
     // first party domain
-    var attribute_row = document.createElement('div');
-    attribute_row.classList.add('attribute-row');
-    var attribute_name = document.createElement('span');
-    attribute_name.classList.add('attribute-name');
-    attribute_name.innerText = 'first party domain';
-    var attribute_value = document.createElement('span');
-    attribute_value.classList.add('attribute-value');
-    attribute_value.innerText = `${stack_cookie.cookie.firstPartyDomain}`;
-
-    attribute_row.append(attribute_name);
-    attribute_row.append(attribute_value);
-
-    cookie_div.append(attribute_row);
-
+    cookie_div.append(this.create_cookie_attribute_row('first party domain', stack_cookie.cookie.firstPartyDomain));
 
     // store id
-    var attribute_row = document.createElement('div');
-    attribute_row.classList.add('attribute-row');
-    var attribute_name = document.createElement('span');
-    attribute_name.classList.add('attribute-name');
-    attribute_name.innerText = 'store id';
-    var attribute_value = document.createElement('span');
-    attribute_value.classList.add('attribute-value');
-    attribute_value.innerText = `${stack_cookie.cookie.storeId}`;
-
-    attribute_row.append(attribute_name);
-    attribute_row.append(attribute_value);
-
-    cookie_div.append(attribute_row);
-
+    cookie_div.append(this.create_cookie_attribute_row('store id', stack_cookie.cookie.storeId));
 
     // value
-    var attribute_row = document.createElement('div');
-    attribute_row.classList.add('attribute-row');
-    var attribute_value = document.createElement('span');
-    attribute_value.classList.add('attribute-value');
-    attribute_value.innerText = `${stack_cookie.cookie.value}`;
-
-    attribute_row.append(attribute_value);
-
-    cookie_div.append(attribute_row);
+    cookie_div.append(this.create_cookie_attribute_row('', stack_cookie.cookie.value));
 
     return cookie_div;
   }
