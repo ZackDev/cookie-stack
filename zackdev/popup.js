@@ -127,21 +127,6 @@ class StackCookieDisplay {
     cookie_div.setAttribute('id', `cookie-${u_cookie_str}`);
     cookie_div.classList.add('cookie', `${u_domain_str}`);
 
-    var cookie_action_div = document.createElement('div');
-    cookie_action_div.classList.add('cookie-action');
-
-    var trash_button = document.createElement('button');
-    trash_button.setAttribute('id', `trash-button-${u_cookie_str}`);
-    trash_button.setAttribute('type', 'button');
-    trash_button.classList.add('clickable', 'border', 'rounded', 'quadratic-30', 'trash');
-    trash_button.addEventListener("click", () => {
-      console.log('StackCookieDisplay: trash button clicked.');
-      this.cookiesAPI.remove(stack_cookie);
-    });
-
-    cookie_action_div.append(trash_button);
-    cookie_div.append(cookie_action_div);
-
     // path
     cookie_div.append(this.create_cookie_attribute_row('path', stack_cookie.cookie.path));
 
@@ -174,6 +159,25 @@ class StackCookieDisplay {
 
     // value
     cookie_div.append(this.create_cookie_attribute_row('value', stack_cookie.cookie.value));
+
+    
+    // cookie action container
+    var cookie_action_div = document.createElement('div');
+    cookie_action_div.classList.add('cookie-action');
+
+    // trash button
+    var trash_button = document.createElement('button');
+    trash_button.title = 'delete cookie';
+    trash_button.setAttribute('id', `trash-button-${u_cookie_str}`);
+    trash_button.setAttribute('type', 'button');
+    trash_button.classList.add('clickable', 'border', 'rounded', 'quadratic-30', 'trash');
+    trash_button.addEventListener("click", () => {
+      console.log('StackCookieDisplay: trash button clicked.');
+      this.cookiesAPI.remove(stack_cookie);
+    });
+
+    cookie_action_div.append(trash_button);
+    cookie_div.append(cookie_action_div);
 
     return cookie_div;
   }
