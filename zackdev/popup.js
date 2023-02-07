@@ -173,7 +173,7 @@ class StackCookieDisplay {
     cookie_div.append(this.create_cookie_attribute_row('store id', stack_cookie.cookie.storeId));
 
     // value
-    cookie_div.append(this.create_cookie_attribute_row('', stack_cookie.cookie.value));
+    cookie_div.append(this.create_cookie_attribute_row('value', stack_cookie.cookie.value));
 
     return cookie_div;
   }
