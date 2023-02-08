@@ -5,18 +5,23 @@ export { getCookiesAPI, StackCookie, Helper }
  * @returns a cookiesAPI object
  */
 const getCookiesAPI = () => {
+    console.log('getCookiesAPI(): detecting browser');
     try {
+        console.log('getCookiesAPI(): trying firefox');
         setAPI('firefox', browser);
+        console.log('getCookiesAPI(): firefox found');
     }
     catch (error) {
-        console.log(error)
+        console.log('getCookiesAPI(): firefox not found');
     }
 
     try {
+        console.log('getCookiesAPI(): trying chromium');
         setAPI('chromium', chrome);
+        console.log('getCookiesAPI(): chromium found');
     }
     catch (error) {
-        console.log(error)
+        console.log('getCookiesAPI(): chromium not found');
     }
     return cookiesAPI;
 }
