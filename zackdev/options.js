@@ -102,21 +102,10 @@ document.onreadystatechange = function () {
                     console.log('json missing keys');
                 }
             });
-            event.target.value = 'No file chosen';
         });
     }
 };
 
-async function getFileHandle() {
-    let filehandle;
-    [filehandle] = await window.showOpenFilePicker();
-    return filehandle;
-}
-
-async function getFile(filehandle) {
-    let file = await filehandle.getFile();
-    return file;
-}
 
 const switchCheckedRadio = (radio) => {
     let disableR = document.getElementById('disable-radio');
