@@ -59,6 +59,23 @@ document.onreadystatechange = function () {
         document.getElementById('deny-list-radio').addEventListener("click", () => {
             setFilterState('denylist');
         });
+
+        document.getElementById('export-btn').addEventListener("click", () => {
+            cookiesAPI.getValue(null)
+                .then((r) => {
+                    let settingsJson = JSON.stringify(r);
+                    let settingsFile = new File([settingsJson], 'file');
+                    let url = URL.createObjectURL(settingsFile);
+                    let downloadProcess = chrome.downloads.download({
+                        url: url,
+                        filename: 'settings.json'
+                    });
+                    downloadProcess.then(
+                        res => URL.revokeObjectURL(url),
+                        rej => URL.revokeObjectURL(url)
+                    );
+                })
+        });
     }
 };
 

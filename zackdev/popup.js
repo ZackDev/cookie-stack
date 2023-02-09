@@ -43,8 +43,14 @@ class StackCookieDisplay {
         else if (value_type == 'boolean') {
             attribute_value.innerHTML = StackCookieDisplay.check_or_x(value);
         }
+        else if (value_type == 'number') {
+            attribute_value.innerText = `${value}`;
+        }
+        else if (value_type == 'undefined') {
+            attribute_value.innerText = 'undefined';
+        }
         else {
-            console.log('StackCookieDisplay.create_cookie_attribute_row(): unexpected type of value');
+            console.log('StackCookieDisplay.create_cookie_attribute_row(): unexpected type of value:', value_type);
         }
 
         attribute_row.append(attribute_name);
