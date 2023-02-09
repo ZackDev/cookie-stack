@@ -22,16 +22,16 @@ document.onreadystatechange = function () {
                 let s = r.ss;
                 switch (s) {
                     case 'allowlist':
-                        document.getElementById('allow-list-radio').setAttribute('checked', true);
+                        document.getElementById('allow-list-radio').setAttribute('checked', 'checked');
                         break;
                     case 'denylist':
-                        document.getElementById('deny-list-radio').setAttribute('checked', true);
+                        document.getElementById('deny-list-radio').setAttribute('checked', 'checked');
                         break;
                     case 'disabled':
-                        document.getElementById('disable-radio').setAttribute('checked', true);
+                        document.getElementById('disable-radio').setAttribute('checked', 'checked');
                         break;
-            }
-        });
+                }
+            });
 
 
         cookiesAPI.storage.onChanged.addListener(onStorageUpdated);
@@ -67,10 +67,10 @@ document.onreadystatechange = function () {
                     let settingsFile = new File(
                         [settingsJson],
                         'cookie-stack-settings.json',
-                        {type: 'application/json'}
+                        { type: 'application/json' }
                     );
                     let url = URL.createObjectURL(settingsFile);
-                    let downloadProcess = chrome.downloads.download({
+                    let downloadProcess = cookiesAPI.downloads.download({
                         url: url,
                         filename: 'cookie-stack-settings.json',
                         saveAs: true
@@ -82,31 +82,27 @@ document.onreadystatechange = function () {
                 })
         });
 
-        document.getElementById('import-btn').addEventListener("click", () => {
-            let filehandle = getFileHandle();
-            filehandle.then((fh) => {
-                let file = getFile(fh);
-                file.then((settingsFile) => {
-                    let content = settingsFile.text();
-                    content.then((c) => {
-                        let jsonObject = JSON.parse(c);
-                        console.log(jsonObject);
-                        if (jsonObject.ss && jsonObject.fa && jsonObject.fd) {
-                            if (typeof jsonObject.ss === 'string' && Array.isArray(jsonObject.fa) && Array.isArray(jsonObject.fd)) {
-                                cookiesAPI.storeValue({ss: jsonObject.ss});
-                                cookiesAPI.storeValue({fa: jsonObject.fa});
-                                cookiesAPI.storeValue({fd: jsonObject.fd});
-                            }
-                            else {
-                                console.log('json wrong property types');
-                            }
-                        }
-                        else {
-                            console.log('json missing keys');
-                        }
-                    });
-                });
-            })
+        document.getElementById('import-file-picker').addEventListener("change", (event) => {
+            let files = event.target.files;
+            let file = files[0];
+            let content = file.text();
+            content.then((c) => {
+                let jsonObject = JSON.parse(c);
+                if (jsonObject.ss && jsonObject.fa && jsonObject.fd) {
+                    if (typeof jsonObject.ss === 'string' && Array.isArray(jsonObject.fa) && Array.isArray(jsonObject.fd)) {
+                        cookiesAPI.storeValue({ ss: jsonObject.ss });
+                        cookiesAPI.storeValue({ fa: jsonObject.fa });
+                        cookiesAPI.storeValue({ fd: jsonObject.fd });
+                    }
+                    else {
+                        console.log('json wrong property types');
+                    }
+                }
+                else {
+                    console.log('json missing keys');
+                }
+            });
+            event.target.value = 'No file chosen';
         });
     }
 };
@@ -122,6 +118,42 @@ async function getFile(filehandle) {
     return file;
 }
 
+const switchCheckedRadio = (radio) => {
+    let disableR = document.getElementById('disable-radio');
+    let allowListR = document.getElementById('allow-list-radio');
+    let denyListR = document.getElementById('deny-list-radio');
+
+    disableR.removeAttribute('checked');
+    allowListR.removeAttribute('checked');
+    denyListR.removeAttribute('checked');
+
+    switch (radio) {
+        case 'disable-radio':
+            disableR.setAttribute('checked', 'checked');
+            // some dirty workaround for radio not updating visuals
+            disableR.click();
+            break;
+        case 'allow-list-radio':
+            allowListR.setAttribute('checked', 'checked');
+            // some dirty workaround for radio not updating visuals
+            allowListR.click();
+            break;
+        case 'deny-list-radio':
+            denyListR.setAttribute('checked', 'checked');
+            // some dirty workaround for radio not updating visuals
+            denyListR.click();
+            break;
+    }
+}
+
+
+/**
+ * initial setup for the extension's local storage
+ * adds the following key-value pairs if not already present
+ * - ss, 'disabled'
+ * - fa, []
+ * - fd, []
+ */
 const setupStorage = () => {
     cookiesAPI.getValue('ss')
         .then((r) => {
@@ -145,12 +177,27 @@ const setupStorage = () => {
         })
 }
 
+
+/**
+ * 
+ * @returns Promise
+ */
 const getFilterState = () => {
     return cookiesAPI.getValue('ss');
 }
 
+
+/**
+ * 
+ * @param {string} s 
+ */
 const setFilterState = (s) => {
-    cookiesAPI.storeValue({ ss: s });
+    if (['disabled', 'allowlist', 'denylist'].contains(s)) {
+        return cookiesAPI.storeValue({ ss: s });
+    }
+    else {
+        return Promise.reject();
+    }
 }
 
 
@@ -217,10 +264,13 @@ const onFilterRead = (f) => {
 }
 
 const onStorageUpdated = (c, a) => {
+    console.log('onStorageUpdated()');
     let key = Object.keys(c)[0];
     switch (key) {
         case 'fa':
+            console.log('allowlist updated')
             if (c.fa.newValue) {
+                console.log('allowlist new value', c.fa.newValue);
                 emptyList('allow-list')
                 for (let fi of c.fa.newValue) {
                     updateList('allow-list', fi);
@@ -231,7 +281,9 @@ const onStorageUpdated = (c, a) => {
             }
             break;
         case 'fd':
+            console.log('denylist updated')
             if (c.fd.newValue) {
+                console.log('denylist new value', c.fd.newValue);
                 emptyList('deny-list')
                 for (let fi of c.fd.newValue) {
                     updateList('deny-list', fi);
@@ -242,16 +294,18 @@ const onStorageUpdated = (c, a) => {
             }
             break;
         case 'ss':
+            console.log('selected list updated')
             let state = c.ss.newValue;
+            console.log('selected list new value', state);
             switch (state) {
                 case 'disabled':
-                    document.getElementById('disable-radio').setAttribute('checked', 'checked');
+                    switchCheckedRadio('disable-radio');
                     break;
                 case 'allowlist':
-                    document.getElementById('allow-list-radio').setAttribute('checked', 'checked');
+                    switchCheckedRadio('allow-list-radio');
                     break;
                 case 'denylist':
-                    document.getElementById('deny-list-radio').setAttribute('checked', 'checked');
+                    switchCheckedRadio('deny-list-radio');
                     break;
             }
     }

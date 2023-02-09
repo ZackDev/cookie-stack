@@ -15,11 +15,13 @@
             </header>
             <div id="content" class="browser-style">
                 <!-- disable radio button -->
-                <input type="radio" id="disable-radio" class="vam" name="manage-lists">&nbsp;disable filter</input>
+                <input type="radio" id="disable-radio" class="vam" name="manage-lists"></input>
+                <label for="disable-radio">disabled</label>
                 <br>
                 <hr>
                 <!-- allow list control -->
-                <input type="radio" id="allow-list-radio" class="mtb-5 vam" name="manage-lists">&nbsp;allowlist:</input>
+                <input type="radio" id="allow-list-radio" class="mtb-5 vam" name="manage-lists"></input>
+                <label for="allow-list-radio">allowlist</label>
                 <br>
                 <input type="text" id="allow-input" class="mtb-5 browser-style" spellcheck="false" />
                 <button type="button" id="allow-add-btn" class="mtb-5 browser-style">add</button>
@@ -28,16 +30,23 @@
                 <br>
                 <hr>
                 <!-- deny list control -->
-                <input type="radio" id="deny-list-radio" class="vam" name="manage-lists">&nbsp;denylist:</input>
+                <input type="radio" id="deny-list-radio" class="vam" name="manage-lists"></input>
+                <label for="deny-list-radio">denylist</label>
                 <br>
                 <input type="text" id="deny-input" class="mtb-5 browser-style" spellcheck="false" />
                 <button type="button" id="deny-add-btn" class="mtb-5 browser-style">add</button>
                 <br>
                 <div id="deny-list" class="flex-row flex-wrap"></div>
                 <br>
+                <hr>
+                <!-- import/export control -->
+                <h2>export and import the settings from above</h2>
                 <div class="flex-row" style="justify-content: space-between;">
                     <button type="button" id="export-btn" class="mtb-5 browser-style">export</button>
-                    <button type="button" id="import-btn" class="mtb-5 browser-style">import</button>
+                    <div>
+                        <input type="file" id="import-file-picker" class="mtb-5 browser-style" accept="application/json"/>
+                        <button type="button" id="import-btn" class="mtb-5 browser-style">import</button>
+                    </div>
                 </div>
             </div>
         </div>

@@ -44,6 +44,7 @@ const setAPI = (b, r) => {
         cookiesAPI.browser = b;
         cookiesAPI.browserAction = r.browserAction;
         cookiesAPI.cookies = r.cookies;
+        cookiesAPI.downloads = r.downloads;
         cookiesAPI.runtime = r.runtime;
         cookiesAPI.storage = r.storage;
     }
