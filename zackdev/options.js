@@ -63,21 +63,64 @@ document.onreadystatechange = function () {
         document.getElementById('export-btn').addEventListener("click", () => {
             cookiesAPI.getValue(null)
                 .then((r) => {
-                    let settingsJson = JSON.stringify(r);
-                    let settingsFile = new File([settingsJson], 'file');
+                    let settingsJson = JSON.stringify(r, undefined, 4);
+                    let settingsFile = new File(
+                        [settingsJson],
+                        'cookie-stack-settings.json',
+                        {type: 'application/json'}
+                    );
                     let url = URL.createObjectURL(settingsFile);
                     let downloadProcess = chrome.downloads.download({
                         url: url,
-                        filename: 'settings.json'
+                        filename: 'cookie-stack-settings.json',
+                        saveAs: true
                     });
-                    downloadProcess.then(
+                    downloadProcess.then((res, rej) => {
                         res => URL.revokeObjectURL(url),
                         rej => URL.revokeObjectURL(url)
-                    );
+                    });
                 })
+        });
+
+        document.getElementById('import-btn').addEventListener("click", () => {
+            let filehandle = getFileHandle();
+            filehandle.then((fh) => {
+                let file = getFile(fh);
+                file.then((settingsFile) => {
+                    let content = settingsFile.text();
+                    content.then((c) => {
+                        let jsonObject = JSON.parse(c);
+                        console.log(jsonObject);
+                        if (jsonObject.ss && jsonObject.fa && jsonObject.fd) {
+                            if (typeof jsonObject.ss === 'string' && Array.isArray(jsonObject.fa) && Array.isArray(jsonObject.fd)) {
+                                cookiesAPI.storeValue({ss: jsonObject.ss});
+                                cookiesAPI.storeValue({fa: jsonObject.fa});
+                                cookiesAPI.storeValue({fd: jsonObject.fd});
+                            }
+                            else {
+                                console.log('json wrong property types');
+                            }
+                        }
+                        else {
+                            console.log('json missing keys');
+                        }
+                    });
+                });
+            })
         });
     }
 };
+
+async function getFileHandle() {
+    let filehandle;
+    [filehandle] = await window.showOpenFilePicker();
+    return filehandle;
+}
+
+async function getFile(filehandle) {
+    let file = await filehandle.getFile();
+    return file;
+}
 
 const setupStorage = () => {
     cookiesAPI.getValue('ss')
