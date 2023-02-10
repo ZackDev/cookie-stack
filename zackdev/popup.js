@@ -263,14 +263,14 @@ class StackCookieDisplay {
             cookie_wrap_div.classList.remove('not-collapsed');
         }
 
-        var ret = document.createElement('div');
-        ret.classList.add('domain-wrap');
-        ret.setAttribute('id', `domain-wrap-${u_domain_str}`);
-        ret.setAttribute('domain', `${stack_cookie.domain()}`);
-        ret.append(cookie_domain_div);
-        ret.append(cookie_wrap_div);
+        var domain_wrap_div = document.createElement('div');
+        domain_wrap_div.classList.add('domain-wrap');
+        domain_wrap_div.setAttribute('id', `domain-wrap-${u_domain_str}`);
+        domain_wrap_div.setAttribute('domain', `${stack_cookie.domain()}`);
+        domain_wrap_div.append(cookie_domain_div);
+        domain_wrap_div.append(cookie_wrap_div);
 
-        return ret;
+        return domain_wrap_div;
     }
 }
 
