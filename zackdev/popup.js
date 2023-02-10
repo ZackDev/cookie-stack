@@ -134,7 +134,7 @@ class StackCookieDisplay {
         var u_cookie_str = stack_cookie.unique_cookie_string();
         var cookie_div = document.createElement('div');
         cookie_div.setAttribute('id', `cookie-${u_cookie_str}`);
-        cookie_div.classList.add('cookie', `${u_domain_str}`);
+        cookie_div.classList.add('cookie', 'p5', `${u_domain_str}`);
 
         // path
         cookie_div.append(this.create_cookie_attribute_row('path', stack_cookie.cookie.path));
