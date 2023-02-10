@@ -24,7 +24,7 @@ A Firefox/Chromium extension for viewing and deleting cookies.
 
 The extension has three main funtionalities:
 
-## 1. View and remove cookies
+## 1. View and delete cookies
 
 Access it by clicking the icon at the toolbar of your browser, displaying the number of cookies currently set.
 
@@ -32,11 +32,11 @@ Access it by clicking the icon at the toolbar of your browser, displaying the nu
 
 * click the toolbar icon to get an overview of domains they belong to
 * expand or contract those domains by clicking the plus or minus symbol next to it to view specific cookies
-* delete a cookie by clicking the trash icon at the bottom of it's details
+* delete a cookie by clicking the trash icon at the bottom of its details
 
 ## 2. Automatically filter incoming cookies by domain
 
-* go to the preferences (firefox), options (chromium)
+* go to the extension's preferences (firefox), options (chromium)
 
 ![Options Screenshot](./cookie-stack-options-screenshot.png)
 
@@ -52,10 +52,10 @@ Remove a domain from a list, click on the displayed domain below the specific li
 
 ## 3. Export and import the extension's settings
 
-The export- and importable settings are the ones shown at the bottom of the preferences (firefox), options (chromium) page, for now this is the active list (disabled, allowlist, denylist) and their contents.
+The export- and importable settings are the ones shown at the bottom of the preferences (firefox), options (chromium) page, for now this is a value for the currently active list (disabled, allowlist, denylist) and their contents.
 
 * go to the preferences (firefox), options (chromium)
 
 Export the current settings by clicking the *export to* button, which will open a file dialog, where the destination folder and file can be choosen.
 
-Import settings by clicking the *Browse files* (firefox) or *Choose File* button. This will present a file dialog where the file from which the settings will be read can be selected. This process will override the currently existing setting.
+Import settings by clicking the *Browse files* (firefox) or *Choose File* (chromium) button. This will present a file dialog where the file, from which the settings are read, can be selected. This process will override the currently existing settings.
