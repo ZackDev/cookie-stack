@@ -59,3 +59,21 @@ The export- and importable settings are the ones shown at the bottom of the pref
 Export the current settings by clicking the `export to` button, which will open a file dialog, where the destination folder and file can be choosen.
 
 Import settings by clicking the `Browse files` (firefox) or `Choose File` (chromium) button. This will present a file dialog where the file, from which the settings are read, can be selected. This process will override the currently existing settings.
+
+The settings file is in JSON format, requires the following key-value pairs:
+
+* **ss**: the name of the selected filter, possible values: disabled, allowlist, denylist
+* **fa**: the allowlist - an array of strings, where the strings are domain-names
+* **fd**: the denylist - also an array of domain-names
+
+Here is an exemplary settings file:
+
+```
+{
+    "ss": "allowlist",
+    "fa": ["github.com", "heise.de"],
+    "fd": []
+}
+```
+
+Enjoy!
