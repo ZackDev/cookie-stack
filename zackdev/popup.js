@@ -217,7 +217,7 @@ class StackCookieDisplay {
         details_button.setAttribute('type', 'button');
         details_button.setAttribute('id', `details-button-${u_domain_str}`);
         details_button.setAttribute('data-target', `cookie-wrap-${u_domain_str}`);
-        details_button.classList.add('details', 'clickable', 'border', 'rounded', 'quadratic-30', 'arrow-south');
+        details_button.classList.add('clickable', 'border', 'rounded', 'quadratic-30', 'arrow-south');
         details_button.addEventListener("click", (event) => {
             console.log('StackCookieDisplay: details button clicked.');
             var btn = event.target;
