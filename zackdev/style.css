@@ -98,20 +98,19 @@ input[type=radio] {
     margin-right: 20px;
 }
 
-.arrow-north {
-    background-image: url('./icons/arrow-north.svg');
+.plus-icon {
+    background-image: url('./icons/plus.svg');
 }
 
-.arrow-south {
-    background-image: url('./icons/arrow-north.svg');
-    transform: rotate(180deg);
+.minus-icon {
+    background-image: url('./icons/minus.svg');
 }
 
-.trash {
+.trash-icon {
     background-image: url('./icons/trash.svg');
 }
 
-.wrench {
+.wrench-icon {
     background-image: url('./icons/wrench.svg');
 }
 

@@ -179,7 +179,7 @@ class StackCookieDisplay {
         trash_button.title = 'delete cookie';
         trash_button.setAttribute('id', `trash-button-${u_cookie_str}`);
         trash_button.setAttribute('type', 'button');
-        trash_button.classList.add('clickable', 'border', 'rounded', 'quadratic-30', 'trash');
+        trash_button.classList.add('clickable', 'border', 'rounded', 'quadratic-30', 'trash-icon');
         trash_button.addEventListener("click", () => {
             console.log('StackCookieDisplay: trash button clicked.');
             this.cookiesAPI.remove(stack_cookie);
@@ -214,28 +214,32 @@ class StackCookieDisplay {
         domain_name.innerText = `${stack_cookie.cookie.domain}`;
 
         var details_button = document.createElement('button');
+        details_button.title = 'show cookies';
         details_button.setAttribute('type', 'button');
         details_button.setAttribute('id', `details-button-${u_domain_str}`);
         details_button.setAttribute('data-target', `cookie-wrap-${u_domain_str}`);
-        details_button.classList.add('clickable', 'border', 'rounded', 'quadratic-30', 'arrow-south');
+        details_button.classList.add('clickable', 'border', 'rounded', 'quadratic-30', 'plus-icon');
         details_button.addEventListener("click", (event) => {
             console.log('StackCookieDisplay: details button clicked.');
             var btn = event.target;
             var collapsed = false;
             var elementToCollapse = document.getElementById(btn.getAttribute('data-target'));
-            if (btn.classList.contains('arrow-south')) {
+            if (btn.classList.contains('plus-icon')) {
+                details_button.title = 'hide cookies';
                 collapsed = false;
                 elementToCollapse.classList.add('collapsed');
                 elementToCollapse.classList.remove('not-collapsed');
-                btn.classList.remove('arrow-south');
-                btn.classList.add('arrow-north');
+                btn.classList.remove('plus-icon');
+                btn.classList.add('minus-icon');
+
             }
-            else if (btn.classList.contains('arrow-north')) {
+            else if (btn.classList.contains('minus-icon')) {
+                details_button.title = 'show cookies';
                 collapsed = true;
                 elementToCollapse.classList.remove('collapsed');
                 elementToCollapse.classList.add('not-collapsed');
-                btn.classList.remove('arrow-north');
-                btn.classList.add('arrow-south');
+                btn.classList.remove('minus-icon');
+                btn.classList.add('plus-icon');
             }
 
             // keeps track of domain's collapsed state
