@@ -37,16 +37,16 @@ class StackCookieDisplay {
         var attribute_value = document.createElement('span');
         attribute_value.classList.add('attribute-value');
 
-        if (value_type == 'string') {
+        if (value_type === 'string') {
             attribute_value.innerText = `${value}`;
         }
-        else if (value_type == 'boolean') {
+        else if (value_type === 'boolean') {
             attribute_value.innerHTML = StackCookieDisplay.check_or_x(value);
         }
-        else if (value_type == 'number') {
+        else if (value_type === 'number') {
             attribute_value.innerText = `${value}`;
         }
-        else if (value_type == 'undefined') {
+        else if (value_type === 'undefined') {
             attribute_value.innerText = 'undefined';
         }
         else {
@@ -60,7 +60,7 @@ class StackCookieDisplay {
     }
 
     set_version() {
-        var version_str = this.cookiesAPI.runtime.getManifest().version_name;
+        var version_str = this.cookiesAPI.runtime.getManifest().version;
         document.getElementById('version').innerText = ['version', version_str].join(' ');
     }
 
