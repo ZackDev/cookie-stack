@@ -22,28 +22,37 @@ A Firefox/Chromium extension for viewing and deleting cookies.
 
 # How to use the extension:
 
-The extension adds two funtionalities to the browser:
+The extension has three main funtionalities:
 
-## View and remove cookies
+## 1. View and remove cookies
 
 Access it by clicking the icon at the toolbar of your browser, displaying the number of cookies currently set.
 
 ![Screenshot](./extension-screenshot.png)
 
 * click the toolbar icon to get an overview of domains they belong to
-* expand or contract those domains by clicking the down or up facing arrow to view specific cookies
-* delete a cookie by clicking the trash icon
+* expand or contract those domains by clicking the plus or minus symbol next to it to view specific cookies
+* delete a cookie by clicking the trash icon at the bottom of it's details
 
-## Automatically filter incoming cookies by domain
+## 2. Automatically filter incoming cookies by domain
 
-* go to the preferences (firefox), options (chromium) to view, edit and set the active filter
+* go to the preferences (firefox), options (chromium)
 * *disabled*: no filter gets applied
 * *allowlist*: allow every cookie on the list, remove the rest
 * *denylist*: deny every cookie specified, allow the rest
 
-**NOTE**: This doesn't prevent cookies from getting initially stored. The filter gets applied *afterwards*. Some websites continuosly try to store cookies on your machine, even after the first pageload. This might cause the filter also to continuosly remove said cookies.
+To add a domain to a specific list, write the domain name into the textfield next to specific list and hit the *add* button.
 
-# Issues:
+Remove a domain from a list, click on the displayed domain below the specific list. 
 
-**firefox**:
-* cookies, whose url (domain + path) isn't fully recontructible by the cookies returned by `browser.coolies.getAll({})` API call, can't be removed by this extension.
+**NOTE**: The filter doesn't prevent cookies from getting initially stored. Cookies get filtered *afterwards*. Some websites continuosly try to store cookies on your machine, even after the first pageload. This might cause the filter also to continuosly remove said cookies.
+
+## 3. Export and import the extension's settings
+
+The export- and importable settings are the ones shown at the bottom of the preferences (firefox), options (chromium) page, for now this is the active list (disabled, allowlist, denylist) and their contents.
+
+* go to the preferences (firefox), options (chromium)
+
+Export the current settings by clicking the *export to* button, which will open a file dialog, where the destination folder and file can be choosen.
+
+Import settings by clicking the *Browse files* (firefox) or *Choose File* button. This will present a file dialog where the file from which the settings will be read can be selected. This process will override the currently existing setting.
