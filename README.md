@@ -1,6 +1,6 @@
 # Cookie Stack
 
-A Firefox/Chromium extension for viewing and deleting cookies.
+firefox and chromium extension for managing cookies. Includes automatic deletion of cookies by domain.
 
 **NOTE**: cookies may contain sensitive information
 
