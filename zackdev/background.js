@@ -1,5 +1,11 @@
 import { getCookiesAPI, StackCookie } from '/zackdev/modules.mjs';
 
+/**
+ * runs in the background without user-interaction and is responsible for:
+ * - updating the extension's badge text (number of locally stored cookies)
+ * - applying the domain filter (when the filter changes or new cookies are set)
+ */
+
 const cookiesAPI = getCookiesAPI();
 
 /*
