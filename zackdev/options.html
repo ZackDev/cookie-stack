@@ -8,12 +8,10 @@
     <body>
         <div id="wrapper">
             <header class="rounded mb-20">
-                <div>
-                    <h1>Cookie Stack Options</h1>
-                    <h2>allow or deny cookies to be set for specific domains</h2>
-                </div>
+                <h1>Cookie Stack Options</h1>
             </header>
             <div id="content" class="browser-style">
+                <h2>allow or deny cookies to be set for specific domains</h2>
                 <!-- disable radio button -->
                 <input type="radio" id="disable-radio" class="vam" name="manage-lists"></input>
                 <label for="disable-radio">disabled</label>
@@ -41,10 +39,10 @@
                 <hr>
                 <!-- import/export control -->
                 <h2>export and import the settings from above</h2>
-                <div class="flex-row" style="justify-content: space-between;">
+                <div class="flex-row" style="justify-content: space-between;" class="vam">
                     <button type="button" id="export-btn" class="mtb-5 browser-style">export</button>
                     <div>
-                        <label for="import-file-picker">select file for import</label>
+                        <label for="import-file-picker">import:</label>
                         <input type="file" id="import-file-picker" class="mtb-5 browser-style" accept="application/json"/>
                     </div>
                 </div>
