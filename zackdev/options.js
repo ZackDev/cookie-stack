@@ -181,7 +181,7 @@ const getFilterState = () => {
  * @param {string} s 
  */
 const setFilterState = (s) => {
-    if (['disabled', 'allowlist', 'denylist'].contains(s)) {
+    if (['disabled', 'allowlist', 'denylist'].includes(s)) {
         return cookiesAPI.storeValue({ ss: s });
     }
     else {
