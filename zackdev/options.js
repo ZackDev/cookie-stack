@@ -1,11 +1,9 @@
-import { getCookiesAPI } from '/zackdev/modules.mjs';
+import { CookiesAPI } from '/zackdev/modules.mjs';
 
-const cookiesAPI = getCookiesAPI();
+const cookiesAPI = new CookiesAPI();
 
 document.onreadystatechange = function () {
     if (document.readyState === "complete") {
-
-        setupStorage();
 
         getFilter('allow')
             .then((r) => {
@@ -133,37 +131,6 @@ const switchCheckedRadio = (radio) => {
             denyListR.click();
             break;
     }
-}
-
-
-/**
- * initial setup for the extension's local storage
- * adds the following key-value pairs if not already present
- * - ss, 'disabled'
- * - fa, []
- * - fd, []
- */
-const setupStorage = () => {
-    cookiesAPI.getValue('ss')
-        .then((r) => {
-            if (Object.keys(r).length === 0) {
-                cookiesAPI.storeValue({ ss: 'disabled' });
-            }
-        })
-
-    cookiesAPI.getValue('fa')
-        .then((r) => {
-            if (Object.keys(r).length === 0) {
-                cookiesAPI.storeValue({ fa: [] });
-            }
-        })
-
-    cookiesAPI.getValue('fd')
-        .then((r) => {
-            if (Object.keys(r).length === 0) {
-                cookiesAPI.storeValue({ fd: [] });
-            }
-        })
 }
 
 

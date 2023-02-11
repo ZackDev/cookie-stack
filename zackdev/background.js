@@ -1,4 +1,4 @@
-import { getCookiesAPI } from '/zackdev/modules.mjs';
+import { CookiesAPI } from '/zackdev/modules.mjs';
 
 
 /**
@@ -8,7 +8,7 @@ import { getCookiesAPI } from '/zackdev/modules.mjs';
  */
 
 
-const cookiesAPI = getCookiesAPI();
+const cookiesAPI = new CookiesAPI();
 
 
 cookiesAPI.browserAction.setBadgeTextColor(

@@ -1,4 +1,4 @@
-import { getCookiesAPI, StackCookie, Helper } from '/zackdev/modules.mjs';
+import { CookiesAPI, StackCookie, Helper } from '/zackdev/modules.mjs';
 
 /*
   StackCookieDisplay class
@@ -9,14 +9,6 @@ import { getCookiesAPI, StackCookie, Helper } from '/zackdev/modules.mjs';
   -- version and a link to the homepage
 */
 class StackCookieDisplay {
-    static check_or_x(b) {
-        if (b === true) {
-            return '&check;';
-        }
-        else if (b === false) {
-            return '&cross;';
-        }
-    }
 
     constructor(content_root, api) {
         this.content_root = content_root;
@@ -41,7 +33,7 @@ class StackCookieDisplay {
             attribute_value.innerText = `${value}`;
         }
         else if (value_type === 'boolean') {
-            attribute_value.innerHTML = StackCookieDisplay.check_or_x(value);
+            attribute_value.innerHTML = Helper.check_or_x(value);
         }
         else if (value_type === 'number') {
             attribute_value.innerText = `${value}`;
@@ -276,7 +268,7 @@ class StackCookieDisplay {
 
 
 function init() {
-    const cookiesAPI = getCookiesAPI();
+    const cookiesAPI = new CookiesAPI();
     /*
     adds cookies to the display
     */
