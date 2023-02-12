@@ -15,8 +15,6 @@ input[type=radio] {
 }
 
 #content-wrap {
-    padding: 1px 10px 0px 10px;
-    margin: 5px 0px 5px 0px;
     min-height: 400px;
     max-height: 400px;
     overflow-y: scroll;
@@ -26,10 +24,7 @@ input[type=radio] {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    max-height: 32px;
-    padding: 0 22px 0 5px;
     font-size: 12px;
-    color: #505050;
 }
 
 .border {
@@ -53,20 +48,17 @@ input[type=radio] {
 }
 
 .cookie-domain {
-    min-height: 45px;
     font-size: 20px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin: 0 5px 0 5px;
+    margin: 15px 5px 15px 5px;
 }
 
 .cookie {
     align-items: center;
     color: #5f5f5f;
-    margin: 0 0 20px 0;
-    border: 1px solid #e7e7e7;
-    border-radius: 5px;
+    margin: 20px 0 20px 0;
 }
 
 .domain-wrap {}
@@ -85,13 +77,10 @@ input[type=radio] {
     border-bottom: 1px solid #e7e7e7;
 }
 
-.cookie .attribute-row:last-child {
-    border-bottom: none;
-}
-
 .cookie .attribute-value {
     overflow-wrap: anywhere;
     font-size: 16px;
+    font-weight: bold;
 }
 
 .cookie .attribute-name {

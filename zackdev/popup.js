@@ -197,7 +197,7 @@ class StackCookieDisplay {
         console.log('StackCookieDisplay.create_domain_wrap_html(): creating html elements');
         var cookie_domain_div = document.createElement('div');
         cookie_domain_div.setAttribute('id', `cookie-domain-${u_domain_str}`);
-        cookie_domain_div.classList.add('cookie-domain', 'border-top');
+        cookie_domain_div.classList.add('cookie-domain');
 
         var domain_info_div = document.createElement('div');
 
