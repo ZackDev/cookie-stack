@@ -1,45 +1,53 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
+
     <head>
         <link type="text/css" rel="stylesheet" href="/zackdev/style.css">
         <script type="module" src="/zackdev/options.js"></script>
         <meta charset="utf-8">
     </head>
+
     <body>
         <div id="wrapper">
             <header class="rounded mb-20">
                 <h1>allow or deny cookies to be set for specific domains</h1>
             </header>
             <div id="content" class="browser-style">
-                <!-- disable radio button -->
-                <input type="radio" id="disable-radio" class="mtb-5 vam clickable" name="manage-lists"></input>
-                <label for="disable-radio">disabled</label>
-                <br>
-                <!-- allow list control -->
-                <input type="radio" id="allow-list-radio" class="mtb-5 vam clickable" name="manage-lists"></input>
-                <label for="allow-list-radio">allowlist</label>
-                <input type="text" id="allow-input" class="mtb-5 browser-style" spellcheck="false" />
-                <button type="button" id="allow-add-btn" class="mtb-5 browser-style clickable">add</button>
-                <div id="allow-list" class="flex-row flex-wrap"></div>
-                <br>
-                <!-- deny list control -->
-                <input type="radio" id="deny-list-radio" class="mtb-5 vam clickable" name="manage-lists"></input>
-                <label for="deny-list-radio">denylist</label>
-                <input type="text" id="deny-input" class="mtb-5 browser-style" spellcheck="false" />
-                <button type="button" id="deny-add-btn" class="mtb-5 browser-style clickable">add</button>
-                <div id="deny-list" class="flex-row flex-wrap"></div>
-                <br>
+                <!-- list controls -->
+                <div>
+                    <!-- disable radio button -->
+                    <input type="radio" id="disable-radio" class="mtb-5 vam clickable" name="manage-lists"></input>
+                    <label for="disable-radio">disabled</label>
+                    <br>
+                    <!-- allow list control -->
+                    <input type="radio" id="allow-list-radio" class="mtb-5 vam clickable" name="manage-lists"></input>
+                    <label for="allow-list-radio">allowlist</label>
+                    <input type="text" id="allow-input" class="mtb-5 browser-style" spellcheck="false" />
+                    <button type="button" id="allow-add-btn" class="mtb-5 browser-style clickable">add</button>
+                    <div id="allow-list" class="flex-row flex-wrap"></div>
+                    <br>
+                    <!-- deny list control -->
+                    <input type="radio" id="deny-list-radio" class="mtb-5 vam clickable" name="manage-lists"></input>
+                    <label for="deny-list-radio">denylist</label>
+                    <input type="text" id="deny-input" class="mtb-5 browser-style" spellcheck="false" />
+                    <button type="button" id="deny-add-btn" class="mtb-5 browser-style clickable">add</button>
+                    <div id="deny-list" class="flex-row flex-wrap"></div>
+                </div>
                 <hr>
                 <!-- import/export control -->
-                <h2>export the above settings to file and import from file</h2>
-                <div class="flex-row" style="justify-content: space-between;" class="vam">
-                    <button type="button" id="export-btn" class="mtb-5 browser-style clickable">export to</button>
-                    <div>
-                        <label for="import-file-picker">import from:</label>
-                        <input type="file" id="import-file-picker" class="mtb-5 browser-style clickable" accept="application/json"/>
+                <div>
+                    <h2>export the above settings to file and import from file</h2>
+                    <div class="flex-row" style="justify-content: space-between;" class="vam">
+                        <button type="button" id="export-btn" class="mtb-5 browser-style clickable">export to</button>
+                        <div>
+                            <label for="import-file-picker">import from:</label>
+                            <input type="file" id="import-file-picker" class="mtb-5 browser-style clickable"
+                                accept="application/json" />
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </body>
+
 </html>

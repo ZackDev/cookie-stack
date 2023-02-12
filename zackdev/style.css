@@ -3,7 +3,7 @@ body {
     min-height: 500px;
     background-color: #FFF;
     color: #000;
-    user-select: none;
+    /*user-select: none;*/
 }
 
 input[type=radio] {
