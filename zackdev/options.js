@@ -73,33 +73,53 @@ document.onreadystatechange = function () {
                         filename: 'cookie-stack-settings.json',
                         saveAs: true
                     });
-                    downloadProcess.then((res, rej) => {
-                        res => URL.revokeObjectURL(url),
-                        rej => URL.revokeObjectURL(url)
+                    downloadProcess.then(
+                        (resolve) => {
+                            URL.revokeObjectURL(url)
+                        },
+                        (reject) => {
+                            URL.revokeObjectURL(url)
                     });
                 })
         });
 
         document.getElementById('import-file-picker').addEventListener("change", (event) => {
             let files = event.target.files;
-            let file = files[0];
-            let content = file.text();
-            content.then((c) => {
-                let jsonObject = JSON.parse(c);
-                if (jsonObject.ss && jsonObject.fa && jsonObject.fd) {
-                    if (typeof jsonObject.ss === 'string' && Array.isArray(jsonObject.fa) && Array.isArray(jsonObject.fd)) {
-                        cookiesAPI.storeValue({ ss: jsonObject.ss });
-                        cookiesAPI.storeValue({ fa: jsonObject.fa });
-                        cookiesAPI.storeValue({ fd: jsonObject.fd });
+            if (files.length == 1) {
+                let file = files[0];
+                let content = file.text();
+                content.then(
+                    (resolve) => {
+                        let jsonObject = JSON.parse(resolve);
+                        if (jsonObject.ss && jsonObject.fa && jsonObject.fd) {
+                            if (typeof jsonObject.ss === 'string' && Array.isArray(jsonObject.fa) && Array.isArray(jsonObject.fd)) {
+                                console.log('import-file-picker:', 'writing settings from json file to localStorage');
+                                cookiesAPI.storeValue({ ss: jsonObject.ss });
+                                cookiesAPI.storeValue({ fa: jsonObject.fa });
+                                cookiesAPI.storeValue({ fd: jsonObject.fd });
+                            }
+                            else {
+                                console.info('import-file-picker:', 'selected json file has wrong property types');
+                            }
+                        }
+                        else {
+                            console.info('import-file-picker:', 'selected json file has missing keys');
+                        }
+                    },
+                    (reject) => {
+                        console.error('import-file-picker:', 'error at calling text() on selected file:', reject);
                     }
-                    else {
-                        console.log('json wrong property types');
-                    }
+                );
+            }
+            else {
+                if (files.length == 0) {
+                    console.info('import-file-picker:', 'no file selected');
                 }
-                else {
-                    console.log('json missing keys');
+                else if (files.length > 1) {
+                    console.info('import-file-picker:', 'multiple files selected');
                 }
-            });
+            }
+
         });
     }
 };
