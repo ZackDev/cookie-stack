@@ -36,11 +36,16 @@ class StackCookieDisplay {
             attribute_value.innerHTML = Helper.check_or_x(value);
         }
         else if (value_type === 'number') {
-            try {
-                let v = new Date(value * 1000);
-                attribute_value.innerText += v.toISOString();
+            if (name === 'expiration date') {
+                try {
+                    let v = new Date(value * 1000);
+                    attribute_value.innerText += v.toISOString();
+                }
+                catch {
+                    attribute_value.innerText = `${value}`;
+                }
             }
-            catch {
+            else {
                 attribute_value.innerText = `${value}`;
             }
         }
