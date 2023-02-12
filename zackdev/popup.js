@@ -2,17 +2,18 @@ import { CookiesAPI, StackCookie, Helper } from '/zackdev/modules.mjs';
 
 /*
   StackCookieDisplay class
-  - responsible for DOM manipulation
+  - responsible for DOM manipulation of the popup.html page
   -- adding and removing cookies
   -- displaying cookie values
   -- handling trash and details button clicks
-  -- version and a link to the homepage
+  -- display version string
 */
 class StackCookieDisplay {
 
     constructor(content_root, api) {
         this.content_root = content_root;
         this.cookiesAPI = api;
+        // keeps track of the collapsed state of domains
         this.domain_state = new Map();
         this.set_version();
         this.set_options_link();
@@ -22,7 +23,7 @@ class StackCookieDisplay {
         let value_type = typeof (value);
 
         var attribute_row = document.createElement('div');
-        attribute_row.classList.add('attribute-row');
+        attribute_row.classList.add('attribute-row', 'border-bottom');
         var attribute_name = document.createElement('span');
         attribute_name.classList.add('attribute-name');
         attribute_name.innerText = name;
@@ -30,7 +31,7 @@ class StackCookieDisplay {
         attribute_value.classList.add('attribute-value');
 
         if (value_type === 'string') {
-            attribute_value.innerText = `${value}`;
+            attribute_value.innerText = value;
         }
         else if (value_type === 'boolean') {
             attribute_value.innerHTML = Helper.check_or_x(value);
@@ -39,14 +40,14 @@ class StackCookieDisplay {
             if (name === 'expiration date') {
                 try {
                     let v = new Date(value * 1000);
-                    attribute_value.innerText += v.toISOString();
+                    attribute_value.innerText = v.toISOString();
                 }
                 catch {
-                    attribute_value.innerText = `${value}`;
+                    attribute_value.innerText = String(value);
                 }
             }
             else {
-                attribute_value.innerText = `${value}`;
+                attribute_value.innerText = String(value);
             }
         }
         else if (value_type === 'undefined') {
@@ -200,7 +201,7 @@ class StackCookieDisplay {
 
         var u_domain_str = stack_cookie.unique_domain_string();
         var domain_state = this.domain_state.get(u_domain_str);
-        console.log('StackCookieDisplay.create_domain_wrap_html(): domain_state');
+        console.log('StackCookieDisplay.create_domain_wrap_html(): domain_state:', domain_state);
         var collapse_class = '';
         if (domain_state.collapsed === true) {
             collapse_class = 'collapsed';
@@ -245,7 +246,6 @@ class StackCookieDisplay {
                 btn.classList.add('plus-icon');
             }
 
-            // keeps track of domain's collapsed state
             this.domain_state.set(stack_cookie.unique_domain_string(),
                 {
                     collapsed: collapsed
@@ -280,13 +280,11 @@ class StackCookieDisplay {
 
 function init() {
     const cookiesAPI = new CookiesAPI();
-    /*
-    adds cookies to the display
-    */
+
     const add_all_cookies = (cookies) => {
-        for (let i = 0; i < cookies.length; i++) {
-            display.on_cookie_added(new StackCookie(cookies[i]));
-        }
+        cookies.forEach(cookie => {
+            display.on_cookie_added(new StackCookie(cookie));
+        });
     }
 
     const on_cookie_changed_listener = (cookie_event) => {
