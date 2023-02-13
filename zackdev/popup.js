@@ -83,6 +83,7 @@ class StackCookieDisplay {
             attribute_value.innerText = value;
             if (name === 'value') {
                 attribute_name.style.marginRight = '20px';
+                attribute_value.style.overflowWrap = 'anywhere';
             }
         }
         else if (value_type === 'boolean') {
