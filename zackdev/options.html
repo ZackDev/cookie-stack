@@ -8,7 +8,7 @@
     </head>
 
     <body>
-        <div id="wrapper">
+        <div class="p5">
             <header class="rounded">
                 <h1>allow or deny cookies to be set for specific domains</h1>
             </header>
@@ -24,20 +24,20 @@
                     <label for="allow-list-radio">allowlist</label>
                     <input type="text" id="allow-input" class="mtb-5 browser-style" spellcheck="false" />
                     <button type="button" id="allow-add-btn" class="mtb-5 browser-style clickable">add</button>
-                    <div id="allow-list" class="flex-row flex-wrap"></div>
+                    <div id="allow-list" class="flex flex-row flex-wrap"></div>
                     <br>
                     <!-- deny list control -->
                     <input type="radio" id="deny-list-radio" class="mtb-5 vam clickable" name="manage-lists"></input>
                     <label for="deny-list-radio">denylist</label>
                     <input type="text" id="deny-input" class="mtb-5 browser-style" spellcheck="false" />
                     <button type="button" id="deny-add-btn" class="mtb-5 browser-style clickable">add</button>
-                    <div id="deny-list" class="flex-row flex-wrap"></div>
+                    <div id="deny-list" class="flex flex-row flex-wrap"></div>
                 </div>
                 <hr>
                 <!-- import/export control -->
                 <div>
                     <h2>export the above settings to file and import from file</h2>
-                    <div class="flex-row" style="justify-content: space-between;" class="vam">
+                    <div class="flex flex-row flex-spacebetween" class="vam">
                         <button type="button" id="export-btn" class="mtb-5 browser-style clickable">export to</button>
                         <div>
                             <label for="import-file-picker">import from:</label>

@@ -23,12 +23,13 @@ class StackCookieDisplay {
         let value_type = typeof (value);
 
         var attribute_row = document.createElement('div');
-        attribute_row.classList.add('attribute-row', 'border-bottom');
+        attribute_row.classList.add('align-items-center', 'border-bottom', 'flex', 'flex-spacebetween');
+        attribute_row.style.color = '#5f5f5f';
         var attribute_name = document.createElement('span');
-        attribute_name.classList.add('attribute-name');
+        attribute_name.classList.add('fs-16');
         attribute_name.innerText = name;
         var attribute_value = document.createElement('span');
-        attribute_value.classList.add('attribute-value');
+        attribute_value.classList.add('fs-16');
 
         if (value_type === 'string') {
             attribute_value.innerText = value;
@@ -138,8 +139,8 @@ class StackCookieDisplay {
         var u_cookie_str = stack_cookie.unique_cookie_string();
         var cookie_div = document.createElement('div');
         cookie_div.setAttribute('id', `cookie-${u_cookie_str}`);
-        cookie_div.classList.add('cookie', 'p5', `${u_domain_str}`);
-
+        cookie_div.classList.add('align-items-center', 'cookie', 'p10', `${u_domain_str}`);
+ 
         // path
         cookie_div.append(this.create_cookie_attribute_row('path', stack_cookie.cookie.path));
 
@@ -176,7 +177,7 @@ class StackCookieDisplay {
 
         // cookie action container
         var cookie_action_div = document.createElement('div');
-        cookie_action_div.classList.add('cookie-action');
+        cookie_action_div.classList.add('align-items-center', 'flex', 'flex-end', 'minh-40');
 
         // trash button
         var trash_button = document.createElement('button');
@@ -209,12 +210,11 @@ class StackCookieDisplay {
         console.log('StackCookieDisplay.create_domain_wrap_html(): creating html elements');
         var cookie_domain_div = document.createElement('div');
         cookie_domain_div.setAttribute('id', `cookie-domain-${u_domain_str}`);
-        cookie_domain_div.classList.add('cookie-domain');
+        cookie_domain_div.classList.add('align-items-center', 'flex', 'flex-spacebetween', 'fs-20', 'mtb-10', 'p10');
 
         var domain_info_div = document.createElement('div');
 
         var domain_name = document.createElement('span');
-        domain_name.classList.add('attribute-value');
         domain_name.innerText = `${stack_cookie.cookie.domain}`;
 
         var details_button = document.createElement('button');
@@ -260,7 +260,7 @@ class StackCookieDisplay {
 
         var cookie_wrap_div = document.createElement('div');
         cookie_wrap_div.setAttribute('id', `cookie-wrap-${u_domain_str}`);
-        cookie_wrap_div.classList.add('cookie-wrap', 'not-collapsed');
+        cookie_wrap_div.classList.add('not-collapsed');
         if (collapse_class !== '') {
             cookie_wrap_div.classList.add(`${collapse_class}`);
             cookie_wrap_div.classList.remove('not-collapsed');
