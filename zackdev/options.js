@@ -1,10 +1,11 @@
 import { CookiesAPI } from '/zackdev/modules.mjs';
 
+
 const cookiesAPI = new CookiesAPI();
+
 
 document.onreadystatechange = function () {
     if (document.readyState === "complete") {
-
         getFilter('allow')
             .then((r) => {
                 onFilterRead(r);
@@ -79,7 +80,7 @@ document.onreadystatechange = function () {
                         },
                         (reject) => {
                             URL.revokeObjectURL(url)
-                    });
+                        });
                 })
         });
 
@@ -162,19 +163,11 @@ const switchCheckedRadio = (radio) => {
 }
 
 
-/**
- * 
- * @returns Promise
- */
 const getFilterState = () => {
     return cookiesAPI.getValue('ss');
 }
 
 
-/**
- * 
- * @param {string} s 
- */
 const setFilterState = (s) => {
     if (['disabled', 'allowlist', 'denylist'].includes(s)) {
         return cookiesAPI.storeValue({ ss: s });
@@ -220,6 +213,7 @@ const updateFilter = (t, d, a) => {
     }
 }
 
+
 const getFilter = (t) => {
     switch (t) {
         case 'allow':
@@ -230,6 +224,7 @@ const getFilter = (t) => {
             break;
     }
 }
+
 
 const onFilterRead = (f) => {
     let key = Object.keys(f)[0];
@@ -246,6 +241,7 @@ const onFilterRead = (f) => {
             break;
     }
 }
+
 
 const onStorageUpdated = (c, a) => {
     console.log('onStorageUpdated()');
@@ -295,6 +291,7 @@ const onStorageUpdated = (c, a) => {
     }
 }
 
+
 const updateList = (l, v) => {
     let list = document.getElementById(l);
     let d = document.createElement('div');
@@ -316,6 +313,7 @@ const updateList = (l, v) => {
     }
     list.append(d);
 }
+
 
 const emptyList = (l) => {
     document.getElementById(l).innerHTML = '';

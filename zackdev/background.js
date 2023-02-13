@@ -11,18 +11,10 @@ import { CookiesAPI } from '/zackdev/modules.mjs';
 const cookiesAPI = new CookiesAPI();
 
 
-cookiesAPI.browserAction.setBadgeTextColor(
-    {
-        color: "#000000"
-    }
-);
+cookiesAPI.browserAction.setBadgeTextColor({ color: "#000000" });
 
 
-cookiesAPI.browserAction.setBadgeBackgroundColor(
-    {
-        color: "#FFFFFF"
-    }
-);
+cookiesAPI.browserAction.setBadgeBackgroundColor({ color: "#FFFFFF" });
 
 
 /*
@@ -35,15 +27,12 @@ const cookie_event_listener = (event) => {
     console.log('background.js', 'cookie_event_listener()', event);
     cookiesAPI.cookies.getAll({}, (cookies) => {
         var num_cookies = String(cookies.length);
-        cookiesAPI.browserAction.setBadgeText({"text": num_cookies});
+        cookiesAPI.browserAction.setBadgeText({ "text": num_cookies });
         cookiesAPI.filter.applyFilter(cookies);
     });
 }
 
 
-/*
-  adds the Listener 'cookie_event_listener' to the cookies.onChanged event
-*/
 if (!cookiesAPI.cookies.onChanged.hasListener(cookie_event_listener)) {
     cookiesAPI.cookies.onChanged.addListener(cookie_event_listener);
     cookie_event_listener({});
