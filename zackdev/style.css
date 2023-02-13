@@ -10,6 +10,10 @@ input[type=radio] {
     margin: 5px 0 5px 0;
 }
 
+input[type=file] {
+    margin: 5px 0 5px 0;
+}
+
 #wrapper {
     padding: 5px;
 }
