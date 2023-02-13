@@ -20,13 +20,6 @@ input[type=file] {
     overflow-y: scroll;
 }
 
-#info-wrap {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    font-size: 12px;
-}
-
 .align-items-center {
     align-items: center;
 }
@@ -57,10 +50,6 @@ input[type=file] {
 
 .domain-wrap {}
 
-
-.cookie .attribute-row {
-    color: #5f5f5f;
-}
 
 .plus-icon {
     background-image: url('./icons/plus.svg');
@@ -127,6 +116,10 @@ input[type=file] {
 
 .clickable:hover {
     background-color: #FFFFFF;
+}
+
+.fs-12 {
+    font-size: 12px;
 }
 
 .fs-16 {
