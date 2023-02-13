@@ -82,9 +82,7 @@ input[type=file] {
     width: 40px;
 }
 
-.collapsed {}
-
-.not-collapsed {
+.collapsed {
     display: none;
 }
 

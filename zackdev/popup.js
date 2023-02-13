@@ -159,7 +159,7 @@ class StackCookieDisplay {
             console.log('StackCookieDisplay.on_cookie_added(): setting domain state');
             this.domain_state.set(stack_cookie.unique_domain_string(),
                 {
-                    collapsed: false
+                    collapsed: true
                 }
             );
             console.log('StackCookieDisplay.on_cookie_added(): domain_wrap doesnt exist, going through which to insert to.');
@@ -241,12 +241,8 @@ class StackCookieDisplay {
         console.log('StackCookieDisplay.create_domain_wrap_html()');
 
         var u_domain_str = stack_cookie.unique_domain_string();
-        var domain_state = this.domain_state.get(u_domain_str);
         console.log('StackCookieDisplay.create_domain_wrap_html(): domain_state:', domain_state);
-        var collapse_class = '';
-        if (domain_state.collapsed === true) {
-            collapse_class = 'collapsed';
-        }
+
         console.log('StackCookieDisplay.create_domain_wrap_html(): creating html elements');
         var cookie_domain_div = document.createElement('div');
         cookie_domain_div.setAttribute('id', `cookie-domain-${u_domain_str}`);
@@ -271,8 +267,7 @@ class StackCookieDisplay {
             if (btn.classList.contains('plus-icon')) {
                 details_button.title = 'hide cookies';
                 collapsed = false;
-                elementToCollapse.classList.add('collapsed');
-                elementToCollapse.classList.remove('not-collapsed');
+                elementToCollapse.classList.remove('collapsed');
                 btn.classList.remove('plus-icon');
                 btn.classList.add('minus-icon');
 
@@ -280,17 +275,12 @@ class StackCookieDisplay {
             else if (btn.classList.contains('minus-icon')) {
                 details_button.title = 'show cookies';
                 collapsed = true;
-                elementToCollapse.classList.remove('collapsed');
-                elementToCollapse.classList.add('not-collapsed');
+                elementToCollapse.classList.add('collapsed');
                 btn.classList.remove('minus-icon');
                 btn.classList.add('plus-icon');
             }
 
-            this.domain_state.set(stack_cookie.unique_domain_string(),
-                {
-                    collapsed: collapsed
-                }
-            );
+            this.domain_state.set(u_domain_str, { collapsed: collapsed });
         });
 
         domain_info_div.append(domain_name);
@@ -300,12 +290,18 @@ class StackCookieDisplay {
 
         var cookie_wrap_div = document.createElement('div');
         cookie_wrap_div.setAttribute('id', `cookie-wrap-${u_domain_str}`);
-        cookie_wrap_div.classList.add('not-collapsed');
-        if (collapse_class !== '') {
-            cookie_wrap_div.classList.add(`${collapse_class}`);
-            cookie_wrap_div.classList.remove('not-collapsed');
-        }
 
+        var domain_state = this.domain_state.get(u_domain_str);
+        if (domain_state) {
+            if (domain_state.collapsed === true) {
+                cookie_wrap_div.classList.add('collapsed');
+            }
+        }
+        else {
+            cookie_wrap_div.classList.add('collapsed');
+            this.domain_state.set(u_domain_str, { collapsed: true })
+        }
+        
         var domain_wrap_div = document.createElement('div');
         domain_wrap_div.classList.add('domain-wrap');
         domain_wrap_div.setAttribute('id', `domain-wrap-${u_domain_str}`);
