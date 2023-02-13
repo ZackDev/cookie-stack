@@ -1,5 +1,53 @@
 import { CookiesAPI, StackCookie, Helper } from '/zackdev/modules.mjs';
 
+
+const key_name_pairs = [
+    {
+        key: 'path',
+        name: 'path'
+    },
+    {
+        key: 'name',
+        name: 'name'
+    },
+    {
+        key: 'secure',
+        name: 'secure'
+    },
+    {
+        key: 'session',
+        name: 'session'
+    },
+    {
+        key: 'hostOnly',
+        name: 'host only'
+    },
+    {
+        key: 'httpOnly',
+        name: 'http only'
+    },
+    {
+        key: 'sameSite',
+        name: 'same site'
+    },
+    {
+        key: 'expirationDate',
+        name: 'expiration date'
+    },
+    {
+        key: 'firstPartyDomain',
+        name: 'first party domain'
+    },
+    {
+        key: 'storeId',
+        name: 'store id'
+    },
+    {
+        key: 'value',
+        name: 'value'
+    }
+];
+
 /*
   StackCookieDisplay class
   - responsible for DOM manipulation of the popup.html page
@@ -70,7 +118,7 @@ class StackCookieDisplay {
     create_cookie_attribute_rows(cookie, key_name_pairs) {
         var attribute_rows = [];
         key_name_pairs.forEach((p) => {
-            if(cookie.hasOwnProperty(p.key)) {
+            if (cookie.hasOwnProperty(p.key)) {
                 attribute_rows.push(this.create_cookie_attribute_row(p.name, cookie[p.key]));
             }
         });
@@ -153,57 +201,9 @@ class StackCookieDisplay {
         var cookie_div = document.createElement('div');
         cookie_div.setAttribute('id', `cookie-${u_cookie_str}`);
         cookie_div.classList.add('align-items-center', 'cookie', 'p10', `${u_domain_str}`);
- 
-        const key_name_pairs = [
-            {
-                key: 'path',
-                name: 'path'
-            },
-            {
-                key: 'name',
-                name: 'name'
-            },
-            {
-                key: 'secure',
-                name: 'secure'
-            },
-            {
-                key: 'session',
-                name: 'session'
-            },
-            {
-                key: 'hostOnly',
-                name: 'host only'
-            },
-            {
-                key: 'httpOnly',
-                name: 'http only'
-            },
-            {
-                key: 'sameSite',
-                name: 'same site'
-            },
-            {
-                key: 'expirationDate',
-                name: 'expiration date'
-            },
-            {
-                key: 'firstPartyDomain',
-                name: 'first party domain'
-            },
-            {
-                key: 'storeId',
-                name: 'store id'
-            },
-            {
-                key: 'value',
-                name: 'value'
-            }
-        ];
-        
+
         let attribute_rows = this.create_cookie_attribute_rows(stack_cookie.cookie, key_name_pairs);
         cookie_div.append(...attribute_rows);
-
 
         // cookie action container
         var cookie_action_div = document.createElement('div');
