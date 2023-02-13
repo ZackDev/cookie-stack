@@ -137,18 +137,26 @@ const switchCheckedRadio = (radio) => {
     switch (radio) {
         case 'disable-radio':
             disableR.setAttribute('checked', 'checked');
-            // some dirty workaround for radio not updating visuals
-            disableR.click();
+            // some dirty workaround for
+            // - chromium not updating visuals
+            // - firefox radio click logic
+            if (cookiesAPI.browser === 'chromium') {
+                disableR.click();
+            }
             break;
         case 'allow-list-radio':
             allowListR.setAttribute('checked', 'checked');
-            // some dirty workaround for radio not updating visuals
-            allowListR.click();
+            // some dirty workaround, see above
+            if (cookiesAPI.browser === 'chromium') {
+                disableR.click();
+            }
             break;
         case 'deny-list-radio':
             denyListR.setAttribute('checked', 'checked');
-            // some dirty workaround for radio not updating visuals
-            denyListR.click();
+            // workaround, see above
+            if (cookiesAPI.browser === 'chromium') {
+                disableR.click();
+            }
             break;
     }
 }

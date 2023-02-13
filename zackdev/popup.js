@@ -45,6 +45,10 @@ const key_name_pairs = [
     {
         key: 'value',
         name: 'value'
+    },
+    {
+        key: 'partitionKey',
+        name: 'partition key'
     }
 ];
 
@@ -67,7 +71,7 @@ class StackCookieDisplay {
         this.set_options_link();
     }
 
-    create_cookie_attribute_row(name, value) {
+    create_cookie_attribute_row(key_name_pair, value) {
         let value_type = typeof (value);
 
         var attribute_row = document.createElement('div');
@@ -75,13 +79,13 @@ class StackCookieDisplay {
         attribute_row.style.color = '#5f5f5f';
         var attribute_name = document.createElement('span');
         attribute_name.classList.add('fs-16');
-        attribute_name.innerText = name;
+        attribute_name.innerText = key_name_pair.name;
         var attribute_value = document.createElement('span');
         attribute_value.classList.add('fs-16');
 
         if (value_type === 'string') {
             attribute_value.innerText = value;
-            if (name === 'value') {
+            if (key_name_pair.key === 'value') {
                 attribute_name.style.marginRight = '20px';
                 attribute_value.style.overflowWrap = 'anywhere';
             }
@@ -90,7 +94,7 @@ class StackCookieDisplay {
             attribute_value.innerHTML = Helper.check_or_x(value);
         }
         else if (value_type === 'number') {
-            if (name === 'expiration date') {
+            if (key_name_pair.key === 'expirationDate') {
                 try {
                     let v = new Date(value * 1000);
                     attribute_value.innerText = v.toISOString();
@@ -101,6 +105,11 @@ class StackCookieDisplay {
             }
             else {
                 attribute_value.innerText = String(value);
+            }
+        }
+        else if (key_name_pair.key === 'partitionKey') {
+            if (value && value.hasOwnProperty('topLevelSite')) {
+                attribute_value.innerText = String(value.topLevelSite);
             }
         }
         else if (value_type === 'undefined') {
@@ -116,11 +125,11 @@ class StackCookieDisplay {
         return attribute_row;
     }
 
-    create_cookie_attribute_rows(cookie, key_name_pairs) {
+    create_cookie_attributes(cookie) {
         var attribute_rows = [];
         key_name_pairs.forEach((p) => {
             if (cookie.hasOwnProperty(p.key)) {
-                attribute_rows.push(this.create_cookie_attribute_row(p.name, cookie[p.key]));
+                attribute_rows.push(this.create_cookie_attribute_row(p, cookie[p.key]));
             }
         });
         return attribute_rows;
@@ -203,7 +212,7 @@ class StackCookieDisplay {
         cookie_div.setAttribute('id', `cookie-${u_cookie_str}`);
         cookie_div.classList.add('align-items-center', 'cookie', 'p10', `${u_domain_str}`);
 
-        let attribute_rows = this.create_cookie_attribute_rows(stack_cookie.cookie, key_name_pairs);
+        let attribute_rows = this.create_cookie_attributes(stack_cookie.cookie, key_name_pairs);
         cookie_div.append(...attribute_rows);
 
         // cookie action container
