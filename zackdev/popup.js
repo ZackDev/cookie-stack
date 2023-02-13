@@ -67,6 +67,16 @@ class StackCookieDisplay {
         return attribute_row;
     }
 
+    create_cookie_attribute_rows(cookie, key_name_pairs) {
+        var attribute_rows = [];
+        key_name_pairs.forEach((p) => {
+            if(cookie.hasOwnProperty(p.key)) {
+                attribute_rows.push(this.create_cookie_attribute_row(p.name, cookie[p.key]));
+            }
+        });
+        return attribute_rows;
+    }
+
     set_version() {
         var version_str = this.cookiesAPI.runtime.getManifest().version;
         document.getElementById('version').innerText = ['version', version_str].join(' ');
@@ -144,38 +154,55 @@ class StackCookieDisplay {
         cookie_div.setAttribute('id', `cookie-${u_cookie_str}`);
         cookie_div.classList.add('align-items-center', 'cookie', 'p10', `${u_domain_str}`);
  
-        // path
-        cookie_div.append(this.create_cookie_attribute_row('path', stack_cookie.cookie.path));
-
-        // name
-        cookie_div.append(this.create_cookie_attribute_row('name', stack_cookie.cookie.name));
-
-        // secure
-        cookie_div.append(this.create_cookie_attribute_row('secure', stack_cookie.cookie.secure));
-
-        // session
-        cookie_div.append(this.create_cookie_attribute_row('session', stack_cookie.cookie.session));
-
-        // host host only
-        cookie_div.append(this.create_cookie_attribute_row('host only', stack_cookie.cookie.hostOnly));
-
-        // http only
-        cookie_div.append(this.create_cookie_attribute_row('http only', stack_cookie.cookie.httpOnly));
-
-        // same site
-        cookie_div.append(this.create_cookie_attribute_row('same site', stack_cookie.cookie.sameSite));
-
-        // expiration date
-        cookie_div.append(this.create_cookie_attribute_row('expiration date', stack_cookie.cookie.expirationDate));
-
-        // first party domain
-        cookie_div.append(this.create_cookie_attribute_row('first party domain', stack_cookie.cookie.firstPartyDomain));
-
-        // store id
-        cookie_div.append(this.create_cookie_attribute_row('store id', stack_cookie.cookie.storeId));
-
-        // value
-        cookie_div.append(this.create_cookie_attribute_row('value', stack_cookie.cookie.value));
+        const key_name_pairs = [
+            {
+                key: 'path',
+                name: 'path'
+            },
+            {
+                key: 'name',
+                name: 'name'
+            },
+            {
+                key: 'secure',
+                name: 'secure'
+            },
+            {
+                key: 'session',
+                name: 'session'
+            },
+            {
+                key: 'hostOnly',
+                name: 'host only'
+            },
+            {
+                key: 'httpOnly',
+                name: 'http only'
+            },
+            {
+                key: 'sameSite',
+                name: 'same site'
+            },
+            {
+                key: 'expirationDate',
+                name: 'expiration date'
+            },
+            {
+                key: 'firstPartyDomain',
+                name: 'first party domain'
+            },
+            {
+                key: 'storeId',
+                name: 'store id'
+            },
+            {
+                key: 'value',
+                name: 'value'
+            }
+        ];
+        
+        let attribute_rows = this.create_cookie_attribute_rows(stack_cookie.cookie, key_name_pairs);
+        cookie_div.append(...attribute_rows);
 
 
         // cookie action container
