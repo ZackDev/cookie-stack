@@ -90,6 +90,10 @@ input[type=file] {
     display: flex;
 }
 
+.flex-column {
+    flex-direction: column;
+}
+
 .flex-end {
     justify-content: flex-end;
 }
@@ -135,11 +139,11 @@ input[type=file] {
     font-size: 20px;
 }
 
-.p2 {
+.p-2 {
     padding: 2px;
 }
 
-.p5 {
+.p-5 {
     padding: 5px;
 }
 

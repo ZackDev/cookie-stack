@@ -301,7 +301,7 @@ const onStorageUpdated = (c, a) => {
 const updateList = (l, v) => {
     let list = document.getElementById(l);
     let d = document.createElement('div');
-    d.classList.add('border', 'p2', 'rounded', 'clickable');
+    d.classList.add('border', 'clickable', 'p-5', 'rounded');
     d.innerText = v;
     switch (l) {
         case 'allow-list':
