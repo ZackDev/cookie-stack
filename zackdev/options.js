@@ -76,6 +76,7 @@ document.onreadystatechange = function () {
                         filename: 'cookie-stack-settings.json',
                         saveAs: true
                     });
+                    /*
                     downloadProcess.then(
                         (resolve) => {
                             URL.revokeObjectURL(url)
@@ -83,6 +84,7 @@ document.onreadystatechange = function () {
                         (reject) => {
                             URL.revokeObjectURL(url)
                         });
+                    */
                 })
         });
 
