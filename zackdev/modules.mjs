@@ -40,11 +40,7 @@ class CookiesAPI {
             this.cookies = r.cookies;
             this.downloads = r.downloads;
             this.filter = {
-                filterObj: {
-                    ss: '',
-                    fa: [],
-                    fd: [],
-                },
+                filterObj: {},
                 applyFilter: (cookies) => {
                     console.log('modules.msj', 'filter.applyFilter()', cookies, this.filter.filterObj);
                     switch (this.filter.filterObj.ss) {
@@ -75,25 +71,16 @@ class CookiesAPI {
                             break;
                     }
                 },
-                getFilterObject: () => {
-                    return this.filter.filterObj;
-                },
                 initStorage: () => {
                     console.info('initStorage()');
-                    this.getValue('ss')
+                    this.getValue(null)
                         .then((r) => {
                             if (!r.ss) {
                                 this.storeValue({ 'ss': 'disabled' });
                             }
-                        });
-                    this.getValue('fa')
-                        .then((r) => {
                             if (!r.fa) {
                                 this.storeValue({ 'fa': [] });
                             }
-                        });
-                    this.getValue('fd')
-                        .then((r) => {
                             if (!r.fd) {
                                 this.storeValue({ 'fd': [] });
                             }
@@ -101,18 +88,10 @@ class CookiesAPI {
                 },
                 initFilter: () => {
                     console.info('initFilter()');
-                    this.getValue('ss')
+                    this.getValue(null)
                         .then((r) => {
-                            this.filter.filterObj.ss = r.ss;
+                            this.filter.filterObj = r;
                         });
-                    this.getValue('fa')
-                        .then((r) => {
-                            this.filter.filterObj.fa = r.fa;
-                        });
-                    this.getValue('fd')
-                        .then((r) => {
-                            this.filter.filterObj.fd = r.fd;
-                        })
                 },
                 updateFilter: (storageObject) => {
                     console.log('updating filter', storageObject);
@@ -123,24 +102,15 @@ class CookiesAPI {
                                 if (storageObject.fa.newValue) {
                                     this.filter.filterObj.fa = storageObject.fa.newValue;
                                 }
-                                else {
-                                    this.filter.filterObj.fa = [];
-                                }
                                 break;
                             case 'fd':
                                 if (storageObject.fd.newValue) {
                                     this.filter.filterObj.fd = storageObject.fd.newValue;
                                 }
-                                else {
-                                    this.filter.filterObj.fd = [];
-                                }
                                 break;
                             case 'ss':
                                 if (storageObject.ss.newValue) {
                                     this.filter.filterObj.ss = storageObject.ss.newValue;
-                                }
-                                else {
-                                    this.filter.filterObj.ss = 'disabled';
                                 }
                                 break;
                         }
@@ -219,9 +189,6 @@ class CookiesAPI {
         }
     }
 }
-
-
-
 
 
 /*
