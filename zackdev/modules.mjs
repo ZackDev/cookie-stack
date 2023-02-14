@@ -7,30 +7,22 @@ export { CookiesAPI, StackCookie, Helper }
  */
 class CookiesAPI {
     constructor() {
-        console.log('CookiesAPI', 'constructor()', CookiesAPI.instance);
-        if (CookiesAPI.instance) {
-            return CookiesAPI.instance;
+        console.info('CookiesAPI constructor called');
+        this.browser = '';
+        try {
+            this.setAPI('firefox', browser);
+            console.info('firefox found');
         }
-        else {
-            this.browser = '';
-            console.log('getCookiesAPI(): detecting browser');
-            try {
-                console.log('getCookiesAPI(): trying firefox');
-                this.setAPI('firefox', browser);
-                CookiesAPI.instance = this;
-            }
-            catch (error) {
-                console.log('getCookiesAPI(): firefox not found');
-            }
+        catch (error) {
+            console.info('firefox not found');
+        }
 
-            try {
-                console.log('getCookiesAPI(): trying chromium');
-                this.setAPI('chromium', chrome);
-                CookiesAPI.instance = this;
-            }
-            catch (error) {
-                console.log('getCookiesAPI(): chromium not found');
-            }
+        try {
+            this.setAPI('chromium', chrome);
+            console.info('chromium found');
+        }
+        catch (error) {
+            console.log('chromium not found');
         }
     }
 
@@ -54,7 +46,7 @@ class CookiesAPI {
                     fd: [],
                 },
                 applyFilter: (cookies) => {
-                    console.log('modules.msj', 'filter.applyFilter()', cookies);
+                    console.log('modules.msj', 'filter.applyFilter()', cookies, this.filter.filterObj);
                     switch (this.filter.filterObj.ss) {
                         case 'disabled':
                             console.log('filter: disabled');
@@ -87,6 +79,7 @@ class CookiesAPI {
                     return this.filter.filterObj;
                 },
                 initStorage: () => {
+                    console.info('initStorage()');
                     this.getValue('ss')
                         .then((r) => {
                             if (!r.ss) {
@@ -102,37 +95,55 @@ class CookiesAPI {
                     this.getValue('fd')
                         .then((r) => {
                             if (!r.fd) {
-                                this.storeValue({ 'fd': [] })
+                                this.storeValue({ 'fd': [] });
                             }
                         });
                 },
-                updateFilter: (c, a) => {
-                    let key = Object.keys(c)[0];
-                    switch (key) {
-                        case 'fa':
-                            if (c.fa.newValue) {
-                                this.filter.filterObj.fa = c.fa.newValue;
-                            }
-                            else {
-                                this.filter.filterObj.fa = [];
-                            }
-                            break;
-                        case 'fd':
-                            if (c.fd.newValue) {
-                                this.filter.filterObj.fd = c.fd.newValue;
-                            }
-                            else {
-                                this.filter.filterObj.fd = [];
-                            }
-                            break;
-                        case 'ss':
-                            if (c.ss.newValue) {
-                                this.filter.filterObj.ss = c.ss.newValue;
-                            }
-                            else {
-                                this.filter.filterObj.ss = 'disabled';
-                            }
-                            break;
+                initFilter: () => {
+                    console.info('initFilter()');
+                    this.getValue('ss')
+                        .then((r) => {
+                            this.filter.filterObj.ss = r.ss;
+                        });
+                    this.getValue('fa')
+                        .then((r) => {
+                            this.filter.filterObj.fa = r.fa;
+                        });
+                    this.getValue('fd')
+                        .then((r) => {
+                            this.filter.filterObj.fd = r.fd;
+                        })
+                },
+                updateFilter: (storageObject) => {
+                    console.log('updating filter', storageObject);
+                    let keys = Object.keys(storageObject);
+                    for (let key of keys) {
+                        switch (key) {
+                            case 'fa':
+                                if (storageObject.fa.newValue) {
+                                    this.filter.filterObj.fa = storageObject.fa.newValue;
+                                }
+                                else {
+                                    this.filter.filterObj.fa = [];
+                                }
+                                break;
+                            case 'fd':
+                                if (storageObject.fd.newValue) {
+                                    this.filter.filterObj.fd = storageObject.fd.newValue;
+                                }
+                                else {
+                                    this.filter.filterObj.fd = [];
+                                }
+                                break;
+                            case 'ss':
+                                if (storageObject.ss.newValue) {
+                                    this.filter.filterObj.ss = storageObject.ss.newValue;
+                                }
+                                else {
+                                    this.filter.filterObj.ss = 'disabled';
+                                }
+                                break;
+                        }
                     }
                     this.getAll({}, this.filter.applyFilter);
                 }
@@ -171,7 +182,8 @@ class CookiesAPI {
                 }
                 this.storage.onChanged.addListener(this.filter.updateFilter);
                 this.filter.initStorage();
-                this.filter.updateFilter();
+                this.filter.initFilter();
+                this.getAll({}, this.filter.applyFilter);
                 break;
 
             case 'chromium':
@@ -183,7 +195,7 @@ class CookiesAPI {
                     }
                     this.cookies.remove(details);
                 }
-                this.getAll = r.cookies.getAll;
+                this.getAll = this.cookies.getAll;
                 this.browserAction.setBadgeTextColor = () => { };
                 this.storeValue = (v) => {
                     return new Promise((res, rej) => {
@@ -201,7 +213,8 @@ class CookiesAPI {
                 }
                 this.storage.onChanged.addListener(this.filter.updateFilter);
                 this.filter.initStorage();
-                this.filter.updateFilter();
+                this.filter.initFilter();
+                this.getAll({}, this.filter.applyFilter);
                 break;
         }
     }
