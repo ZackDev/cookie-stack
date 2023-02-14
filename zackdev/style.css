@@ -90,9 +90,20 @@ input[type=file] {
     display: flex;
 }
 
+.flex-end {
+    justify-content: flex-end;
+}
+
+.flex-gap-5 {
+    gap: 5px;
+}
+
+.flex-gap-10 {
+    gap: 10px;
+}
+
 .flex-row {
     flex-direction: row;
-    gap: 5px;
 }
 
 .flex-spacebetween {
@@ -101,10 +112,6 @@ input[type=file] {
 
 .flex-wrap {
     flex-wrap: wrap;
-}
-
-.flex-end {
-    justify-content: flex-end;
 }
 
 .clickable {

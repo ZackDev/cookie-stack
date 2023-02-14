@@ -35,13 +35,15 @@ document.onreadystatechange = function () {
 
         cookiesAPI.storage.onChanged.addListener(onStorageUpdated);
 
-        document.getElementById('allow-add-btn').addEventListener("click", () => {
+        document.getElementById('allow-domain-form').addEventListener("submit", (event) => {
+            event.preventDefault();
             let ta = document.getElementById('allow-input');
             updateFilter('allow', ta.value, 'add');
             ta.value = '';
         });
 
-        document.getElementById('deny-add-btn').addEventListener("click", () => {
+        document.getElementById('deny-domain-form').addEventListener("submit", (event) => {
+            event.preventDefault();
             let td = document.getElementById('deny-input');
             updateFilter('deny', td.value, 'add');
             td.value = '';
@@ -149,14 +151,14 @@ const switchCheckedRadio = (radio) => {
             allowListR.setAttribute('checked', 'checked');
             // some dirty workaround, see above
             if (cookiesAPI.browser === 'chromium') {
-                disableR.click();
+                allowListR.click();
             }
             break;
         case 'deny-list-radio':
             denyListR.setAttribute('checked', 'checked');
             // workaround, see above
             if (cookiesAPI.browser === 'chromium') {
-                disableR.click();
+                denyListR.click();
             }
             break;
     }
