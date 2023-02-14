@@ -171,6 +171,7 @@ class CookiesAPI {
                 }
                 this.storage.onChanged.addListener(this.filter.updateFilter);
                 this.filter.initStorage();
+                this.filter.updateFilter();
                 break;
 
             case 'chromium':
@@ -200,6 +201,7 @@ class CookiesAPI {
                 }
                 this.storage.onChanged.addListener(this.filter.updateFilter);
                 this.filter.initStorage();
+                this.filter.updateFilter();
                 break;
         }
     }

@@ -8,64 +8,60 @@
     </head>
 
     <body>
-        <div class="p5">
-            <div id="content" class="browser-style">
-                <!-- controls -->
-                <div>
-                    <fieldset>
-                        <legend>Choose the active filter list</legend>
-                        <div class="flex flex-gap-10">
-                            <div>
-                                <!-- disable radio button -->
-                                <input type="radio" id="disable-radio" class="mtb-5 vam clickable" name="manage-lists"></input>
-                                <label for="disable-radio">disable filter</label>
-                            </div>
-                            <div>
-                                <!-- allow list control -->
-                                <input type="radio" id="allow-list-radio" class="mtb-5 vam clickable" name="manage-lists"></input>
-                                <label for="allow-list-radio">use allowlist filter</label>
-                            </div>
-                            <div>
-                                <input type="radio" id="deny-list-radio" class="mtb-5 vam clickable" name="manage-lists"></input>
-                                <label for="deny-list-radio">use denylist filter</label>
-                            </div>
-                        </div>
-                    </fieldset>
+        <div id="content" class="browser-style p5">
+            <!-- active filter control -->
+            <fieldset>
+                <legend>Choose the active filter list</legend>
+                <div class="flex flex-gap-10">
+                    <div>
+                        <input type="radio" id="disable-radio" class="mtb-5 vam clickable" name="manage-lists"></input>
+                        <label for="disable-radio">disable filter</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="allow-list-radio" class="mtb-5 vam clickable" name="manage-lists"></input>
+                        <label for="allow-list-radio">use allowlist filter</label>
+                    </div>
+                    <div>
+                        <input type="radio" id="deny-list-radio" class="mtb-5 vam clickable" name="manage-lists"></input>
+                        <label for="deny-list-radio">use denylist filter</label>
+                    </div>
+                </div>
+            </fieldset>
 
-                    <fieldset>
-                        <legend>Edit the allowlist filter</legend>
-                        <form id="allow-domain-form" name="allow-domain-form">
-                            <input type="text" id="allow-input" class="mtb-5 browser-style" spellcheck="false" placeholder="type a domain" minlength="3" required/>
-                            <button type="submit" id="allow-add-btn" class="mtb-5 browser-style clickable">add domain to allowlist</button>
-                        </form>
-                        <br>
-                        <div id="allow-list" class="flex flex-row flex-gap-5 flex-wrap"></div>
-                    </fieldset>
-                    <fieldset>
-                        <legend>Edit the denylist filter</legend>
-                        <form id="deny-domain-form" name="deny-domain-form">
-                            <input type="text" id="deny-input" class="mtb-5 browser-style" spellcheck="false" placeholder="type a domain" minlength="3" required/>
-                            <button type="submit" id="deny-add-btn" class="mtb-5 browser-style clickable">add domain to denylist</button>
-                        </form>
-                        <br>
-                        <div id="deny-list" class="flex flex-row flex-gap-5 flex-wrap"></div>
-                    </fieldset>
+            <!-- allowlist control -->
+            <fieldset>
+                <legend>Edit the allowlist filter</legend>
+                <form id="allow-domain-form" name="allow-domain-form">
+                    <input type="text" id="allow-input" class="mtb-5 browser-style" spellcheck="false" placeholder="type a domain" minlength="3" required/>
+                    <button type="submit" id="allow-add-btn" class="mtb-5 browser-style clickable">add domain to allowlist</button>
+                </form>
+                <br>
+                <div id="allow-list" class="flex flex-row flex-gap-5 flex-wrap"></div>
+            </fieldset>
+
+            <!-- denylist control -->
+            <fieldset>
+                <legend>Edit the denylist filter</legend>
+                <form id="deny-domain-form" name="deny-domain-form">
+                    <input type="text" id="deny-input" class="mtb-5 browser-style" spellcheck="false" placeholder="type a domain" minlength="3" required/>
+                    <button type="submit" id="deny-add-btn" class="mtb-5 browser-style clickable">add domain to denylist</button>
+                </form>
+                <br>
+                <div id="deny-list" class="flex flex-row flex-gap-5 flex-wrap"></div>
+            </fieldset>
+
+            <!-- import/export control -->
+            <fieldset>
+            <legend>Export/import settings</legend>
+                <div class="flex flex-row flex-spacebetween" class="vam">
+                    <button type="button" id="export-btn" class="mtb-5 browser-style clickable">export to</button>
+                    <div>
+                        <label for="import-file-picker">import from:</label>
+                        <input type="file" id="import-file-picker" class="mtb-5 browser-style clickable"
+                            accept="application/json" />
+                    </div>
                 </div>
-                <!-- import/export control -->
-                <div>
-                    <fieldset>
-                    <legend>export/import settings</legend>
-                        <div class="flex flex-row flex-spacebetween" class="vam">
-                            <button type="button" id="export-btn" class="mtb-5 browser-style clickable">export to</button>
-                            <div>
-                                <label for="import-file-picker">import from:</label>
-                                <input type="file" id="import-file-picker" class="mtb-5 browser-style clickable"
-                                    accept="application/json" />
-                            </div>
-                        </div>
-                    </fieldset>
-                </div>
-            </div>
+            </fieldset>
         </div>
     </body>
 

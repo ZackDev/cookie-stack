@@ -110,9 +110,11 @@ document.onreadystatechange = function () {
                         else {
                             console.info('import-file-picker:', 'selected json file has missing keys');
                         }
+                        event.target.value = '';
                     },
                     (reject) => {
                         console.error('import-file-picker:', 'error at calling text() on selected file:', reject);
+                        event.target.value = '';
                     }
                 );
             }
