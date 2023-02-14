@@ -59,12 +59,22 @@ input[type=file] {
     background-image: url('./icons/minus.svg');
 }
 
+.x-icon {
+    background-image: url('./icons/plus.svg');
+    rotate: 45deg;
+}
+
 .trash-icon {
     background-image: url('./icons/trash.svg');
 }
 
 .wrench-icon {
     background-image: url('./icons/wrench.svg');
+}
+
+.quadratic-15 {
+    height: 15px;
+    width: 15px;
 }
 
 .quadratic-20 {
@@ -129,6 +139,10 @@ input[type=file] {
 
 .fs-12 {
     font-size: 12px;
+}
+
+.fs-14 {
+    font-size: 14px;
 }
 
 .fs-16 {

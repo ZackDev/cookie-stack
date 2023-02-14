@@ -12,7 +12,7 @@
             <!-- active filter control -->
             <fieldset class="mtb-10">
                 <legend class="fs-16">Choose the active filter list</legend>
-                <div class="flex flex-column">
+                <div class="flex flex-column fs-14">
                     <div>
                         <input type="radio" id="disable-radio" class="mtb-5 vam clickable" name="manage-lists"></input>
                         <label for="disable-radio">disable filter</label>
@@ -31,7 +31,7 @@
             <!-- allowlist control -->
             <fieldset class="mtb-10">
                 <legend class="fs-16">Edit the allowlist filter</legend>
-                <form id="allow-domain-form" name="allow-domain-form">
+                <form id="allow-domain-form" class="fs-14" name="allow-domain-form">
                     <input type="text" id="allow-input" class="mtb-5 browser-style" spellcheck="false" placeholder="type a domain" minlength="3" required/>
                     <button type="submit" id="allow-add-btn" class="mtb-5 browser-style clickable">add domain to allowlist</button>
                 </form>
@@ -42,7 +42,7 @@
             <!-- denylist control -->
             <fieldset class="mtb-10">
                 <legend class="fs-16">Edit the denylist filter</legend>
-                <form id="deny-domain-form" name="deny-domain-form">
+                <form id="deny-domain-form" class="fs-14" name="deny-domain-form">
                     <input type="text" id="deny-input" class="mtb-5 browser-style" spellcheck="false" placeholder="type a domain" minlength="3" required/>
                     <button type="submit" id="deny-add-btn" class="mtb-5 browser-style clickable">add domain to denylist</button>
                 </form>
@@ -53,14 +53,14 @@
             <!-- import/export control -->
             <fieldset class="mtb-10">
                 <legend class="fs-16">Export/import settings</legend>
-                <div class="flex flex-column" class="vam">
+                <div class="flex flex-column" class="fs-14" class="vam">
                     <div>
-                        <label for="export-btn">export:</label>
-                        <button type="button" id="export-btn" class="mtb-5 browser-style clickable">save to file</button>
+                        <label for="export-btn" class="fs-14">export:</label>
+                        <button type="button" id="export-btn" class="mtb-5 browser-style clickable fs-14">save to file</button>
                     </div>
                     <div>
-                        <label for="import-file-picker">import:</label>
-                        <input type="file" id="import-file-picker" class="mtb-5 browser-style clickable"
+                        <label for="import-file-picker" class="fs-14">import:</label>
+                        <input type="file" id="import-file-picker" class="mtb-5 browser-style clickable fs-14"
                             accept="application/json" />
                     </div>
                 </div>

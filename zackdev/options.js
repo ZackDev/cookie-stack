@@ -298,26 +298,40 @@ const onStorageUpdated = (c, a) => {
 }
 
 
-const updateList = (l, v) => {
-    let list = document.getElementById(l);
-    let d = document.createElement('div');
-    d.classList.add('border', 'clickable', 'p-5', 'rounded');
-    d.innerText = v;
-    switch (l) {
+const updateList = (list_id, domain) => {
+    let list = document.getElementById(list_id);
+
+    let list_item_container = document.createElement('div');
+    list_item_container.classList.add('align-items-center', 'border', 'flex', 'flex-gap-5', 'flex-row', 'p-5', 'rounded');
+
+    let list_item_text = document.createElement('div');
+    list_item_text.classList.add('fs-14');
+    list_item_text.innerText = domain;
+    
+    let x_icon = document.createElement('div');
+    x_icon.classList.add('border', 'clickable', 'circle', 'quadratic-15', 'x-icon');
+    x_icon.title = 'delete';
+    x_icon.value = domain;
+
+
+    list_item_container.append(list_item_text)
+    list_item_container.append(x_icon);
+
+    switch (list_id) {
         case 'allow-list':
-            d.addEventListener("click", (e) => {
-                e.stopImmediatePropagation();
-                updateFilter('allow', e.target.innerText, 'remove');
+            x_icon.addEventListener("click", (event) => {
+                // event.stopImmediatePropagation();
+                updateFilter('allow', event.target.value, 'remove');
             });
             break;
         case 'deny-list':
-            d.addEventListener("click", (e) => {
-                e.stopImmediatePropagation();
-                updateFilter('deny', e.target.innerText, 'remove');
+            x_icon.addEventListener("click", (event) => {
+                // event.stopImmediatePropagation();
+                updateFilter('deny', event.target.value, 'remove');
             });
             break;
     }
-    list.append(d);
+    list.append(list_item_container);
 }
 
 
