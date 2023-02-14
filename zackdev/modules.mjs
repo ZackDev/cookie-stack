@@ -86,28 +86,23 @@ class CookiesAPI {
                 getFilterObject: () => {
                     return this.filter.filterObj;
                 },
-                setupFilter: () => {
+                initStorage: () => {
                     this.getValue('ss')
                         .then((r) => {
-                            if (r.ss) {
-                                this.filter.filterObj.ss = r.ss;
-                            }
-                            else {
-                                this.filter.filterObj.ss = 'disabled';
-                            }
-                        })
-
-                    this.getValue('fa')
-                        .then((r) => {
-                            if (r.fa) {
-                                this.filter.filterObj.fa = r.fa;
+                            if (!r.ss) {
+                                this.storeValue({ 'ss': 'disabled' });
                             }
                         });
-
-                        this.getValue('fd')
+                    this.getValue('fa')
                         .then((r) => {
-                            if (r.fd) {
-                                this.filter.filterObj.fd = r.fd;
+                            if (!r.fa) {
+                                this.storeValue({ 'fa': [] });
+                            }
+                        });
+                    this.getValue('fd')
+                        .then((r) => {
+                            if (!r.fd) {
+                                this.storeValue({ 'fd': [] })
                             }
                         });
                 },
@@ -174,8 +169,8 @@ class CookiesAPI {
                 this.getValue = (v) => {
                     return this.storage.local.get(v);
                 }
-                this.filter.setupFilter();
                 this.storage.onChanged.addListener(this.filter.updateFilter);
+                this.filter.initStorage();
                 break;
 
             case 'chromium':
@@ -203,8 +198,8 @@ class CookiesAPI {
                         });
                     });
                 }
-                this.filter.setupFilter();
                 this.storage.onChanged.addListener(this.filter.updateFilter);
+                this.filter.initStorage();
                 break;
         }
     }
