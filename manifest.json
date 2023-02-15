@@ -29,7 +29,7 @@
     "open_in_tab": true
   },
   "icons": {
-    "48": "/zackdev/icons/cookie-stack-logo.png",
-    "96": "/zackdev/icons/cookie-stack-logo.png"
+    "48": "/zackdev/icons/cookie-stack-logo-48x48.png",
+    "96": "/zackdev/icons/cookie-stack-logo-96x96.png"
   }
 }
