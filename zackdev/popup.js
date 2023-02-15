@@ -213,7 +213,13 @@ class StackCookieDisplay {
         cookie_div.classList.add('align-items-center', 'cookie', 'p10', `${u_domain_str}`);
 
         let attribute_rows = this.create_cookie_attributes(stack_cookie.cookie, key_name_pairs);
-        cookie_div.append(...attribute_rows);
+
+        let attribute_rows_container = document.createElement('div');
+        attribute_rows_container.style.fontFamily = 'monospace';
+        
+        attribute_rows_container.append(...attribute_rows);
+
+        cookie_div.append(attribute_rows_container);
 
         // cookie action container
         var cookie_action_div = document.createElement('div');
