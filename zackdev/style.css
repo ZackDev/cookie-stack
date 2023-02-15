@@ -153,6 +153,10 @@ input[type=file] {
     font-size: 20px;
 }
 
+.fs-30 {
+    font-size: 30px;
+}
+
 .p-2 {
     padding: 2px;
 }
