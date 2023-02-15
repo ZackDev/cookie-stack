@@ -40,13 +40,12 @@ Access it by clicking the icon at the toolbar of your browser, displaying the nu
 
 ![Options Screenshot](./zackdev/screenshots/cookie-stack-options-screenshot.png)
 
-* **disabled**: no filter gets applied
 * **allowlist**: allow every cookie on the list, remove the rest
 * **denylist**: deny every cookie specified, allow the rest
 
 To add a domain to a specific list, write the domain name into the textfield next to specific list and hit the `add` button.
 
-Remove a domain from a list, click on the displayed domain below the specific list. 
+Remove a domain from a list, click the *x* on the displayed domain name. 
 
 **NOTE**: The filter doesn't prevent cookies from getting initially stored. *Cookies get filtered afterwards*. Some websites continuosly try to store cookies on your machine, even after the first pageload. This might cause the filter also to continuosly remove said cookies.
 
@@ -56,7 +55,7 @@ The export- and importable settings are the ones shown at the bottom of the pref
 
 * go to the preferences (firefox), options (chromium)
 
-Export the current settings by clicking the `export to` button, which will open a file dialog, where the destination folder and file can be choosen.
+Export the current settings by clicking the `save to file` button, which will open a file dialog, where the destination folder and file can be choosen.
 
 Import settings by clicking the `Browse files` (firefox) or `Choose File` (chromium) button. This will present a file dialog where the file, from which the settings are read, can be selected. This process will override the currently existing settings.
 
