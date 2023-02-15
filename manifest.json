@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "Cookie Stack",
-  "version": "0.11",
+  "version": "0.12",
   "homepage_url": "https://github.com/ZackDev/cookie-stack",
   "description": "Manages cookies. Includes automatic deletion based on filters.",
   "permissions": [
@@ -15,7 +15,7 @@
   },
   "browser_action": {
     "default_icon": {
-      "16": "/zackdev/icons/favicon-16x16.png"
+      "16": "/zackdev/icons/cookie-stack-logo-16x16.png"
     },
     "default_title": "Cookie Stack",
     "default_popup": "/zackdev/popup.html",
@@ -27,5 +27,9 @@
     "browser_style": true,
     "chrome_style": true,
     "open_in_tab": true
+  },
+  "icons": {
+    "48": "/zackdev/icons/cookie-stack-logo.png",
+    "96": "/zackdev/icons/cookie-stack-logo.png"
   }
 }
