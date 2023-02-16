@@ -7,24 +7,11 @@ const cookiesAPI = new CookiesAPI();
 document.onreadystatechange = function () {
     if (document.readyState === "complete") {
 
-        cookiesAPI.getValue('fa')
+        cookiesAPI.getValue(null)
             .then((storageObj) => {
-                if (storageObj.fa) {
-                    storageObj.fa.forEach((item) => addToList('allow-list', item));
-                }
-            });
-
-        cookiesAPI.getValue('fd')
-            .then((storageObj) => {
-                if (storageObj.fd) {
-                    storageObj.fd.forEach((item) => addToList('deny-list', item));
-                }
-            });
-
-        cookiesAPI.getValue('ss')
-            .then((storageObj) => {
-                let selectedFilter = storageObj.ss;
-                switch (selectedFilter) {
+                storageObj.fa.forEach((item) => addToList('allow-list', item));
+                storageObj.fd.forEach((item) => addToList('deny-list', item));
+                switch (storageObj.ss) {
                     case 'allowlist': {
                         document.getElementById('allow-list-radio').setAttribute('checked', 'checked');
                         break;
@@ -93,7 +80,7 @@ document.onreadystatechange = function () {
                             URL.revokeObjectURL(url)
                         });
                     */
-                })
+                });
         });
 
         document.getElementById('import-file-picker').addEventListener("change", (event) => {
