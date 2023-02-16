@@ -25,15 +25,18 @@ document.onreadystatechange = function () {
             .then((storageObj) => {
                 let selectedFilter = storageObj.ss;
                 switch (selectedFilter) {
-                    case 'allowlist':
+                    case 'allowlist': {
                         document.getElementById('allow-list-radio').setAttribute('checked', 'checked');
                         break;
-                    case 'denylist':
+                    }
+                    case 'denylist': {
                         document.getElementById('deny-list-radio').setAttribute('checked', 'checked');
                         break;
-                    case 'disabled':
+                    }
+                    case 'disabled': {
                         document.getElementById('disable-radio').setAttribute('checked', 'checked');
                         break;
+                    }
                 }
             });
 
@@ -104,12 +107,7 @@ document.onreadystatechange = function () {
                         if (jsonObject.ss && jsonObject.fa && jsonObject.fd) {
                             if (typeof jsonObject.ss === 'string' && Array.isArray(jsonObject.fa) && Array.isArray(jsonObject.fd)) {
                                 console.log('import-file-picker:', 'writing settings from json file to localStorage');
-                                let objectToStore = {
-                                    ss: jsonObject.ss,
-                                    fa: jsonObject.fa,
-                                    fd: jsonObject.fd
-                                }
-                                cookiesAPI.storeValue(objectToStore);
+                                cookiesAPI.storeValue(jsonObject);
                             }
                             else {
                                 console.info('import-file-picker:', 'selected json file has wrong property types');
@@ -150,7 +148,7 @@ const switchCheckedRadio = (radio) => {
     denyListRadioBtn.removeAttribute('checked');
 
     switch (radio) {
-        case 'disable-radio':
+        case 'disable-radio': {
             disableRadioBtn.setAttribute('checked', 'checked');
             // some dirty workaround for
             // - chromium not updating visuals
@@ -159,20 +157,23 @@ const switchCheckedRadio = (radio) => {
                 disableRadioBtn.click();
             }
             break;
-        case 'allow-list-radio':
+        }
+        case 'allow-list-radio': {
             allowListRadioBtn.setAttribute('checked', 'checked');
             // some dirty workaround, see above
             if (cookiesAPI.browser === 'chromium') {
                 allowListRadioBtn.click();
             }
             break;
-        case 'deny-list-radio':
+        }
+        case 'deny-list-radio': {
             denyListRadioBtn.setAttribute('checked', 'checked');
             // workaround, see above
             if (cookiesAPI.browser === 'chromium') {
                 denyListRadioBtn.click();
             }
             break;
+        }
     }
 }
 
@@ -184,7 +185,7 @@ const switchCheckedRadio = (radio) => {
  * @param {String} action - action: 'add' or 'remove'
  */
 const updateFilter = (name, domain, action) => {
-    if (['fa', 'fd'].includes(name)) {
+    if (name === 'fa' || name === 'fd') {
         cookiesAPI.getValue(name)
             .then((storageObj) => {
                 let filter = storageObj[name];
@@ -211,57 +212,41 @@ const updateFilter = (name, domain, action) => {
 const onStorageUpdated = (storageObj) => {
     console.log('onStorageUpdated()');
     let key = Object.keys(storageObj)[0];
-    switch (key) {
-        case 'fa': {
-            console.log('allowlist updated', storageObj.fa);
-            if (storageObj.fa.newValue && storageObj.fa.oldValue) {
-                if (storageObj.fa.newValue.length < storageObj.fa.oldValue.length) {
-                    // get array diff, remove from html
-                    let itemsToRemove = storageObj.fa.oldValue.filter((item) => !storageObj.fa.newValue.includes(item));
-                    itemsToRemove.forEach((item) => removeFromList('allow-list', item));
-                }
-                else if (storageObj.fa.newValue.length > storageObj.fa.oldValue.length) {
-                    // get array diff, add to html
-                    let itemsToAdd = storageObj.fa.newValue.filter((item) => !storageObj.fa.oldValue.includes(item));
-                    itemsToAdd.forEach((item) => addToList('allow-list', item));
-                }
+    
+    if (key === 'fa' || key === 'fd') {
+        var itemsToAdd = []
+        var itemsToRemove = [];
+        var listName = '';
+        if (storageObj[key].newValue && storageObj[key].oldValue) {
+            if (storageObj[key].newValue.length > storageObj[key].oldValue.length) {
+                itemsToAdd = storageObj[key].newValue.filter((item) => !storageObj[key].oldValue.includes(item));
             }
-            break;
+            else if (storageObj[key].newValue.length < storageObj[key].oldValue.length) {
+                itemsToRemove = storageObj[key].oldValue.filter((item) => !storageObj[key].newValue.includes(item));
+            }
         }
-        case 'fd': {
-            console.log('denylist updated', storageObj.fd);
-            if (storageObj.fd.newValue && storageObj.fd.oldValue) {
-                if (storageObj.fd.newValue.length < storageObj.fd.oldValue.length) {
-                    // get array diff, remove from html
-                    let itemsToRemove = storageObj.fd.oldValue.filter((item) => !storageObj.fd.newValue.includes(item));
-                    itemsToRemove.forEach((item) => removeFromList('deny-list', item));
-                }
-                else if (storageObj.fd.newValue.length > storageObj.fd.oldValue.length) {
-                    // get array diff, add to html
-                    let itemsToAdd = storageObj.fd.newValue.filter((item) => !storageObj.fd.oldValue.includes(item));
-                    itemsToAdd.forEach((item) => addToList('deny-list', item));
-                }
-            }
-            break;
-        }
-        case 'ss': {
-            console.log('selected filter updated')
-            let selectedFilter = storageObj.ss.newValue;
-            console.log('selected filter new value', selectedFilter);
-            switch (selectedFilter) {
-                case 'disabled':
-                    switchCheckedRadio('disable-radio');
-                    break;
-                case 'allowlist':
-                    switchCheckedRadio('allow-list-radio');
-                    break;
-                case 'denylist':
-                    switchCheckedRadio('deny-list-radio');
-                    break;
-            }
+        key === 'fa' ? listName = 'allow-list' : listName = 'deny-list';
+
+        itemsToAdd.forEach((item) => addToList(listName, item));
+        itemsToRemove.forEach((item) => removeFromList(listName, item));
+    }
+    else if (key === 'ss') {
+        console.log('selected filter updated')
+        let selectedFilter = storageObj.ss.newValue;
+        switch (selectedFilter) {
+            case 'disabled':
+                switchCheckedRadio('disable-radio');
+                break;
+            case 'allowlist':
+                switchCheckedRadio('allow-list-radio');
+                break;
+            case 'denylist':
+                switchCheckedRadio('deny-list-radio');
+                break;
         }
     }
 }
+
 
 const addToList = (list_id, domain) => {
     let list = document.getElementById(list_id);
@@ -280,11 +265,13 @@ const addToList = (list_id, domain) => {
     }
 } 
 
+
 const removeFromList = (list_id, domain) => {
     let list = document.getElementById(list_id);
-    let itemToRemove = Array.from(list.childNodes).filter((child) => child.name === domain);
-    itemToRemove.pop().remove();
+    let itemsToRemove = Array.from(list.childNodes).filter((child) => child.name === domain);
+    itemsToRemove.pop().remove();
 }
+
 
 const createListItem = (list_id, domain) => {
     let list_item_container = document.createElement('div');
@@ -300,21 +287,22 @@ const createListItem = (list_id, domain) => {
     x_icon.title = 'delete';
     x_icon.value = domain;
 
-
     list_item_container.append(list_item_text)
     list_item_container.append(x_icon);
 
     switch (list_id) {
-        case 'allow-list':
+        case 'allow-list': {
             x_icon.addEventListener("click", (event) => {
                 updateFilter('fa', domain, 'remove');
             });
             break;
-        case 'deny-list':
+        }
+        case 'deny-list': {
             x_icon.addEventListener("click", (event) => {
                 updateFilter('fd', domain, 'remove');
             });
             break;
+        }
     }
 
     return list_item_container;
