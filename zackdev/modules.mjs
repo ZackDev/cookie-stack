@@ -76,7 +76,7 @@ class CookiesAPI {
                         case 'denylist': {
                             console.log('filter: denylist');
                             cookiesToDelete = cookies.filter((c) => {
-                                return this.filter.filterObj.fa.includes(c.domain);
+                                return this.filter.filterObj.fd.includes(c.domain);
                             });
                             break;
                         }
@@ -89,23 +89,24 @@ class CookiesAPI {
                 initStorage: () => {
                     console.info('initStorage()');
                     this.getValue(null)
-                        .then((r) => {
-                            if (!r.ss) {
-                                this.storeValue({ 'ss': 'disabled' });
+                        .then((storageObject) => {
+                            if (!storageObject.ss) {
+                                storageObject.ss = 'disabled';
                             }
-                            if (!r.fa) {
-                                this.storeValue({ 'fa': [] });
+                            if (!storageObject.fa) {
+                                storageObject.fa = [];
                             }
-                            if (!r.fd) {
-                                this.storeValue({ 'fd': [] });
+                            if (!storageObject.fd) {
+                                storageObject.fd = [];
                             }
+                            this.storeValue(storageObject);
                         });
                 },
                 initFilter: () => {
                     console.info('initFilter()');
                     this.getValue(null)
-                        .then((r) => {
-                            this.filter.filterObj = r;
+                        .then((storageObject) => {
+                            this.filter.filterObj = storageObject;
                         });
                 },
                 updateFilter: (storageObject) => {
