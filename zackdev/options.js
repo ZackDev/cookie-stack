@@ -231,19 +231,21 @@ const getFilter = (t) => {
 }
 
 
-const onFilterRead = (f) => {
-    let key = Object.keys(f)[0];
+const onFilterRead = (filterObj) => {
+    let key = Object.keys(filterObj)[0];
     switch (key) {
-        case 'fa':
-            for (let fi of f.fa) {
-                updateList('allow-list', fi);
+        case 'fa': {
+            if (filterObj.fa) {
+                filterObj.fa.forEach((item) => addToList('allow-list', item));
             }
             break;
-        case 'fd':
-            for (let fi of f.fd) {
-                updateList('deny-list', fi);
+        }
+        case 'fd': {
+            if (filterObj.fd) {
+                filterObj.fd.forEach((item) => addToList('deny-list', item));
             }
             break;
+        }
     }
 }
 
@@ -253,30 +255,34 @@ const onStorageUpdated = (c, a) => {
     let key = Object.keys(c)[0];
     switch (key) {
         case 'fa': {
-            console.log('allowlist updated')
-            if (c.fa.newValue) {
-                console.log('allowlist new value', c.fa.newValue);
-                emptyList('allow-list')
-                for (let fi of c.fa.newValue) {
-                    updateList('allow-list', fi);
+            console.log('allowlist updated');
+            if (c.fa.newValue && c.fa.oldValue) {
+                if (c.fa.newValue.length < c.fa.oldValue.length) {
+                    // get array diff, remove from html
+                    let itemsToRemove = c.fa.oldValue.filter((item) => !c.fa.newValue.includes(item));
+                    itemsToRemove.forEach((item) => removeFromList('allow-list', item));
                 }
-            }
-            else {
-                emptyList('allow-list');
+                else if (c.fa.newValue.length > c.fa.oldValue.length) {
+                    // get array diff, add to html
+                    let itemsToAdd = c.fa.newValue.filter((item) => !c.fa.oldValue.includes(item));
+                    itemsToAdd.forEach((item) => addToList('allow-list', item));
+                }
             }
             break;
         }
         case 'fd': {
             console.log('denylist updated')
-            if (c.fd.newValue) {
-                console.log('denylist new value', c.fd.newValue);
-                emptyList('deny-list')
-                for (let fi of c.fd.newValue) {
-                    updateList('deny-list', fi);
+            if (c.fd.newValue && c.fd.oldValue) {
+                if (c.fd.newValue.length < c.fd.oldValue.length) {
+                    // get array diff, remove from html
+                    let itemsToRemove = c.fd.oldValue.filter((item) => !c.fd.newValue.includes(item));
+                    itemsToRemove.forEach((item) => removeFromList('deny-list', item));
                 }
-            }
-            else {
-                emptyList('deny-list');
+                else if (c.fd.newValue.length > c.fd.oldValue.length) {
+                    // get array diff, add to html
+                    let itemsToAdd = c.fd.newValue.filter((item) => !c.fd.oldValue.includes(item));
+                    itemsToAdd.forEach((item) => addToList('deny-list', item));
+                }
             }
             break;
         }
@@ -299,12 +305,33 @@ const onStorageUpdated = (c, a) => {
     }
 }
 
-
-const updateList = (list_id, domain) => {
+const addToList = (list_id, domain) => {
     let list = document.getElementById(list_id);
+    let listItems = Array.from(list.childNodes);
+    let newListItem = createListItem(list_id, domain);
+    var listItemAdded = false;
+    for (let i = 0; i < listItems.length; i++) {
+        if (listItems[i].name > newListItem.name) {
+            list.insertBefore(newListItem, listItems[i]);
+            listItemAdded = true;
+            break;
+        }
+    }
+    if (listItemAdded === false) {
+        list.append(newListItem);
+    }
+} 
 
+const removeFromList = (list_id, domain) => {
+    let list = document.getElementById(list_id);
+    let itemToRemove = Array.from(list.childNodes).filter((child) => child.name === domain);
+    itemToRemove.pop().remove();
+}
+
+const createListItem = (list_id, domain) => {
     let list_item_container = document.createElement('div');
     list_item_container.classList.add('align-items-center', 'border', 'flex', 'flex-gap-5', 'flex-row', 'p-5', 'rounded');
+    list_item_container.name = domain;
 
     let list_item_text = document.createElement('div');
     list_item_text.classList.add('fs-14');
@@ -333,10 +360,6 @@ const updateList = (list_id, domain) => {
             });
             break;
     }
-    list.append(list_item_container);
-}
 
-
-const emptyList = (l) => {
-    document.getElementById(l).innerHTML = '';
+    return list_item_container;
 }
