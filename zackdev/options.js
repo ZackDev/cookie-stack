@@ -6,20 +6,25 @@ const cookiesAPI = new CookiesAPI();
 
 document.onreadystatechange = function () {
     if (document.readyState === "complete") {
-        getFilter('allow')
-            .then((r) => {
-                onFilterRead(r);
+
+        cookiesAPI.getValue('fa')
+            .then((storageObj) => {
+                if (storageObj.fa) {
+                    storageObj.fa.forEach((item) => addToList('allow-list', item));
+                }
             });
 
-        getFilter('deny')
-            .then((r) => {
-                onFilterRead(r);
+        cookiesAPI.getValue('fd')
+            .then((storageObj) => {
+                if (storageObj.fd) {
+                    storageObj.fd.forEach((item) => addToList('deny-list', item));
+                }
             });
 
-        getFilterState()
-            .then((r) => {
-                let s = r.ss;
-                switch (s) {
+        cookiesAPI.getValue('ss')
+            .then((storageObj) => {
+                let selectedFilter = storageObj.ss;
+                switch (selectedFilter) {
                     case 'allowlist':
                         document.getElementById('allow-list-radio').setAttribute('checked', 'checked');
                         break;
@@ -32,39 +37,38 @@ document.onreadystatechange = function () {
                 }
             });
 
-
         cookiesAPI.storage.onChanged.addListener(onStorageUpdated);
 
         document.getElementById('allow-domain-form').addEventListener("submit", (event) => {
             event.preventDefault();
             let ta = document.getElementById('allow-input');
-            updateFilter('allow', ta.value, 'add');
+            updateFilter('fa', ta.value, 'add');
             ta.value = '';
         });
 
         document.getElementById('deny-domain-form').addEventListener("submit", (event) => {
             event.preventDefault();
             let td = document.getElementById('deny-input');
-            updateFilter('deny', td.value, 'add');
+            updateFilter('fd', td.value, 'add');
             td.value = '';
         });
 
         document.getElementById('disable-radio').addEventListener("click", () => {
-            setFilterState('disabled');
+            cookiesAPI.storeValue({ ss: 'disabled' });
         });
 
         document.getElementById('allow-list-radio').addEventListener("click", () => {
-            setFilterState('allowlist');
+            cookiesAPI.storeValue({ ss: 'allowlist' });
         });
 
         document.getElementById('deny-list-radio').addEventListener("click", () => {
-            setFilterState('denylist');
+            cookiesAPI.storeValue({ ss: 'denylist' });
         });
 
         document.getElementById('export-btn').addEventListener("click", () => {
             cookiesAPI.getValue(null)
-                .then((r) => {
-                    let settingsJson = JSON.stringify(r, undefined, 4);
+                .then((resolve) => {
+                    let settingsJson = JSON.stringify(resolve, undefined, 4);
                     let settingsFile = new File(
                         [settingsJson],
                         'cookie-stack-settings.json',
@@ -95,14 +99,17 @@ document.onreadystatechange = function () {
                 let file = files[0];
                 let content = file.text();
                 content.then(
-                    (resolve) => {
-                        let jsonObject = JSON.parse(resolve);
+                    (text) => {
+                        let jsonObject = JSON.parse(text);
                         if (jsonObject.ss && jsonObject.fa && jsonObject.fd) {
                             if (typeof jsonObject.ss === 'string' && Array.isArray(jsonObject.fa) && Array.isArray(jsonObject.fd)) {
                                 console.log('import-file-picker:', 'writing settings from json file to localStorage');
-                                cookiesAPI.storeValue({ ss: jsonObject.ss });
-                                cookiesAPI.storeValue({ fa: jsonObject.fa });
-                                cookiesAPI.storeValue({ fd: jsonObject.fd });
+                                let objectToStore = {
+                                    ss: jsonObject.ss,
+                                    fa: jsonObject.fa,
+                                    fd: jsonObject.fd
+                                }
+                                cookiesAPI.storeValue(objectToStore);
                             }
                             else {
                                 console.info('import-file-picker:', 'selected json file has wrong property types');
@@ -134,163 +141,114 @@ document.onreadystatechange = function () {
 
 
 const switchCheckedRadio = (radio) => {
-    let disableR = document.getElementById('disable-radio');
-    let allowListR = document.getElementById('allow-list-radio');
-    let denyListR = document.getElementById('deny-list-radio');
+    let disableRadioBtn = document.getElementById('disable-radio');
+    let allowListRadioBtn = document.getElementById('allow-list-radio');
+    let denyListRadioBtn = document.getElementById('deny-list-radio');
 
-    disableR.removeAttribute('checked');
-    allowListR.removeAttribute('checked');
-    denyListR.removeAttribute('checked');
+    disableRadioBtn.removeAttribute('checked');
+    allowListRadioBtn.removeAttribute('checked');
+    denyListRadioBtn.removeAttribute('checked');
 
     switch (radio) {
         case 'disable-radio':
-            disableR.setAttribute('checked', 'checked');
+            disableRadioBtn.setAttribute('checked', 'checked');
             // some dirty workaround for
             // - chromium not updating visuals
             // - firefox radio click logic
             if (cookiesAPI.browser === 'chromium') {
-                disableR.click();
+                disableRadioBtn.click();
             }
             break;
         case 'allow-list-radio':
-            allowListR.setAttribute('checked', 'checked');
+            allowListRadioBtn.setAttribute('checked', 'checked');
             // some dirty workaround, see above
             if (cookiesAPI.browser === 'chromium') {
-                allowListR.click();
+                allowListRadioBtn.click();
             }
             break;
         case 'deny-list-radio':
-            denyListR.setAttribute('checked', 'checked');
+            denyListRadioBtn.setAttribute('checked', 'checked');
             // workaround, see above
             if (cookiesAPI.browser === 'chromium') {
-                denyListR.click();
+                denyListRadioBtn.click();
             }
             break;
-    }
-}
-
-
-const getFilterState = () => {
-    return cookiesAPI.getValue('ss');
-}
-
-
-const setFilterState = (s) => {
-    if (['disabled', 'allowlist', 'denylist'].includes(s)) {
-        return cookiesAPI.storeValue({ ss: s });
-    }
-    else {
-        return Promise.reject();
     }
 }
 
 
 /**
  * 
- * @param {String} t - type of the filter: 'allow' or 'deny'
- * @param {String} d - data
- * @param {String} a - action: 'add' or 'remove'
+ * @param {String} name - name of the filter: 'fa' or 'fd'
+ * @param {String} domain - domain
+ * @param {String} action - action: 'add' or 'remove'
  */
-const updateFilter = (t, d, a) => {
-    if (['allow', 'deny'].includes(t)) {
-        getFilter(t)
-            .then((r) => {
-                let filter = r[Object.keys(r)[0]];
-                if (a === 'add') {
-                    if (!filter.includes(d)) {
-                        filter.push(d);
+const updateFilter = (name, domain, action) => {
+    if (['fa', 'fd'].includes(name)) {
+        cookiesAPI.getValue(name)
+            .then((storageObj) => {
+                let filter = storageObj[name];
+                if (action === 'add') {
+                    if (!filter.includes(domain)) {
+                        filter.push(domain);
                         filter.sort();
                     }
                 }
-                else if (a === 'remove') {
-                    let i = filter.indexOf(d);
+                else if (action === 'remove') {
+                    let i = filter.indexOf(domain);
                     if (i > -1) {
                         filter.splice(i, 1);
                     }
                 }
-                switch (t) {
-                    case 'allow':
-                        cookiesAPI.storeValue({ fa: filter });
-                        break;
-                    case 'deny':
-                        cookiesAPI.storeValue({ fd: filter });
-                        break;
-                }
+                let objectToStore = {};
+                objectToStore[name] = filter;
+                cookiesAPI.storeValue(objectToStore);
             });
     }
 }
 
 
-const getFilter = (t) => {
-    switch (t) {
-        case 'allow':
-            return cookiesAPI.getValue('fa');
-        case 'deny':
-            return cookiesAPI.getValue('fd');
-    }
-}
-
-
-const onFilterRead = (filterObj) => {
-    let key = Object.keys(filterObj)[0];
-    switch (key) {
-        case 'fa': {
-            if (filterObj.fa) {
-                filterObj.fa.forEach((item) => addToList('allow-list', item));
-            }
-            break;
-        }
-        case 'fd': {
-            if (filterObj.fd) {
-                filterObj.fd.forEach((item) => addToList('deny-list', item));
-            }
-            break;
-        }
-    }
-}
-
-
-const onStorageUpdated = (c, a) => {
+const onStorageUpdated = (storageObj) => {
     console.log('onStorageUpdated()');
-    let key = Object.keys(c)[0];
+    let key = Object.keys(storageObj)[0];
     switch (key) {
         case 'fa': {
-            console.log('allowlist updated');
-            if (c.fa.newValue && c.fa.oldValue) {
-                if (c.fa.newValue.length < c.fa.oldValue.length) {
+            console.log('allowlist updated', storageObj.fa);
+            if (storageObj.fa.newValue && storageObj.fa.oldValue) {
+                if (storageObj.fa.newValue.length < storageObj.fa.oldValue.length) {
                     // get array diff, remove from html
-                    let itemsToRemove = c.fa.oldValue.filter((item) => !c.fa.newValue.includes(item));
+                    let itemsToRemove = storageObj.fa.oldValue.filter((item) => !storageObj.fa.newValue.includes(item));
                     itemsToRemove.forEach((item) => removeFromList('allow-list', item));
                 }
-                else if (c.fa.newValue.length > c.fa.oldValue.length) {
+                else if (storageObj.fa.newValue.length > storageObj.fa.oldValue.length) {
                     // get array diff, add to html
-                    let itemsToAdd = c.fa.newValue.filter((item) => !c.fa.oldValue.includes(item));
+                    let itemsToAdd = storageObj.fa.newValue.filter((item) => !storageObj.fa.oldValue.includes(item));
                     itemsToAdd.forEach((item) => addToList('allow-list', item));
                 }
             }
             break;
         }
         case 'fd': {
-            console.log('denylist updated')
-            if (c.fd.newValue && c.fd.oldValue) {
-                if (c.fd.newValue.length < c.fd.oldValue.length) {
+            console.log('denylist updated', storageObj.fd);
+            if (storageObj.fd.newValue && storageObj.fd.oldValue) {
+                if (storageObj.fd.newValue.length < storageObj.fd.oldValue.length) {
                     // get array diff, remove from html
-                    let itemsToRemove = c.fd.oldValue.filter((item) => !c.fd.newValue.includes(item));
+                    let itemsToRemove = storageObj.fd.oldValue.filter((item) => !storageObj.fd.newValue.includes(item));
                     itemsToRemove.forEach((item) => removeFromList('deny-list', item));
                 }
-                else if (c.fd.newValue.length > c.fd.oldValue.length) {
+                else if (storageObj.fd.newValue.length > storageObj.fd.oldValue.length) {
                     // get array diff, add to html
-                    let itemsToAdd = c.fd.newValue.filter((item) => !c.fd.oldValue.includes(item));
+                    let itemsToAdd = storageObj.fd.newValue.filter((item) => !storageObj.fd.oldValue.includes(item));
                     itemsToAdd.forEach((item) => addToList('deny-list', item));
                 }
             }
             break;
         }
         case 'ss': {
-            console.log('selected list updated')
-            let state = c.ss.newValue;
-            console.log('selected list new value', state);
-            switch (state) {
+            console.log('selected filter updated')
+            let selectedFilter = storageObj.ss.newValue;
+            console.log('selected filter new value', selectedFilter);
+            switch (selectedFilter) {
                 case 'disabled':
                     switchCheckedRadio('disable-radio');
                     break;
@@ -349,14 +307,12 @@ const createListItem = (list_id, domain) => {
     switch (list_id) {
         case 'allow-list':
             x_icon.addEventListener("click", (event) => {
-                // event.stopImmediatePropagation();
-                updateFilter('allow', event.target.value, 'remove');
+                updateFilter('fa', domain, 'remove');
             });
             break;
         case 'deny-list':
             x_icon.addEventListener("click", (event) => {
-                // event.stopImmediatePropagation();
-                updateFilter('deny', event.target.value, 'remove');
+                updateFilter('fd', domain, 'remove');
             });
             break;
     }
