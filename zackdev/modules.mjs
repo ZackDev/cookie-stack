@@ -12,17 +12,17 @@ class CookiesAPI {
         try {
             this.setAPI('firefox', browser);
             console.info('firefox found');
+            return this;
         }
         catch (error) {
-            console.info('firefox not found');
+            console.info('firefox not found', error);
         }
-
         try {
             this.setAPI('chromium', chrome);
-            console.info('chromium found');
+            return this;
         }
         catch (error) {
-            console.log('chromium not found');
+            console.info('chromium not found', error);
         }
     }
 
@@ -35,7 +35,24 @@ class CookiesAPI {
     setAPI = (b, r) => {
         console.log('modules.mjs', 'setAPI()');
         if (this.browser === '') {
-            this.browser = b;
+            if (!r) {
+                throw new Error('API: entrypoint not found');
+            }
+            if (!r.browserAction) {
+                throw new Error('API: browserAction not found');
+            }
+            if (!r.cookies) {
+                throw new Error('API: cookies not found');
+            }
+            if (!r.downloads) {
+                throw new Error('API: downloads not found');
+            }
+            if (!r.runtime) {
+                throw new Error('API: runtime not found');
+            }
+            if (!r.storage) {
+                throw new Error('API: storage not found');
+            }
             this.browserAction = r.browserAction;
             this.cookies = r.cookies;
             this.downloads = r.downloads;
@@ -43,33 +60,31 @@ class CookiesAPI {
                 filterObj: {},
                 applyFilter: (cookies) => {
                     console.log('modules.msj', 'filter.applyFilter()', cookies, this.filter.filterObj);
+                    var cookiesToDelete = [];
                     switch (this.filter.filterObj.ss) {
-                        case 'disabled':
+                        case 'disabled': {
                             console.log('filter: disabled');
                             break;
-
-                        case 'allowlist':
+                        }
+                        case 'allowlist': {
                             console.log('filter: allowlist');
-                            var cookiesToDelete = cookies.filter((c) => {
+                            cookiesToDelete = cookies.filter((c) => {
                                 return !this.filter.filterObj.fa.includes(c.domain);
                             });
-                            cookiesToDelete.forEach((c) => {
-                                console.log('removing cookie', c);
-                                this.remove(new StackCookie(c));
-                            });
                             break;
-
-                        case 'denylist':
+                        }
+                        case 'denylist': {
                             console.log('filter: denylist');
-                            var cookiesToDelete = cookies.filter((c) => {
+                            cookiesToDelete = cookies.filter((c) => {
                                 return this.filter.filterObj.fa.includes(c.domain);
                             });
-                            cookiesToDelete.forEach((c) => {
-                                console.log('removing cookie', c);
-                                this.remove(new StackCookie(c));
-                            });
                             break;
+                        }
                     }
+                    cookiesToDelete.forEach((c) => {
+                        console.log('removing cookie', c);
+                        this.remove(new StackCookie(c));
+                    });
                 },
                 initStorage: () => {
                     console.info('initStorage()');
@@ -168,14 +183,14 @@ class CookiesAPI {
                 this.getAll = this.cookies.getAll;
                 this.browserAction.setBadgeTextColor = () => { };
                 this.storeValue = (v) => {
-                    return new Promise((res, rej) => {
+                    return new Promise((res) => {
                         this.storage.local.set(v, (r) => {
                             res(r);
                         });
                     });
                 }
                 this.getValue = (v) => {
-                    return new Promise((res, rej) => {
+                    return new Promise((res) => {
                         this.storage.local.get(v, (r) => {
                             res(r);
                         });
@@ -197,13 +212,16 @@ class CookiesAPI {
   -- returns the concatenated ascii-number representation of the passed string
   -- solely for generating valid HTML-Element selectors from strings that contain special
   -- characters like '.' and '#'
-  - negative example 'github.com' as selector would select tags named 'github' with class 'com'
+  -- negative example 'github.com' as selector would select tags named 'github' with class 'com'
+  
+  - static check_or_x( b )
+  -- returns HTML-glyph '&check;' or '&cross;', based on the parameter b
 */
 class Helper {
     static unique_string(str) {
         let u_str = '';
-        for (let i = 0; i < str.length; i++) {
-            u_str += str.charCodeAt(i);
+        for (let c of str) {
+            u_str += c.charCodeAt(0);
         }
         return u_str;
     }

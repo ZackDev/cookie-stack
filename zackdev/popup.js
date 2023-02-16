@@ -77,18 +77,18 @@ class StackCookieDisplay {
         var attribute_row = document.createElement('div');
         attribute_row.classList.add('align-items-center', 'border-bottom', 'flex', 'flex-spacebetween');
         attribute_row.style.color = '#5f5f5f';
+
         var attribute_name = document.createElement('span');
         attribute_name.classList.add('fs-16');
         attribute_name.innerText = key_name_pair.name;
+        attribute_name.style.marginRight = '20px';
+
         var attribute_value = document.createElement('span');
         attribute_value.classList.add('fs-16');
+        attribute_value.style.overflowWrap = 'anywhere';
 
         if (value_type === 'string') {
             attribute_value.innerText = value;
-            if (key_name_pair.key === 'value') {
-                attribute_name.style.marginRight = '20px';
-                attribute_value.style.overflowWrap = 'anywhere';
-            }
         }
         else if (value_type === 'boolean') {
             attribute_value.innerHTML = Helper.check_or_x(value);
@@ -108,7 +108,7 @@ class StackCookieDisplay {
             }
         }
         else if (key_name_pair.key === 'partitionKey') {
-            if (value && value.hasOwnProperty('topLevelSite')) {
+            if (value && Object.getOwnPropertyNames(value).includes('topLevelSite')) {
                 attribute_value.innerText = String(value.topLevelSite);
             }
         }
@@ -128,7 +128,7 @@ class StackCookieDisplay {
     create_cookie_attributes(cookie) {
         var attribute_rows = [];
         key_name_pairs.forEach((p) => {
-            if (cookie.hasOwnProperty(p.key)) {
+            if (Object.getOwnPropertyNames(cookie).includes(p.key)) {
                 attribute_rows.push(this.create_cookie_attribute_row(p, cookie[p.key]));
             }
         });
@@ -377,14 +377,6 @@ function init() {
     cookiesAPI.getAll({}, add_all_cookies);
 }
 
-/*
-stub: handling is done by cookies.onChanged(...)
-*/
-function on_cookie_removed(cookie) { }
-
-function on_cookie_remove_error(error) {
-    console.log(error);
-}
 
 document.onreadystatechange = () => {
     if (document.readyState === 'complete') {

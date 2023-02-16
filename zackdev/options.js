@@ -71,6 +71,7 @@ document.onreadystatechange = function () {
                         { type: 'application/json' }
                     );
                     let url = URL.createObjectURL(settingsFile);
+
                     let downloadProcess = cookiesAPI.downloads.download({
                         url: url,
                         filename: 'cookie-stack-settings.json',
@@ -224,10 +225,8 @@ const getFilter = (t) => {
     switch (t) {
         case 'allow':
             return cookiesAPI.getValue('fa');
-            break;
         case 'deny':
             return cookiesAPI.getValue('fd');
-            break;
     }
 }
 
@@ -253,7 +252,7 @@ const onStorageUpdated = (c, a) => {
     console.log('onStorageUpdated()');
     let key = Object.keys(c)[0];
     switch (key) {
-        case 'fa':
+        case 'fa': {
             console.log('allowlist updated')
             if (c.fa.newValue) {
                 console.log('allowlist new value', c.fa.newValue);
@@ -266,7 +265,8 @@ const onStorageUpdated = (c, a) => {
                 emptyList('allow-list');
             }
             break;
-        case 'fd':
+        }
+        case 'fd': {
             console.log('denylist updated')
             if (c.fd.newValue) {
                 console.log('denylist new value', c.fd.newValue);
@@ -279,7 +279,8 @@ const onStorageUpdated = (c, a) => {
                 emptyList('deny-list');
             }
             break;
-        case 'ss':
+        }
+        case 'ss': {
             console.log('selected list updated')
             let state = c.ss.newValue;
             console.log('selected list new value', state);
@@ -294,6 +295,7 @@ const onStorageUpdated = (c, a) => {
                     switchCheckedRadio('deny-list-radio');
                     break;
             }
+        }
     }
 }
 
