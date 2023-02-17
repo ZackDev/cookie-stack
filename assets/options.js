@@ -1,6 +1,5 @@
 import { CookiesAPI } from '/assets/modules.mjs';
 
-
 var cookiesAPI;
 
 document.onreadystatechange = function () {
@@ -11,9 +10,8 @@ document.onreadystatechange = function () {
                     cookiesAPI = apiObj;
                     init();
                 },
-                (error) => {
-                    console.log(error);
-                });
+                (error) => {}
+                );
     }
 };
 
@@ -105,33 +103,16 @@ const init = () => {
                     let jsonObject = JSON.parse(text);
                     if (jsonObject.ss && jsonObject.fa && jsonObject.fd) {
                         if (typeof jsonObject.ss === 'string' && Array.isArray(jsonObject.fa) && Array.isArray(jsonObject.fd)) {
-                            console.log('import-file-picker:', 'writing settings from json file to localStorage');
                             cookiesAPI.storeValue(jsonObject);
                         }
-                        else {
-                            console.info('import-file-picker:', 'selected json file has wrong property types');
-                        }
-                    }
-                    else {
-                        console.info('import-file-picker:', 'selected json file has missing keys');
                     }
                     event.target.value = '';
                 },
                 (reject) => {
-                    console.error('import-file-picker:', 'error at calling text() on selected file:', reject);
                     event.target.value = '';
                 }
             );
         }
-        else {
-            if (files.length == 0) {
-                console.info('import-file-picker:', 'no file selected');
-            }
-            else if (files.length > 1) {
-                console.info('import-file-picker:', 'multiple files selected');
-            }
-        }
-
     });
 }
 
@@ -207,9 +188,8 @@ const updateFilter = (name, domain, action) => {
 
 
 const onStorageUpdated = (storageObj) => {
-    console.log('onStorageUpdated()');
     let key = Object.keys(storageObj)[0];
-
+    
     if (key === 'fa' || key === 'fd') {
         var itemsToAdd = []
         var itemsToRemove = [];
@@ -228,7 +208,6 @@ const onStorageUpdated = (storageObj) => {
         itemsToRemove.forEach((item) => removeFromList(listName, item));
     }
     else if (key === 'ss') {
-        console.log('selected filter updated')
         let selectedFilter = storageObj.ss.newValue;
         switch (selectedFilter) {
             case 'disabled':

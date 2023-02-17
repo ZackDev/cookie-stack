@@ -1,57 +1,6 @@
 import { CookiesAPI, StackCookie, Helper } from '/assets/modules.mjs';
 
 
-const keyNamePairs = [
-    {
-        key: 'path',
-        name: 'path'
-    },
-    {
-        key: 'name',
-        name: 'name'
-    },
-    {
-        key: 'secure',
-        name: 'secure'
-    },
-    {
-        key: 'session',
-        name: 'session'
-    },
-    {
-        key: 'hostOnly',
-        name: 'host only'
-    },
-    {
-        key: 'httpOnly',
-        name: 'http only'
-    },
-    {
-        key: 'sameSite',
-        name: 'same site'
-    },
-    {
-        key: 'expirationDate',
-        name: 'expiration date'
-    },
-    {
-        key: 'firstPartyDomain',
-        name: 'first party domain'
-    },
-    {
-        key: 'storeId',
-        name: 'store id'
-    },
-    {
-        key: 'value',
-        name: 'value'
-    },
-    {
-        key: 'partitionKey',
-        name: 'partition key'
-    }
-];
-
 /*
   StackCookieDisplay class
   - responsible for DOM manipulation of the popup.html page
@@ -65,7 +14,6 @@ class StackCookieDisplay {
     constructor(contentRoot, api) {
         this.contentRoot = contentRoot;
         this.cookiesAPI = api;
-        // keeps track of the collapsed state of domains
         this.domainState = new Map();
         this.setVersion();
         this.setOptionsLink();
@@ -115,9 +63,6 @@ class StackCookieDisplay {
         else if (valueType === 'undefined') {
             attributeValue.innerText = 'undefined';
         }
-        else {
-            console.log('StackCookieDisplay.createCookieAttributeRow(): unexpected type of value:', valueType);
-        }
 
         attributeRow.append(attributeName);
         attributeRow.append(attributeValue);
@@ -127,7 +72,7 @@ class StackCookieDisplay {
 
     createCookieAttributes(cookie) {
         var attributeRows = [];
-        keyNamePairs.forEach((p) => {
+        this.cookiesAPI.keyNamePairs.forEach((p) => {
             if (Object.getOwnPropertyNames(cookie).includes(p.key)) {
                 attributeRows.push(this.createCookieAttributeRow(p, cookie[p.key]));
             }
@@ -147,64 +92,44 @@ class StackCookieDisplay {
         });
     }
 
-    // creates and adds 'cookie-domain' div to the DOM if it is the first cookie for this domain
-    // creates and adds 'cookie-wrap' and appends it to an already existing or previously created domain
     onCookieAdded(stackCookie) {
-        console.log('StackCookieDisplay.onCookieAdded()');
-
         var domainWrap = document.getElementById(`domain-wrap-${stackCookie.uniqueDomainString()}`);
-        // domain-wrap doesn't exist
         if (domainWrap === null) {
-            // set the domain state to it's default, 'not collapsed'
-            console.log('StackCookieDisplay.onCookieAdded(): setting domain state');
             this.domainState.set(stackCookie.uniqueDomainString(),
                 {
                     collapsed: true
                 }
             );
-            console.log('StackCookieDisplay.onCookieAdded(): domainWrap doesnt exist, going through which to insert to.');
             var domainAdded = false;
             var allDomainWraps = document.getElementsByClassName('domain-wrap');
             for (let i = 0; i < allDomainWraps.length; i++) {
                 var compareWrap = allDomainWraps[i];
                 var compareWrapDomain = compareWrap.getAttribute('domain');
-                console.log('StackCookieDisplay.onCookieAdded(): comparing cookie domain to existing domain:');
                 // lexical domain comparison ('a' < 'b' ) = true, ('a' > 'b') = false
                 if (stackCookie.domain() < compareWrapDomain) {
-                    console.log('StackCookieDisplay.onCookieAdded(): prepending domain-wrap');
-                    // add domain-wrap for stackCookie before the compared element, set domainAdded flag to true, leave the for loop
                     document.getElementById('content').insertBefore(this.createDomainWrapHTML(stackCookie), allDomainWraps[i]);
                     domainAdded = true;
                     break;
                 }
             }
-            // append domain-wrap to contentRoot if comparison didn't trigger
-            // e.g. existing domains: 'a', 'b', adding cookie with 'c' domain
             if (domainAdded === false) {
-                console.log('StackCookieDisplay.onCookieAdded(): appending domain-wrap to contentRoot ');
                 this.contentRoot.append(this.createDomainWrapHTML(stackCookie));
             }
         }
         // at this point, a cookie-domain with cookie wrap exists
         var cookieWrap = document.getElementById(`cookie-wrap-${stackCookie.uniqueDomainString()}`);
-        console.log('StackCookieDisplay.onCookieAdded(): adding cookie to cookieWrap:');
         cookieWrap.append(this.createCookieHTML(stackCookie));
     }
 
-    // removes a single cookie from the DOM
-    // removes 'cookie-domain' from DOM if there are no more cookies in it
     onCookieRemoved(stackCookie) {
-        console.log('StackCookieDisplay.onCookieRemoved(): removing cookie.');
         document.getElementById(`cookie-${stackCookie.uniqueCookieString()}`).remove();
         let cookies = document.getElementsByClassName(`cookie ${stackCookie.uniqueDomainString()}`);
         if (cookies.length === 0) {
-            console.log('StackCookieDisplay.onCookieRemoved(): removing domain-wrap');
             document.getElementById(`domain-wrap-${stackCookie.uniqueDomainString()}`).remove();
             this.domainState.delete(stackCookie.uniqueDomainString());
         }
     }
 
-    // creates nested HTML-Element for a specific cookie, including the cookie values provided
     createCookieHTML(stackCookie) {
         var uDomainStr = stackCookie.uniqueDomainString();
         var uCookieStr = stackCookie.uniqueCookieString();
@@ -212,27 +137,23 @@ class StackCookieDisplay {
         cookieDiv.setAttribute('id', `cookie-${uCookieStr}`);
         cookieDiv.classList.add('align-items-center', 'cookie', 'p10', `${uDomainStr}`);
 
-        let attributeRows = this.createCookieAttributes(stackCookie.cookie, keyNamePairs);
+        let attributeRows = this.createCookieAttributes(stackCookie.cookie, this.cookiesAPI.keyNamePairs);
 
         let attributeRowsContainer = document.createElement('div');
         attributeRowsContainer.style.fontFamily = 'monospace';
-        
         attributeRowsContainer.append(...attributeRows);
 
         cookieDiv.append(attributeRowsContainer);
 
-        // cookie action container
         var cookieActionDiv = document.createElement('div');
         cookieActionDiv.classList.add('align-items-center', 'flex', 'flex-end', 'minh-40');
 
-        // trash button
         var trashButton = document.createElement('button');
         trashButton.title = 'delete cookie';
         trashButton.setAttribute('id', `trash-button-${uCookieStr}`);
         trashButton.setAttribute('type', 'button');
         trashButton.classList.add('clickable', 'border', 'interactive', 'rounded', 'quadratic-30', 'trash-icon');
         trashButton.addEventListener("click", () => {
-            console.log('StackCookieDisplay: trash button clicked.');
             this.cookiesAPI.remove(stackCookie);
         });
 
@@ -242,14 +163,9 @@ class StackCookieDisplay {
         return cookieDiv;
     }
 
-    // creates a nested HTML-Element for a specific domain with the corresponding collapse button
     createDomainWrapHTML(stackCookie) {
-        console.log('StackCookieDisplay.createDomainWrapHTML()');
-
         var uDomainStr = stackCookie.uniqueDomainString();
-        console.log('StackCookieDisplay.createDomainWrapHTML(): domainState:', domainState);
 
-        console.log('StackCookieDisplay.createDomainWrapHTML(): creating html elements');
         var cookieDomainDiv = document.createElement('div');
         cookieDomainDiv.setAttribute('id', `cookie-domain-${uDomainStr}`);
         cookieDomainDiv.classList.add('align-items-center', 'flex', 'flex-spacebetween', 'fs-20', 'p-5');
@@ -266,7 +182,6 @@ class StackCookieDisplay {
         detailsBtn.setAttribute('data-target', `cookie-wrap-${uDomainStr}`);
         detailsBtn.classList.add('clickable', 'border', 'interactive', 'rounded', 'quadratic-30', 'plus-icon');
         detailsBtn.addEventListener("click", (event) => {
-            console.log('StackCookieDisplay: details button clicked.');
             var btn = event.target;
             var collapsed = false;
             var elementToCollapse = document.getElementById(btn.getAttribute('data-target'));
@@ -285,12 +200,10 @@ class StackCookieDisplay {
                 btn.classList.remove('minus-icon');
                 btn.classList.add('plus-icon');
             }
-
             this.domainState.set(uDomainStr, { collapsed: collapsed });
         });
 
         domainInfoDiv.append(domainName);
-
         cookieDomainDiv.append(domainInfoDiv);
         cookieDomainDiv.append(detailsBtn);
 
@@ -328,66 +241,51 @@ function init(cookiesAPI) {
     }
 
     const onCookieChangedListener = (cookieEvent) => {
-        console.log('onCookieChangedListener(): cookie event caught.');
         var stackCookie = new StackCookie(cookieEvent.cookie);
-
         switch (cookieEvent.cause) {
-
             case 'evicted':
                 // cookie got collected by the GC
-                console.log('handling cookie event "evicted". removing cookie.');
                 display.onCookieRemoved(stackCookie);
                 break;
 
             case 'explicit':
                 // cookie got explicitly added or removed
                 if (cookieEvent.removed === true) {
-                    console.log('handling cookie event "explicit". removing cookie.');
                     display.onCookieRemoved(stackCookie);
                 }
                 else if (cookieEvent.removed === false) {
-                    console.log('handling cookie event "explicit". adding cookie.');
                     display.onCookieAdded(stackCookie);
                 }
                 break;
 
             case 'expired_overwrite':
-                console.log('handling cookie event "expired_overwrite". removing cookie.');
                 display.onCookieRemoved(stackCookie);
                 break;
 
             case 'overwrite':
-                console.log('handling cookie event "overwrite". removing cookie.');
                 display.onCookieRemoved(stackCookie);
                 break;
         }
     }
 
-    // creates StackCookieDisplay object, with the HTML-Element where it attaches to as parameter
     const display = new StackCookieDisplay(document.getElementById('content'), cookiesAPI);
 
-    // adds cookies.onChange listener
     if (!cookiesAPI.cookies.onChanged.hasListener(onCookieChangedListener)) {
         cookiesAPI.cookies.onChanged.addListener(onCookieChangedListener);
     }
 
-    // gets all cookies from browser.cookies API and adds them to the CookieDisplay
     cookiesAPI.getAll({}, addAllCookies);
 }
 
 
 document.onreadystatechange = () => {
     if (document.readyState === 'complete') {
-        var cookiesAPI;
-
         CookiesAPI.getAPI()
             .then(
                 (apiObj) => {
-                    cookiesAPI = apiObj;
-                    init(cookiesAPI);
+                    init(apiObj);
                 },
-                (error) => {
-                    console.log(error);
-                });
+                (error) => {}
+                );
     }
 };
