@@ -11,25 +11,25 @@
     "storage"
   ],
   "background": {
-    "page": "/zackdev/background.html"
+    "page": "/assets/background.html"
   },
   "browser_action": {
     "default_icon": {
-      "16": "/zackdev/icons/cookie-stack-logo-16x16.png"
+      "16": "/assets/icons/cookie-stack-logo-16x16.png"
     },
     "default_title": "Cookie Stack",
-    "default_popup": "/zackdev/popup.html",
+    "default_popup": "/assets/popup.html",
     "browser_style": true,
     "chrome_style": true
   },
   "options_ui": {
-    "page": "/zackdev/options.html",
+    "page": "/assets/options.html",
     "browser_style": true,
     "chrome_style": true,
     "open_in_tab": true
   },
   "icons": {
-    "48": "/zackdev/icons/cookie-stack-logo-48x48.png",
-    "96": "/zackdev/icons/cookie-stack-logo-96x96.png"
+    "48": "/assets/icons/cookie-stack-logo-48x48.png",
+    "96": "/assets/icons/cookie-stack-logo-96x96.png"
   }
 }

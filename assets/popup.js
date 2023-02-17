@@ -1,4 +1,4 @@
-import { CookiesAPI, StackCookie, Helper } from '/zackdev/modules.mjs';
+import { CookiesAPI, StackCookie, Helper } from '/assets/modules.mjs';
 
 
 const keyNamePairs = [

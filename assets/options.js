@@ -1,4 +1,4 @@
-import { CookiesAPI } from '/zackdev/modules.mjs';
+import { CookiesAPI } from '/assets/modules.mjs';
 
 
 var cookiesAPI;
