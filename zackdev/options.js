@@ -245,10 +245,10 @@ const onStorageUpdated = (storageObj) => {
 }
 
 
-const addToList = (list_id, domain) => {
-    let list = document.getElementById(list_id);
+const addToList = (listId, domain) => {
+    let list = document.getElementById(listId);
     let listItems = Array.from(list.childNodes);
-    let newListItem = createListItem(list_id, domain);
+    let newListItem = createListItem(listId, domain);
     var listItemAdded = false;
     for (let i = 0; i < listItems.length; i++) {
         if (listItems[i].name > newListItem.name) {
@@ -263,44 +263,44 @@ const addToList = (list_id, domain) => {
 }
 
 
-const removeFromList = (list_id, domain) => {
-    let list = document.getElementById(list_id);
+const removeFromList = (listId, domain) => {
+    let list = document.getElementById(listId);
     let itemsToRemove = Array.from(list.childNodes).filter((child) => child.name === domain);
     itemsToRemove.pop().remove();
 }
 
 
-const createListItem = (list_id, domain) => {
-    let list_item_container = document.createElement('div');
-    list_item_container.classList.add('align-items-center', 'border', 'flex', 'flex-gap-5', 'flex-row', 'interactive' ,'p-5', 'rounded');
-    list_item_container.name = domain;
+const createListItem = (listId, domain) => {
+    let listItemContainer = document.createElement('div');
+    listItemContainer.classList.add('align-items-center', 'border', 'flex', 'flex-gap-5', 'flex-row', 'interactive' ,'p-5', 'rounded');
+    listItemContainer.name = domain;
 
-    let list_item_text = document.createElement('div');
-    list_item_text.classList.add('fs-14');
-    list_item_text.innerText = domain;
+    let listItemText = document.createElement('div');
+    listItemText.classList.add('fs-14');
+    listItemText.innerText = domain;
 
-    let x_icon = document.createElement('div');
-    x_icon.classList.add('border', 'clickable', 'circle', 'quadratic-15', 'x-icon');
-    x_icon.title = 'delete';
-    x_icon.value = domain;
+    let xIcon = document.createElement('div');
+    xIcon.classList.add('border', 'clickable', 'circle', 'quadratic-15', 'x-icon');
+    xIcon.title = 'delete';
+    xIcon.value = domain;
 
-    list_item_container.append(list_item_text)
-    list_item_container.append(x_icon);
+    listItemContainer.append(listItemText)
+    listItemContainer.append(xIcon);
 
-    switch (list_id) {
+    switch (listId) {
         case 'allow-list': {
-            x_icon.addEventListener("click", (event) => {
+            xIcon.addEventListener("click", (event) => {
                 updateFilter('fa', domain, 'remove');
             });
             break;
         }
         case 'deny-list': {
-            x_icon.addEventListener("click", (event) => {
+            xIcon.addEventListener("click", (event) => {
                 updateFilter('fd', domain, 'remove');
             });
             break;
         }
     }
 
-    return list_item_container;
+    return listItemContainer;
 }

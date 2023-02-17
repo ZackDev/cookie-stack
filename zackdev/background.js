@@ -25,17 +25,17 @@ cookiesAPI.browserAction.setBadgeBackgroundColor({ color: "#FFFFFF" });
   - updates the extension's badge text
   - applies cookies filter
 */
-const cookie_event_listener = (event) => {
+const cookieEventListener = (event) => {
     console.log('background.js', 'cookie_event_listener()', event);
     cookiesAPI.cookies.getAll({}, (cookies) => {
-        var num_cookies = String(cookies.length);
-        cookiesAPI.browserAction.setBadgeText({ "text": num_cookies });
+        var numCookies = String(cookies.length);
+        cookiesAPI.browserAction.setBadgeText({ "text": numCookies });
         cookiesAPI.filter.applyFilter(cookies);
     });
 }
 
 
-if (!cookiesAPI.cookies.onChanged.hasListener(cookie_event_listener)) {
-    cookiesAPI.cookies.onChanged.addListener(cookie_event_listener);
-    cookie_event_listener({});
+if (!cookiesAPI.cookies.onChanged.hasListener(cookieEventListener)) {
+    cookiesAPI.cookies.onChanged.addListener(cookieEventListener);
+    cookieEventListener({});
 }

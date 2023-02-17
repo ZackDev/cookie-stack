@@ -243,24 +243,24 @@ class CookiesAPI {
 
 /*
   Helper class
-  - static unique_string( str )
+  - static uniquString( str )
   -- returns the concatenated ascii-number representation of the passed string
   -- solely for generating valid HTML-Element selectors from strings that contain special
   -- characters like '.' and '#'
   -- negative example 'github.com' as selector would select tags named 'github' with class 'com'
   
-  - static check_or_x( b )
+  - static checkOrX( b )
   -- returns HTML-glyph '&check;' or '&cross;', based on the parameter b
 */
 class Helper {
-    static unique_string(str) {
+    static uniqueString(str) {
         let u_str = '';
         for (let c of str) {
             u_str += c.charCodeAt(0);
         }
         return u_str;
     }
-    static check_or_x(b) {
+    static checkOrX(b) {
         let str = b ? '&check;' : '&cross;';
         return str;
     }
@@ -277,32 +277,32 @@ class StackCookie {
         this.cookie = cookie;
     }
 
-    unique_cookie_string() {
-        let u_str = '';
-        u_str += this.cookie.domain;
-        u_str += this.cookie.path;
-        u_str += this.cookie.name;
-        return Helper.unique_string(u_str);
+    uniqueCookieString() {
+        let uStr = '';
+        uStr += this.cookie.domain;
+        uStr += this.cookie.path;
+        uStr += this.cookie.name;
+        return Helper.uniqueString(uStr);
     }
 
-    unique_domain_string() {
-        let u_str = '';
+    uniqueDomainString() {
+        let uStr = '';
         //this.cookie.secure ? u_str = "https://" : u_str = "http://";
-        u_str += this.cookie.domain;
-        return Helper.unique_string(u_str);
+        uStr += this.cookie.domain;
+        return Helper.uniqueString(uStr);
     }
 
     url() {
-        let url_str = ''
-        this.cookie.secure ? url_str = 'https://' : url_str = 'http://';
-        url_str += this.cookie.domain;
-        url_str += this.cookie.path;
-        return url_str;
+        let urlStr = ''
+        this.cookie.secure ? urlStr = 'https://' : urlStr = 'http://';
+        urlStr += this.cookie.domain;
+        urlStr += this.cookie.path;
+        return urlStr;
     }
 
     domain() {
-        let domain_str = ''
-        domain_str += this.cookie.domain;
-        return domain_str;
+        let domainStr = ''
+        domainStr += this.cookie.domain;
+        return domainStr;
     }
 }
