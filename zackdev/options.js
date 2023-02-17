@@ -1,129 +1,139 @@
 import { CookiesAPI } from '/zackdev/modules.mjs';
 
 
-const cookiesAPI = new CookiesAPI();
-
+var cookiesAPI;
 
 document.onreadystatechange = function () {
     if (document.readyState === "complete") {
-
-        cookiesAPI.getValue(null)
-            .then((storageObj) => {
-                storageObj.fa.forEach((item) => addToList('allow-list', item));
-                storageObj.fd.forEach((item) => addToList('deny-list', item));
-                switch (storageObj.ss) {
-                    case 'allowlist': {
-                        document.getElementById('allow-list-radio').setAttribute('checked', 'checked');
-                        break;
-                    }
-                    case 'denylist': {
-                        document.getElementById('deny-list-radio').setAttribute('checked', 'checked');
-                        break;
-                    }
-                    case 'disabled': {
-                        document.getElementById('disable-radio').setAttribute('checked', 'checked');
-                        break;
-                    }
-                }
-            });
-
-        cookiesAPI.storage.onChanged.addListener(onStorageUpdated);
-
-        document.getElementById('allow-domain-form').addEventListener("submit", (event) => {
-            event.preventDefault();
-            let ta = document.getElementById('allow-input');
-            updateFilter('fa', ta.value, 'add');
-            ta.value = '';
-        });
-
-        document.getElementById('deny-domain-form').addEventListener("submit", (event) => {
-            event.preventDefault();
-            let td = document.getElementById('deny-input');
-            updateFilter('fd', td.value, 'add');
-            td.value = '';
-        });
-
-        document.getElementById('disable-radio').addEventListener("click", () => {
-            cookiesAPI.storeValue({ ss: 'disabled' });
-        });
-
-        document.getElementById('allow-list-radio').addEventListener("click", () => {
-            cookiesAPI.storeValue({ ss: 'allowlist' });
-        });
-
-        document.getElementById('deny-list-radio').addEventListener("click", () => {
-            cookiesAPI.storeValue({ ss: 'denylist' });
-        });
-
-        document.getElementById('export-btn').addEventListener("click", () => {
-            cookiesAPI.getValue(null)
-                .then((resolve) => {
-                    let settingsJson = JSON.stringify(resolve, undefined, 4);
-                    let settingsFile = new File(
-                        [settingsJson],
-                        'cookie-stack-settings.json',
-                        { type: 'application/json' }
-                    );
-                    let url = URL.createObjectURL(settingsFile);
-
-                    let downloadProcess = cookiesAPI.downloads.download({
-                        url: url,
-                        filename: 'cookie-stack-settings.json',
-                        saveAs: true
-                    });
-                    /*
-                    downloadProcess.then(
-                        (resolve) => {
-                            URL.revokeObjectURL(url)
-                        },
-                        (reject) => {
-                            URL.revokeObjectURL(url)
-                        });
-                    */
+        CookiesAPI.getAPI()
+            .then(
+                (apiObj) => {
+                    cookiesAPI = apiObj;
+                    init();
+                },
+                (error) => {
+                    console.log(error);
                 });
-        });
-
-        document.getElementById('import-file-picker').addEventListener("change", (event) => {
-            let files = event.target.files;
-            if (files.length == 1) {
-                let file = files[0];
-                let content = file.text();
-                content.then(
-                    (text) => {
-                        let jsonObject = JSON.parse(text);
-                        if (jsonObject.ss && jsonObject.fa && jsonObject.fd) {
-                            if (typeof jsonObject.ss === 'string' && Array.isArray(jsonObject.fa) && Array.isArray(jsonObject.fd)) {
-                                console.log('import-file-picker:', 'writing settings from json file to localStorage');
-                                cookiesAPI.storeValue(jsonObject);
-                            }
-                            else {
-                                console.info('import-file-picker:', 'selected json file has wrong property types');
-                            }
-                        }
-                        else {
-                            console.info('import-file-picker:', 'selected json file has missing keys');
-                        }
-                        event.target.value = '';
-                    },
-                    (reject) => {
-                        console.error('import-file-picker:', 'error at calling text() on selected file:', reject);
-                        event.target.value = '';
-                    }
-                );
-            }
-            else {
-                if (files.length == 0) {
-                    console.info('import-file-picker:', 'no file selected');
-                }
-                else if (files.length > 1) {
-                    console.info('import-file-picker:', 'multiple files selected');
-                }
-            }
-
-        });
     }
 };
 
+
+const init = () => {
+    cookiesAPI.getValue(null)
+        .then((storageObj) => {
+            storageObj.fa.forEach((item) => addToList('allow-list', item));
+            storageObj.fd.forEach((item) => addToList('deny-list', item));
+            switch (storageObj.ss) {
+                case 'allowlist': {
+                    document.getElementById('allow-list-radio').setAttribute('checked', 'checked');
+                    break;
+                }
+                case 'denylist': {
+                    document.getElementById('deny-list-radio').setAttribute('checked', 'checked');
+                    break;
+                }
+                case 'disabled': {
+                    document.getElementById('disable-radio').setAttribute('checked', 'checked');
+                    break;
+                }
+            }
+        });
+
+    cookiesAPI.storage.onChanged.addListener(onStorageUpdated);
+
+    document.getElementById('allow-domain-form').addEventListener("submit", (event) => {
+        event.preventDefault();
+        let ta = document.getElementById('allow-input');
+        updateFilter('fa', ta.value, 'add');
+        ta.value = '';
+    });
+
+    document.getElementById('deny-domain-form').addEventListener("submit", (event) => {
+        event.preventDefault();
+        let td = document.getElementById('deny-input');
+        updateFilter('fd', td.value, 'add');
+        td.value = '';
+    });
+
+    document.getElementById('disable-radio').addEventListener("click", () => {
+        cookiesAPI.storeValue({ ss: 'disabled' });
+    });
+
+    document.getElementById('allow-list-radio').addEventListener("click", () => {
+        cookiesAPI.storeValue({ ss: 'allowlist' });
+    });
+
+    document.getElementById('deny-list-radio').addEventListener("click", () => {
+        cookiesAPI.storeValue({ ss: 'denylist' });
+    });
+
+    document.getElementById('export-btn').addEventListener("click", () => {
+        cookiesAPI.getValue(null)
+            .then((resolve) => {
+                let settingsJson = JSON.stringify(resolve, undefined, 4);
+                let settingsFile = new File(
+                    [settingsJson],
+                    'cookie-stack-settings.json',
+                    { type: 'application/json' }
+                );
+                let url = URL.createObjectURL(settingsFile);
+
+                let downloadProcess = cookiesAPI.downloads.download({
+                    url: url,
+                    filename: 'cookie-stack-settings.json',
+                    saveAs: true
+                });
+                /*
+                downloadProcess.then(
+                    (resolve) => {
+                        URL.revokeObjectURL(url)
+                    },
+                    (reject) => {
+                        URL.revokeObjectURL(url)
+                    });
+                */
+            });
+    });
+
+    document.getElementById('import-file-picker').addEventListener("change", (event) => {
+        let files = event.target.files;
+        if (files.length == 1) {
+            let file = files[0];
+            let content = file.text();
+            content.then(
+                (text) => {
+                    let jsonObject = JSON.parse(text);
+                    if (jsonObject.ss && jsonObject.fa && jsonObject.fd) {
+                        if (typeof jsonObject.ss === 'string' && Array.isArray(jsonObject.fa) && Array.isArray(jsonObject.fd)) {
+                            console.log('import-file-picker:', 'writing settings from json file to localStorage');
+                            cookiesAPI.storeValue(jsonObject);
+                        }
+                        else {
+                            console.info('import-file-picker:', 'selected json file has wrong property types');
+                        }
+                    }
+                    else {
+                        console.info('import-file-picker:', 'selected json file has missing keys');
+                    }
+                    event.target.value = '';
+                },
+                (reject) => {
+                    console.error('import-file-picker:', 'error at calling text() on selected file:', reject);
+                    event.target.value = '';
+                }
+            );
+        }
+        else {
+            if (files.length == 0) {
+                console.info('import-file-picker:', 'no file selected');
+            }
+            else if (files.length > 1) {
+                console.info('import-file-picker:', 'multiple files selected');
+            }
+        }
+
+    });
+}
 
 const switchCheckedRadio = (radio) => {
     let disableRadioBtn = document.getElementById('disable-radio');
@@ -199,7 +209,7 @@ const updateFilter = (name, domain, action) => {
 const onStorageUpdated = (storageObj) => {
     console.log('onStorageUpdated()');
     let key = Object.keys(storageObj)[0];
-    
+
     if (key === 'fa' || key === 'fd') {
         var itemsToAdd = []
         var itemsToRemove = [];
@@ -250,7 +260,7 @@ const addToList = (list_id, domain) => {
     if (listItemAdded === false) {
         list.append(newListItem);
     }
-} 
+}
 
 
 const removeFromList = (list_id, domain) => {
@@ -268,7 +278,7 @@ const createListItem = (list_id, domain) => {
     let list_item_text = document.createElement('div');
     list_item_text.classList.add('fs-14');
     list_item_text.innerText = domain;
-    
+
     let x_icon = document.createElement('div');
     x_icon.classList.add('border', 'clickable', 'circle', 'quadratic-15', 'x-icon');
     x_icon.title = 'delete';

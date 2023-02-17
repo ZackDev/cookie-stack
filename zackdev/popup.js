@@ -320,9 +320,7 @@ class StackCookieDisplay {
 }
 
 
-function init() {
-    const cookiesAPI = new CookiesAPI();
-
+function init(cookiesAPI) {
     const add_all_cookies = (cookies) => {
         cookies.forEach(cookie => {
             display.on_cookie_added(new StackCookie(cookie));
@@ -380,6 +378,16 @@ function init() {
 
 document.onreadystatechange = () => {
     if (document.readyState === 'complete') {
-        init();
+        var cookiesAPI;
+
+        CookiesAPI.getAPI()
+            .then(
+                (apiObj) => {
+                    cookiesAPI = apiObj;
+                    init(cookiesAPI);
+                },
+                (error) => {
+                    console.log(error);
+                });
     }
 };

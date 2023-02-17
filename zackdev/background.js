@@ -11,6 +11,8 @@ import { CookiesAPI } from '/zackdev/modules.mjs';
 const cookiesAPI = new CookiesAPI();
 
 
+window.cookiesAPI = cookiesAPI;
+
 cookiesAPI.browserAction.setBadgeTextColor({ color: "#000000" });
 
 

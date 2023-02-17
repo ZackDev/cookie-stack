@@ -6,6 +6,40 @@ export { CookiesAPI, StackCookie, Helper }
  * @returns a cookiesAPI object
  */
 class CookiesAPI {
+    static getAPI = () => {
+        return new Promise((resolve, reject) => {
+            if (typeof browser !== 'undefined') {
+                browser.runtime.getBackgroundPage()
+                    .then((page) => {
+                        resolve(page.cookiesAPI);
+                    });
+            }
+            if (typeof chrome !== 'undefined') {
+                chrome.runtime.getBackgroundPage((page) => {
+                    console.log(page);
+                    if (typeof page.cookiesAPI !== 'undefined') {
+                        resolve(page.cookiesAPI);
+                    }
+                    else {
+                        reject('cookiesAPI nout founddd')
+                    }
+                })
+            }
+            else {
+                reject('cookiesAPI not found');
+            }
+        });
+    }
+
+    /**
+     * detects browser and sets up functions used by the extension
+     * NOTE: only to be called directly by the background script for initialization
+     * 
+     * background.js    ->      new CookiesAPI()
+     * other.js         ->      CookiesAPI.getAPI()
+     * 
+     * @returns CookiesAPI instance
+     */
     constructor() {
         console.info('CookiesAPI constructor called');
         this.browser = '';
