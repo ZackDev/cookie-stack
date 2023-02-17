@@ -128,13 +128,17 @@ input[type=file] {
     flex-wrap: wrap;
 }
 
-.clickable {
-    cursor: pointer;
+.interactive {
     background-color: #e7e7e7;
+
 }
 
-.clickable:hover {
-    background-color: #FFFFFF;
+.interactive:hover {
+    background-color: #FFF;
+}
+
+.clickable {
+    cursor: pointer;
 }
 
 .fs-12 {

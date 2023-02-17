@@ -230,7 +230,7 @@ class StackCookieDisplay {
         trash_button.title = 'delete cookie';
         trash_button.setAttribute('id', `trash-button-${u_cookie_str}`);
         trash_button.setAttribute('type', 'button');
-        trash_button.classList.add('clickable', 'border', 'rounded', 'quadratic-30', 'trash-icon');
+        trash_button.classList.add('clickable', 'border', 'interactive', 'rounded', 'quadratic-30', 'trash-icon');
         trash_button.addEventListener("click", () => {
             console.log('StackCookieDisplay: trash button clicked.');
             this.cookiesAPI.remove(stack_cookie);
@@ -264,7 +264,7 @@ class StackCookieDisplay {
         details_button.setAttribute('type', 'button');
         details_button.setAttribute('id', `details-button-${u_domain_str}`);
         details_button.setAttribute('data-target', `cookie-wrap-${u_domain_str}`);
-        details_button.classList.add('clickable', 'border', 'rounded', 'quadratic-30', 'plus-icon');
+        details_button.classList.add('clickable', 'border', 'interactive', 'rounded', 'quadratic-30', 'plus-icon');
         details_button.addEventListener("click", (event) => {
             console.log('StackCookieDisplay: details button clicked.');
             var btn = event.target;

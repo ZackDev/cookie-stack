@@ -272,7 +272,7 @@ const removeFromList = (list_id, domain) => {
 
 const createListItem = (list_id, domain) => {
     let list_item_container = document.createElement('div');
-    list_item_container.classList.add('align-items-center', 'border', 'flex', 'flex-gap-5', 'flex-row', 'p-5', 'rounded');
+    list_item_container.classList.add('align-items-center', 'border', 'flex', 'flex-gap-5', 'flex-row', 'interactive' ,'p-5', 'rounded');
     list_item_container.name = domain;
 
     let list_item_text = document.createElement('div');
