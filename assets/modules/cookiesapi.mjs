@@ -1,4 +1,5 @@
 import { keyNamePairs } from "./static.mjs";
+import { StackCookie } from "./stackcookie.mjs";
 export { CookiesAPI }
 
 /**
@@ -20,7 +21,7 @@ class CookiesAPI {
                         resolve(page.cookiesAPI);
                     }
                     else {
-                        reject('cookiesAPI nout founddd')
+                        reject('cookiesAPI not found')
                     }
                 })
             }
