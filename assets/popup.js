@@ -126,7 +126,8 @@ class StackCookieDisplay {
         var uCookieStr = stackCookie.uniqueCookieString();
         var cookieDiv = document.createElement('div');
         cookieDiv.setAttribute('id', `cookie-${uCookieStr}`);
-        cookieDiv.classList.add('align-items-center', 'cookie', 'p10', `${uDomainStr}`);
+        cookieDiv.classList.add('align-items-center', 'cookie', `${uDomainStr}`);
+        cookieDiv.style.padding = '15px 5px 15px 10px';
 
         let attributeRows = this.createCookieAttributes(stackCookie.cookie, this.cookiesAPI.keyNamePairs);
 

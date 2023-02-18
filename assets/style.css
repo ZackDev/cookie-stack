@@ -28,10 +28,6 @@ input[type=file] {
     border: 1px solid #e7e7e7;
 }
 
-.border-top {
-    border-top: 1px solid #e7e7e7;
-}
-
 .border-bottom {
     border-bottom: 1px solid #e7e7e7;
 }
@@ -77,11 +73,6 @@ input[type=file] {
     width: 15px;
 }
 
-.quadratic-20 {
-    height: 20px;
-    width: 20px;
-}
-
 .quadratic-30 {
     height: 30px;
     width: 30px;
@@ -112,10 +103,6 @@ input[type=file] {
     gap: 5px;
 }
 
-.flex-gap-10 {
-    gap: 10px;
-}
-
 .flex-row {
     flex-direction: row;
 }
@@ -141,10 +128,6 @@ input[type=file] {
     cursor: pointer;
 }
 
-.fs-12 {
-    font-size: 12px;
-}
-
 .fs-14 {
     font-size: 14px;
 }
@@ -161,36 +144,12 @@ input[type=file] {
     font-size: 30px;
 }
 
-.p-2 {
-    padding: 2px;
-}
-
 .p-5 {
     padding: 5px;
 }
 
-.p10 {
-    padding: 10px;
-}
-
-.m-20 {
-    margin: 20px;
-}
-
-.mb-20 {
-    margin: 0 0 20px 0;
-}
-
 .minh-40 {
     min-height: 40px;
-}
-
-.mlr-10 {
-    margin: 0 10px 0 10px;
-}
-
-.mlr-20 {
-    margin: 0 20px 0 20px;
 }
 
 .mtb-5 {
@@ -201,14 +160,6 @@ input[type=file] {
     margin: 10px 0 10px 0;
 }
 
-.mtb-20 {
-    margin: 20px 0 20px 0;
-}
-
 .vam {
     vertical-align: middle;
-}
-
-.filter-item {
-    padding: 2px;
 }
