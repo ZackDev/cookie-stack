@@ -4,9 +4,7 @@ import { CookiesAPI, StackCookie, Helper } from '/assets/modules.mjs';
   StackCookieDisplay class
   - responsible for DOM manipulation of the popup.html page
   -- adding and removing cookies
-  -- displaying cookie values
-  -- handling trash and details button clicks
-  -- display version string
+  -- collapse, expand domains
 */
 class StackCookieDisplay {
 
