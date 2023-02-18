@@ -1,5 +1,6 @@
 export { keyNamePairs }
 
+// mapping of a cookie's keys to the displayed name
 const keyNamePairs = [
     {
         key: 'path',

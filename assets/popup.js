@@ -1,6 +1,5 @@
 import { CookiesAPI, StackCookie, Helper } from '/assets/modules.mjs';
 
-
 /*
   StackCookieDisplay class
   - responsible for DOM manipulation of the popup.html page

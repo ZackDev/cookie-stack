@@ -2,10 +2,13 @@ import { keyNamePairs } from "./static.mjs";
 import { StackCookie } from "./stackcookie.mjs";
 export { CookiesAPI }
 
-/**
- * 
- * @returns a cookiesAPI object
- */
+/*
+  CookiesAPI class
+  - bundles the browser's functions used by the extension in a single object
+  - how it is used:
+  -- background.js creates an instance by calling the constructor and attaches it to 'window'
+  -- popup.js and options.js call the static getAPI() to retrieve the previously attached object
+*/
 class CookiesAPI {
     static getAPI = () => {
         return new Promise((resolve, reject) => {
@@ -33,11 +36,6 @@ class CookiesAPI {
 
     /**
      * detects browser and sets up functions used by the extension
-     * NOTE: only to be called directly by the background script for initialization
-     * 
-     * background.js    ->      new CookiesAPI()
-     * other.js         ->      CookiesAPI.getAPI()
-     * 
      * @returns CookiesAPI instance
      */
     constructor() {
@@ -58,7 +56,6 @@ class CookiesAPI {
      * determines the used browser and builds the cookiesAPI facade to partially uniform the usage of chromium's and firefox's WebAPI
      * @param {String} b shorthand name of the browser 'firefox' or 'chromium' 
      * @param {Object} r the browser's top level access to the WebAPI 
-     * @returns {cookiesAPI}
      */
     setAPI = (b, r) => {
         if (this.browser === '') {
