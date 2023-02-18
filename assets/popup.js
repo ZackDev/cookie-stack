@@ -14,7 +14,6 @@ class StackCookieDisplay {
         this.contentRoot = contentRoot;
         this.cookiesAPI = api;
         this.domainState = new Map();
-        this.setVersion();
         this.setOptionsLink();
     }
 
@@ -77,11 +76,6 @@ class StackCookieDisplay {
             }
         });
         return attributeRows;
-    }
-
-    setVersion() {
-        var versionStr = this.cookiesAPI.runtime.getManifest().version;
-        document.getElementById('version').innerText = ['version', versionStr].join(' ');
     }
 
     setOptionsLink() {
