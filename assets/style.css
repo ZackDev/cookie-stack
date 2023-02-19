@@ -20,6 +20,28 @@ input[type=file] {
     overflow-y: scroll;
 }
 
+#cookie-stack-3 {
+    color: #746B5A;
+    display: inline-block;
+    transform: rotate(-12deg);
+}
+
+#cookie-stack-2 {
+    color: #000;
+    display: inline-block;
+    transform: rotate(-7deg);
+}
+
+#cookie-stack-1 {
+    color: #81613E;
+    display: inline-block;
+    transform: rotate(5deg);
+}
+#cookie-stack-0 {
+    color: #7F5112;;
+    display: inline-block;
+}
+
 .align-items-center {
     align-items: center;
 }
