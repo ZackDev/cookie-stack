@@ -20,6 +20,12 @@ input[type=file] {
     overflow-y: scroll;
 }
 
+#logo-wrap {
+    transform: rotate(90deg);
+    letter-spacing: -1px;
+    font-weight: bold;
+}
+
 #cookie-stack-3 {
     color: #746B5A;
     display: inline-block;
