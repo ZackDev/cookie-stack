@@ -221,7 +221,7 @@ const OptionsUI = (cookiesAPI) => {
                     filename: 'cookie-stack-settings.json',
                     saveAs: true
                 });
-
+                /*
                 downloadProcess.then(
                     (resolve) => {
                         URL.revokeObjectURL(url)
@@ -229,7 +229,7 @@ const OptionsUI = (cookiesAPI) => {
                     (reject) => {
                         URL.revokeObjectURL(url)
                     });
-
+                */
             });
     });
 
