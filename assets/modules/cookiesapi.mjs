@@ -182,6 +182,9 @@ class CookiesAPI {
                 this.getValue = (v) => {
                     return this.storage.local.get(v);
                 }
+                this.download = (c) => {
+                    return this.downloads.download(c);
+                }
                 break;
 
             case 'chrome':
@@ -207,6 +210,13 @@ class CookiesAPI {
                         this.storage.local.get(v, (r) => {
                             res(r);
                         });
+                    });
+                }
+                this.download = (c) => {
+                    return new Promise((res) => {
+                        this.downloads.download(c, (r) => {
+                            res(r);
+                        })
                     });
                 }
                 break;

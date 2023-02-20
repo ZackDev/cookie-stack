@@ -13,7 +13,7 @@ document.onreadystatechange = function () {
 };
 
 /*
-  StackCookieDisplay
+  PopupUI
   - responsible for DOM manipulation of the popup.html page
   -- adding and removing cookies
   -- collapse, expand domains
@@ -253,7 +253,7 @@ const PopupUI = (cookiesAPI) => {
             cookieWrapDiv.classList.add('collapsed');
             domainState.set(uDomainStr, { collapsed: true })
         }
-        
+
         var domainWrapDiv = document.createElement('div');
         domainWrapDiv.classList.add('domain-wrap');
         domainWrapDiv.setAttribute('id', `domain-wrap-${uDomainStr}`);
