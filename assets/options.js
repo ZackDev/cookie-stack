@@ -1,22 +1,18 @@
 import { CookiesAPI } from '/assets/modules.mjs';
 
-var cookiesAPI;
-
 document.onreadystatechange = function () {
     if (document.readyState === "complete") {
         CookiesAPI.getAPI()
             .then(
                 (apiObj) => {
-                    cookiesAPI = apiObj;
-                    OptionsUI();
+                    OptionsUI(apiObj);
                 },
                 (error) => { }
             );
     }
 };
 
-
-const OptionsUI = () => {
+const OptionsUI = (cookiesAPI) => {
     var disableRadio = document.getElementById('disable-radio');
     var allowListRadio = document.getElementById('allow-list-radio');
     var denyListRadio = document.getElementById('deny-list-radio');
@@ -75,7 +71,6 @@ const OptionsUI = () => {
         }
 
     }
-
 
     const addToList = (list, domain) => {
         let listItems = Array.from(list.childNodes);
@@ -239,7 +234,7 @@ const OptionsUI = () => {
     });
 
     importFilePicker.addEventListener("change", (event) => {
-        let files = event.target.files;
+        let files = importFilePicker.files;
         if (files.length == 1) {
             let file = files[0];
             let content = file.text();
@@ -251,13 +246,12 @@ const OptionsUI = () => {
                             cookiesAPI.storeValue(jsonObject);
                         }
                     }
-                    event.target.value = '';
+                    importFilePicker.value = '';
                 },
                 (reject) => {
-                    event.target.value = '';
+                    importFilePicker.value = '';
                 }
             );
         }
     });
-
 }

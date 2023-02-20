@@ -1,21 +1,29 @@
 import { CookiesAPI, StackCookie, Helper } from '/assets/modules.mjs';
 
+document.onreadystatechange = function () {
+    if (document.readyState === "complete") {
+        CookiesAPI.getAPI()
+            .then(
+                (apiObj) => {
+                    PopupUI(apiObj);
+                },
+                (error) => { }
+            );
+    }
+};
+
 /*
-  StackCookieDisplay class
+  StackCookieDisplay
   - responsible for DOM manipulation of the popup.html page
   -- adding and removing cookies
   -- collapse, expand domains
 */
-class StackCookieDisplay {
+const PopupUI = (cookiesAPI) => {
 
-    constructor(contentRoot, api) {
-        this.contentRoot = contentRoot;
-        this.cookiesAPI = api;
-        this.domainState = new Map();
-        this.setOptionsLink();
-    }
+    var contentRoot = document.getElementById('content');
+    var domainStates = new Map();
 
-    createCookieAttributeRow(keyNamePair, value) {
+    const createCookieAttributeRow = (keyNamePair, value) => {
         let valueType = typeof (value);
 
         var attributeRow = document.createElement('div');
@@ -66,62 +74,97 @@ class StackCookieDisplay {
         return attributeRow;
     }
 
-    createCookieAttributes(cookie) {
+    const createCookieAttributes = (cookie) => {
         var attributeRows = [];
-        this.cookiesAPI.keyNamePairs.forEach((p) => {
+        cookiesAPI.keyNamePairs.forEach((p) => {
             if (Object.getOwnPropertyNames(cookie).includes(p.key)) {
-                attributeRows.push(this.createCookieAttributeRow(p, cookie[p.key]));
+                attributeRows.push(createCookieAttributeRow(p, cookie[p.key]));
             }
         });
         return attributeRows;
     }
 
-    setOptionsLink() {
+    const setOptionsLink = () => {
         var optionsIcon = document.getElementById('options-icon');
         optionsIcon.addEventListener("click", () => {
-            this.cookiesAPI.runtime.openOptionsPage();
+            cookiesAPI.runtime.openOptionsPage();
         });
     }
 
-    onCookieAdded(stackCookie) {
+    const addAllCookies = (cookies) => {
+        cookies.forEach(cookie => {
+            onCookieAdded(new StackCookie(cookie));
+        });
+    }
+
+    const onCookieChangedListener = (cookieEvent) => {
+        var stackCookie = new StackCookie(cookieEvent.cookie);
+        switch (cookieEvent.cause) {
+            case 'evicted':
+                // cookie got collected by the GC
+                onCookieRemoved(stackCookie);
+                break;
+
+            case 'explicit':
+                // cookie got explicitly added or removed
+                if (cookieEvent.removed === true) {
+                    onCookieRemoved(stackCookie);
+                }
+                else if (cookieEvent.removed === false) {
+                    onCookieAdded(stackCookie);
+                }
+                break;
+
+            case 'expired_overwrite':
+                onCookieRemoved(stackCookie);
+                break;
+
+            case 'overwrite':
+                onCookieRemoved(stackCookie);
+                break;
+        }
+    }
+
+    const onCookieAdded = (stackCookie) => {
         var domainWrap = document.getElementById(`domain-wrap-${stackCookie.uniqueDomainString()}`);
         if (domainWrap === null) {
-            this.domainState.set(stackCookie.uniqueDomainString(),
+            domainStates.set(stackCookie.uniqueDomainString(),
                 {
                     collapsed: true
                 }
             );
             var domainAdded = false;
             var allDomainWraps = document.getElementsByClassName('domain-wrap');
+            var stackCookieDomain = stackCookie.domain();
             for (let i = 0; i < allDomainWraps.length; i++) {
                 var compareWrap = allDomainWraps[i];
                 var compareWrapDomain = compareWrap.getAttribute('domain');
                 // lexical domain comparison ('a' < 'b' ) = true, ('a' > 'b') = false
-                if (stackCookie.domain() < compareWrapDomain) {
-                    document.getElementById('content').insertBefore(this.createDomainWrapHTML(stackCookie), allDomainWraps[i]);
+                if (stackCookieDomain < compareWrapDomain) {
+                    document.getElementById('content').insertBefore(createDomainWrapHTML(stackCookie), allDomainWraps[i]);
                     domainAdded = true;
                     break;
                 }
             }
             if (domainAdded === false) {
-                this.contentRoot.append(this.createDomainWrapHTML(stackCookie));
+                contentRoot.append(createDomainWrapHTML(stackCookie));
             }
         }
         // at this point, a cookie-domain with cookie wrap exists
         var cookieWrap = document.getElementById(`cookie-wrap-${stackCookie.uniqueDomainString()}`);
-        cookieWrap.append(this.createCookieHTML(stackCookie));
+        cookieWrap.append(createCookieHTML(stackCookie));
     }
 
-    onCookieRemoved(stackCookie) {
+    const onCookieRemoved = (stackCookie) => {
         document.getElementById(`cookie-${stackCookie.uniqueCookieString()}`).remove();
         let cookies = document.getElementsByClassName(`cookie ${stackCookie.uniqueDomainString()}`);
         if (cookies.length === 0) {
             document.getElementById(`domain-wrap-${stackCookie.uniqueDomainString()}`).remove();
-            this.domainState.delete(stackCookie.uniqueDomainString());
+            domainStates.delete(stackCookie.uniqueDomainString());
         }
     }
 
-    createCookieHTML(stackCookie) {
+    const createCookieHTML = (stackCookie) => {
         var uDomainStr = stackCookie.uniqueDomainString();
         var uCookieStr = stackCookie.uniqueCookieString();
         var cookieDiv = document.createElement('div');
@@ -129,7 +172,7 @@ class StackCookieDisplay {
         cookieDiv.classList.add('align-items-center', 'cookie', `${uDomainStr}`);
         cookieDiv.style.padding = '15px 5px 15px 10px';
 
-        let attributeRows = this.createCookieAttributes(stackCookie.cookie, this.cookiesAPI.keyNamePairs);
+        let attributeRows = createCookieAttributes(stackCookie.cookie, cookiesAPI.keyNamePairs);
 
         let attributeRowsContainer = document.createElement('div');
         attributeRowsContainer.style.fontFamily = 'monospace';
@@ -146,7 +189,7 @@ class StackCookieDisplay {
         trashButton.setAttribute('type', 'button');
         trashButton.classList.add('clickable', 'border', 'interactive', 'rounded', 'quadratic-30', 'trash-icon');
         trashButton.addEventListener("click", () => {
-            this.cookiesAPI.remove(stackCookie);
+            cookiesAPI.remove(stackCookie);
         });
 
         cookieActionDiv.append(trashButton);
@@ -155,7 +198,7 @@ class StackCookieDisplay {
         return cookieDiv;
     }
 
-    createDomainWrapHTML(stackCookie) {
+    const createDomainWrapHTML = (stackCookie) => {
         var uDomainStr = stackCookie.uniqueDomainString();
 
         var cookieDomainDiv = document.createElement('div');
@@ -174,25 +217,23 @@ class StackCookieDisplay {
         detailsBtn.setAttribute('data-target', `cookie-wrap-${uDomainStr}`);
         detailsBtn.classList.add('clickable', 'border', 'interactive', 'rounded', 'quadratic-30', 'plus-icon');
         detailsBtn.addEventListener("click", (event) => {
-            var btn = event.target;
             var collapsed = false;
-            var elementToCollapse = document.getElementById(btn.getAttribute('data-target'));
-            if (btn.classList.contains('plus-icon')) {
+            var elementToCollapse = document.getElementById(detailsBtn.getAttribute('data-target'));
+            if (detailsBtn.classList.contains('plus-icon')) {
                 detailsBtn.title = 'hide cookies';
                 collapsed = false;
                 elementToCollapse.classList.remove('collapsed');
-                btn.classList.remove('plus-icon');
-                btn.classList.add('minus-icon');
-
+                detailsBtn.classList.remove('plus-icon');
+                detailsBtn.classList.add('minus-icon');
             }
-            else if (btn.classList.contains('minus-icon')) {
+            else if (detailsBtn.classList.contains('minus-icon')) {
                 detailsBtn.title = 'show cookies';
                 collapsed = true;
                 elementToCollapse.classList.add('collapsed');
-                btn.classList.remove('minus-icon');
-                btn.classList.add('plus-icon');
+                detailsBtn.classList.remove('minus-icon');
+                detailsBtn.classList.add('plus-icon');
             }
-            this.domainState.set(uDomainStr, { collapsed: collapsed });
+            domainStates.set(uDomainStr, { collapsed: collapsed });
         });
 
         domainInfoDiv.append(domainName);
@@ -202,7 +243,7 @@ class StackCookieDisplay {
         var cookieWrapDiv = document.createElement('div');
         cookieWrapDiv.setAttribute('id', `cookie-wrap-${uDomainStr}`);
 
-        var domainState = this.domainState.get(uDomainStr);
+        var domainState = domainStates.get(uDomainStr);
         if (domainState) {
             if (domainState.collapsed === true) {
                 cookieWrapDiv.classList.add('collapsed');
@@ -210,7 +251,7 @@ class StackCookieDisplay {
         }
         else {
             cookieWrapDiv.classList.add('collapsed');
-            this.domainState.set(uDomainStr, { collapsed: true })
+            domainState.set(uDomainStr, { collapsed: true })
         }
         
         var domainWrapDiv = document.createElement('div');
@@ -222,62 +263,11 @@ class StackCookieDisplay {
 
         return domainWrapDiv;
     }
-}
-
-
-function init(cookiesAPI) {
-    const addAllCookies = (cookies) => {
-        cookies.forEach(cookie => {
-            display.onCookieAdded(new StackCookie(cookie));
-        });
-    }
-
-    const onCookieChangedListener = (cookieEvent) => {
-        var stackCookie = new StackCookie(cookieEvent.cookie);
-        switch (cookieEvent.cause) {
-            case 'evicted':
-                // cookie got collected by the GC
-                display.onCookieRemoved(stackCookie);
-                break;
-
-            case 'explicit':
-                // cookie got explicitly added or removed
-                if (cookieEvent.removed === true) {
-                    display.onCookieRemoved(stackCookie);
-                }
-                else if (cookieEvent.removed === false) {
-                    display.onCookieAdded(stackCookie);
-                }
-                break;
-
-            case 'expired_overwrite':
-                display.onCookieRemoved(stackCookie);
-                break;
-
-            case 'overwrite':
-                display.onCookieRemoved(stackCookie);
-                break;
-        }
-    }
-
-    const display = new StackCookieDisplay(document.getElementById('content'), cookiesAPI);
-
     if (!cookiesAPI.cookies.onChanged.hasListener(onCookieChangedListener)) {
         cookiesAPI.cookies.onChanged.addListener(onCookieChangedListener);
     }
 
+    setOptionsLink();
+
     cookiesAPI.getAll({}, addAllCookies);
 }
-
-
-document.onreadystatechange = () => {
-    if (document.readyState === 'complete') {
-        CookiesAPI.getAPI()
-            .then(
-                (apiObj) => {
-                    init(apiObj);
-                },
-                (error) => {}
-                );
-    }
-};
