@@ -17,6 +17,8 @@ const OptionsUI = (cookiesAPI) => {
     var allowListRadio = document.getElementById('allow-list-radio');
     var denyListRadio = document.getElementById('deny-list-radio');
 
+    var radioGroup = [disableRadio, allowListRadio, denyListRadio];
+
     var allowDomainForm = document.getElementById('allow-domain-form');
     var allowDomainTextInput = document.getElementById('allow-input');
     var allowList = document.getElementById('allow-list');
@@ -46,25 +48,27 @@ const OptionsUI = (cookiesAPI) => {
             }
             if (key === 'ss') {
                 let selectedFilter = storageObj.ss.newValue;
-                let radio = null;
+                let radioToCheck = null;
                 switch (selectedFilter) {
                     case 'disabled': {
-                        radio = disableRadio;
+                        radioToCheck = disableRadio;
                         break;
                     }
                     case 'allowlist': {
-                        radio = allowListRadio;
+                        radioToCheck = allowListRadio;
                         break;
                     }
                     case 'denylist': {
-                        radio = denyListRadio;
+                        radioToCheck = denyListRadio;
                         break;
                     }
                 }
-                if (radio !== null) {
-                    radio.setAttribute('checked', 'checked');
+                if (radioToCheck !== null) {
+                    let radiosToUncheck = radioGroup.filter((radio) => radio !== radioToCheck);
+                    radiosToUncheck.forEach(radio => radio.removeAttribute('checked'));
+                    radioToCheck.setAttribute('checked', 'checked');
                     if (cookiesAPI.browserName === 'chrome') {
-                        radio.click();
+                        radioToCheck.click();
                     }
                 }
             }

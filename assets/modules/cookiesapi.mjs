@@ -44,7 +44,7 @@ class CookiesAPI {
             if (typeof browser !== 'undefined') {
                 this.setupAPI('firefox', browser)
             }
-            if (typeof chrome !== 'undefined') {
+            else if (typeof chrome !== 'undefined') {
                 this.setupAPI('chrome', chrome)
             }
             if (this.browserName !== '') {
