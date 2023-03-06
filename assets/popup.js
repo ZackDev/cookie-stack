@@ -84,9 +84,9 @@ const PopupUI = (cookiesAPI) => {
         return attributeRows;
     }
 
-    const setOptionsLink = () => {
-        var optionsIcon = document.getElementById('options-icon');
-        optionsIcon.addEventListener("click", () => {
+    const bindOptionsBtn = () => {
+        var optionsBtn = document.getElementById('options-btn');
+        optionsBtn.addEventListener("click", () => {
             cookiesAPI.runtime.openOptionsPage();
         });
     }
@@ -279,7 +279,7 @@ const PopupUI = (cookiesAPI) => {
     }
 
     bindDeleteAllBtn();
-    setOptionsLink();
+    bindOptionsBtn();
 
     cookiesAPI.getAll({}, addAllCookies);
 }
