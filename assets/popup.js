@@ -91,6 +91,17 @@ const PopupUI = (cookiesAPI) => {
         });
     }
 
+    const bindDeleteAllBtn = () => {
+        var deleteAllBtn = document.getElementById('delete-all-btn');
+        deleteAllBtn.addEventListener("click", () => {
+            cookiesAPI.getAll({}, (cookies) => {
+                cookies.forEach(cookie => {
+                    cookiesAPI.remove(new StackCookie(cookie));
+                });
+            });
+        });
+    }
+
     const addAllCookies = (cookies) => {
         cookies.forEach(cookie => {
             onCookieAdded(new StackCookie(cookie));
@@ -267,6 +278,7 @@ const PopupUI = (cookiesAPI) => {
         cookiesAPI.cookies.onChanged.addListener(onCookieChangedListener);
     }
 
+    bindDeleteAllBtn();
     setOptionsLink();
 
     cookiesAPI.getAll({}, addAllCookies);

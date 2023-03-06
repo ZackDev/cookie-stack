@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "Cookie Stack",
-  "version": "0.14",
+  "version": "0.15",
   "homepage_url": "https://github.com/ZackDev/cookie-stack",
   "description": "Manages cookies. Includes automatic deletion based on filters.",
   "permissions": [
