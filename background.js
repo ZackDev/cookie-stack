@@ -1,4 +1,4 @@
-import { CookiesAPI } from '/assets/modules.mjs';
+import { CookiesAPI } from '/modules.mjs';
 
 
 /**

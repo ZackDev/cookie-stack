@@ -76,24 +76,24 @@ input[type=file] {
 
 
 .plus-icon {
-    background-image: url('./icons/plus.svg');
+    background-image: url('/icons/plus.svg');
 }
 
 .minus-icon {
-    background-image: url('./icons/minus.svg');
+    background-image: url('/icons/minus.svg');
 }
 
 .x-icon {
-    background-image: url('./icons/plus.svg');
+    background-image: url('/icons/plus.svg');
     rotate: 45deg;
 }
 
 .trash-icon {
-    background-image: url('./icons/trash.svg');
+    background-image: url('/icons/trash.svg');
 }
 
 .wrench-icon {
-    background-image: url('./icons/wrench.svg');
+    background-image: url('/icons/wrench.svg');
 }
 
 .quadratic-15 {

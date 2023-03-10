@@ -1,4 +1,4 @@
-import { CookiesAPI, StackCookie, Helper } from '/assets/modules.mjs';
+import { CookiesAPI, StackCookie, Helper } from '/modules.mjs';
 
 document.onreadystatechange = function () {
     if (document.readyState === "complete") {

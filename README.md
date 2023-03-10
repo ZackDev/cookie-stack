@@ -28,7 +28,7 @@ The extension has three main funtionalities:
 
 Access it by clicking the icon at the toolbar of your browser, displaying the number of cookies currently set.
 
-![Popup Screenshot](./assets/screenshots/cookie-stack-popup-screenshot.png)
+![Popup Screenshot](/screenshots/cookie-stack-popup-screenshot.png)
 
 * click the toolbar icon to get an overview of domains they belong to
 * expand or contract those domains by clicking the plus or minus symbol next to it to view specific cookies
@@ -38,7 +38,7 @@ Access it by clicking the icon at the toolbar of your browser, displaying the nu
 
 * go to the extension's preferences (firefox), options (chromium)
 
-![Options Screenshot](./assets/screenshots/cookie-stack-options-screenshot.png)
+![Options Screenshot](/screenshots/cookie-stack-options-screenshot.png)
 
 * **allowlist**: allow every cookie on the list, remove the rest
 * **denylist**: deny every cookie specified, allow the rest
