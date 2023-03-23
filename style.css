@@ -27,24 +27,24 @@ input[type=file] {
 }
 
 #cookie-stack-3 {
-    color: #008616;
+    color: #00b31e;
     display: inline-block;
     transform: rotate(-12deg);
 }
 
 #cookie-stack-2 {
-    color: #008616;
+    color: #009b1a;
     display: inline-block;
     transform: rotate(-7deg);
 }
 
 #cookie-stack-1 {
-    color: #008616;
+    color: #007714;
     display: inline-block;
     transform: rotate(5deg);
 }
 #cookie-stack-0 {
-    color: #008616;;
+    color: #005e10;;
     display: inline-block;
 }
 
