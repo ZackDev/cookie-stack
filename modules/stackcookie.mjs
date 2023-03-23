@@ -28,10 +28,15 @@ class StackCookie {
 
     url() {
         let urlStr = ''
-        this.cookie.secure ? urlStr = 'https://' : urlStr = 'http://';
-        urlStr += this.cookie.domain;
+        urlStr += this.protocol();
+        urlStr += this.domain();
         urlStr += this.cookie.path;
         return urlStr;
+    }
+
+    protocol() {
+        let pStr = this.cookie.secure ? 'https://' : 'http://';
+        return pStr;
     }
 
     domain() {
