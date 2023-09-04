@@ -3,7 +3,7 @@ body {
     min-height: 500px;
     background-color: #FFF;
     color: #313131;
-    /*user-select: none;*/
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 
 input[type=radio] {
