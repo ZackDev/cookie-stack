@@ -40,18 +40,18 @@ Access it by clicking the icon at the toolbar of your browser, displaying the nu
 
 ![Options Screenshot](/screenshots/cookie-stack-options-screenshot.png)
 
-* **allowlist**: allow every cookie on the list, remove the rest
-* **denylist**: deny every cookie specified, allow the rest
+* **allowlist**: allow every cookie identified by domain on the list, remove the rest
+* **denylist**: deny every cookie from the listed domains, allow the rest
 
 To add a domain to a specific list, write the domain name into the textfield next to specific list and hit the `add` button.
 
 Remove a domain from a list, click the *x* on the displayed domain name. 
 
-**NOTE**: The filter doesn't prevent cookies from getting initially stored. *Cookies get filtered afterwards*. Some websites continuosly try to store cookies on your machine, even after the first pageload. This might cause the filter also to continuosly remove said cookies.
+**NOTE**: The extension doesn't prevent cookies from getting initially stored. *Cookies get filtered afterwards*. Some websites continuosly try to store cookies on your machine, even after the first pageload. This might cause the filter also to continuously remove said cookies.
 
 ## 3. Export and import the extension's settings
 
-The export- and importable settings are the ones shown at the bottom of the preferences (firefox), options (chromium) page, for now this is a value for the currently active list (disabled, allowlist, denylist) and their contents.
+The export- and importable settings are the ones shown at the bottom of the preferences (firefox), options (chromium) page, for now this is a value for the currently active list (disabled, allowlist, denylist) and the contents of those lists.
 
 * go to the preferences (firefox), options (chromium)
 
